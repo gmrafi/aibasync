@@ -109,9 +109,9 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
   },
   "MAA": {
     code: "MAA",
-    fullName: "Md. Asaduzzaman Ali",
+    fullName: "Md Ali Ashraf",
     designation: "Assistant Professor",
-    department: "Finance & Leadership",
+    department: "Army Institute of Business Administration (AIBA)",
     roomNumber: "টিচিং লাউঞ্জ",
   },
   "AFMS": {
@@ -161,6 +161,13 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "A. S. (Guest Faculty)",
     designation: "অ্যাডজাঙ্কট ফ্যাকাল্টি",
     department: "Business Administration",
+    roomNumber: "টিচিং লাউঞ্জ",
+  },
+  "DMNIA": {
+    code: "DMNIA",
+    fullName: "Dr. Munshi Naser Ibne Afzal",
+    designation: "অ্যাডজাঙ্কট ফ্যাকাল্টি (প্রফেসর, SUST)",
+    department: "Department of Economics",
     roomNumber: "টিচিং লাউঞ্জ",
   },
 };
