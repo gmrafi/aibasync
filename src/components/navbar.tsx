@@ -40,10 +40,10 @@ export function Navbar({
   const minorTag = isBba11 && minor && minor !== "None" ? ` + ${minor.replace("-M", "")}` : "";
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-emerald-200/80 dark:border-emerald-900/80 bg-white/90 dark:bg-slate-950/85 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl transition-colors">
+    <header className="sticky top-0 z-40 w-full border-b border-emerald-200/80 dark:border-emerald-900/80 bg-gradient-to-r from-white via-emerald-50/60 to-sky-50/70 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900/90 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl transition-colors">
       <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-          <div className="relative flex items-center justify-center shrink-0 rounded-2xl bg-emerald-50/80 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-800 p-1.5 shadow-sm">
+          <div className="relative flex items-center justify-center shrink-0 rounded-2xl bg-gradient-to-br from-emerald-50 via-white to-sky-50 dark:from-emerald-500/10 dark:via-slate-900 dark:to-sky-500/10 border border-emerald-200 dark:border-emerald-800 p-1.5 shadow-sm shadow-emerald-500/10">
             <img
               src="/logo.png"
               alt="AIBA Sylhet Crest"

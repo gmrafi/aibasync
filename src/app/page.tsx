@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { ROUTINE_DATA, INSTITUTION_INFO } from "@/data/routine";
 import { DEFAULT_PREFERENCES, getStoredPreferences, savePreferences } from "@/lib/storage";
-import { getActiveAndUpcomingClass, getDayName } from "@/lib/time-utils";
+import {
+  formatMinutesBengali,
+  getActiveAndUpcomingClass,
+  getDayName,
+  minutesToTime12,
+  timeToMinutes,
+} from "@/lib/time-utils";
 import { trackRoutineView } from "@/lib/tracking";
 import { DayOfWeek, FacultyMember, UserPreferences, UserRole } from "@/lib/types";
 import { Navbar } from "@/components/navbar";
@@ -166,6 +172,52 @@ export default function HomePage() {
   const minorDisplay = isBba11 && preferences.minor && preferences.minor !== "None"
     ? ` + Minor: ${preferences.minor.replace("-M", "")}`
     : "";
+
+  const nextClasses = status.todayClasses
+    .filter((slot) => timeToMinutes(slot.startTime) > effectiveTime.getHours() * 60 + effectiveTime.getMinutes())
+    .slice(0, 3);
+
+  const freeWindows = status.todayClasses.reduce<Array<{ start: string; end: string; minutes: number }>>(
+    (windows, slot, index, arr) => {
+      if (index === arr.length - 1) return windows;
+      const nextSlot = arr[index + 1];
+      const gap = timeToMinutes(nextSlot.startTime) - timeToMinutes(slot.endTime);
+      if (gap > 30) {
+        windows.push({
+          start: slot.endTime,
+          end: nextSlot.startTime,
+          minutes: gap,
+        });
+      }
+      return windows;
+    },
+    []
+  );
+
+  const bestFreeWindow = freeWindows.sort((a, b) => b.minutes - a.minutes)[0] || null;
+
+  const summaryCards = [
+    {
+      label: "আজকের ক্লাস",
+      value: `${status.todayClasses.length}`,
+      note: status.currentClass ? "চলমান" : status.allDoneForToday ? "শেষ" : "সিডিউল",
+    },
+    {
+      label: "পরবর্তী",
+      value: nextClasses[0] ? minutesToTime12(nextClasses[0].startTime) : status.isWeekend ? "ছুটি" : status.allDoneForToday ? "শেষ" : "—",
+      note: nextClasses[0] ? nextClasses[0].courseTitle.slice(0, 18) : "কোন ক্লাস নেই",
+    },
+    {
+      label: "ফ্রি স্লট",
+      value: bestFreeWindow ? formatMinutesBengali(bestFreeWindow.minutes) : "—",
+      note: bestFreeWindow ? `${bestFreeWindow.start}–${bestFreeWindow.end}` : "কোন gap নেই",
+    },
+    {
+      label: "স্ট্যাটাস",
+      value: status.currentClass ? "নাউ" : nextClasses[0] ? "রেডি" : "ফ্রি",
+      note: status.currentClass ? status.currentClass.room : nextClasses[0] ? nextClasses[0].room : "আজ আপডেটেড",
+    },
+  ];
 
   return (
     <div
@@ -332,6 +384,8 @@ export default function HomePage() {
               role={preferences.role}
               teacherCode={preferences.teacherCode}
               currentRealDay={currentDayName}
+              currentClass={status.currentClass}
+              nextClass={status.nextClass}
               onSelectFaculty={(fac) => setSelectedFaculty(fac)}
             />
           )}

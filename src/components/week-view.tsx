@@ -23,6 +23,8 @@ interface WeekViewProps {
   role?: UserRole;
   teacherCode?: string;
   currentRealDay: DayOfWeek;
+  currentClass?: ClassSlot | null;
+  nextClass?: ClassSlot | null;
   onSelectFaculty: (faculty: FacultyMember) => void;
 }
 
@@ -393,6 +395,8 @@ export function WeekView({
   role = "student",
   teacherCode,
   currentRealDay,
+  currentClass,
+  nextClass,
   onSelectFaculty,
 }: WeekViewProps) {
   const [layoutMode, setLayoutMode] = useState<"GRID" | "DAY">("GRID");
@@ -435,7 +439,7 @@ export function WeekView({
 
   return (
     <div className="space-y-3.5">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/80 shadow-[0_12px_30px_rgba(22,101,52,0.08)]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-800/80 shadow-[0_12px_30px_rgba(16,185,129,0.12)] ring-1 ring-emerald-100/80 dark:ring-emerald-900/40">
         <div>
           <div className="flex items-center gap-2">
             <span className="p-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/40">
@@ -524,7 +528,7 @@ export function WeekView({
       {/* DAYS AS ROWS (LEFT), ALL 3 PERIODS VISIBLE/PEEKING       */}
       {/* ========================================================= */}
       {layoutMode === "GRID" && (
-        <div className="rounded-[26px] border border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-slate-900 shadow-[0_18px_40px_rgba(22,101,52,0.12)] overflow-hidden transition-all">
+        <div className="rounded-[26px] border border-emerald-300 dark:border-emerald-800/80 bg-white dark:bg-slate-900 shadow-[0_18px_40px_rgba(16,185,129,0.12)] ring-1 ring-emerald-200/80 dark:ring-emerald-900/50 overflow-hidden transition-all">
           <div className="overflow-x-auto">
             <div className="min-w-[640px] sm:min-w-[720px]">
               {/* Table Column Headers */}
