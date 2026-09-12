@@ -85,6 +85,10 @@ export function Navbar({
                     <span className="font-mono text-slate-700 dark:text-slate-300">{teacherCode}</span>
                   </>
                 )}
+                <span className="text-slate-400 dark:text-slate-500">•</span>
+                <span className="text-slate-600 dark:text-slate-400 text-[11px]">
+                  {batch === "MY_CLASSES" ? "আমার ক্লাস" : batch === "ALL_BATCHES" ? "মাস্টার রুটিন" : batch}
+                </span>
               </>
             ) : (
               <>

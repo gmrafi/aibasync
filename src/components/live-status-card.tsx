@@ -184,8 +184,14 @@ export function LiveStatusCard({
             {/* Time Slot */}
             <span className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200">
               <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-              {minutesToTime12(cls.startTime)} – {minutesToTime12(cls.endTime)}
+              {minutesToTime12(cls.startTime)} - {minutesToTime12(cls.endTime)}
             </span>
+
+            {role === "teacher" && (
+              <span className="px-2.5 py-1 rounded-xl bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 font-mono font-bold text-xs">
+                {cls.batch} {cls.majorOrSection}
+              </span>
+            )}
 
             {/* Room with copy */}
             <button
@@ -274,8 +280,14 @@ export function LiveStatusCard({
           <div className="flex flex-wrap items-center gap-2.5 pt-1 text-xs sm:text-sm font-semibold">
             <span className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200">
               <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-              {minutesToTime12(next.startTime)} – {minutesToTime12(next.endTime)}
+              {minutesToTime12(next.startTime)} - {minutesToTime12(next.endTime)}
             </span>
+
+            {role === "teacher" && (
+              <span className="px-2.5 py-1 rounded-xl bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 font-mono font-bold text-xs">
+                {next.batch} {next.majorOrSection}
+              </span>
+            )}
 
             <button
               type="button"

@@ -6,7 +6,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Chinmoy Das Gupta",
     designation: "Assistant Professor",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/6788d9844d073d10650e1e54",
   },
   "GMST": {
@@ -14,7 +14,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Golam Morshed Shahriar Tanim",
     designation: "Assistant Professor",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/6786144ea00882eea30ee1b6",
   },
   "MAA": {
@@ -22,7 +22,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Md Ali Ashraf",
     designation: "Assistant Professor",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/67861408f65e9ba1f00a0de2",
   },
   "AS": {
@@ -30,7 +30,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Md Ali Ashraf",
     designation: "Assistant Professor",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/67861408f65e9ba1f00a0de2",
   },
   "LF": {
@@ -38,7 +38,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Limuza Fairuz",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Lounge 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/6788d9c12cbfc5d2b3008099",
   },
   "MEU": {
@@ -46,7 +46,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Md. Udoy Rahman",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/6788da0e9cd8450a470ac01b",
   },
   "N. M. A": {
@@ -54,7 +54,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "N. M. Ashikuzzaman",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 204 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৪ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/687f15b3aa9b9be7d703c295",
   },
   "MIH": {
@@ -62,7 +62,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Md. Iqbal Hossain",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/687c6fb7e0846f06370b8e42",
   },
   "AA": {
@@ -70,7 +70,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Adiba Ahmed",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 204 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৪ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/69ce1367b03f5fb0a60c8b91",
   },
   "KF": {
@@ -78,7 +78,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Kaniz Fatema",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Lounge 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/69ce190bd8485d4717018628",
   },
   "MT": {
@@ -86,7 +86,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Mohammad Tooneer",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/69ce2ecc451c6213880984f4",
   },
   "MAI": {
@@ -94,7 +94,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Md. Ahsanul Islam",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 204 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৪ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/69d0c3756416c92a9d0344ae",
   },
   "SW": {
@@ -102,7 +102,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Syed Wasiftazwar",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Computer Lab / Room 204",
+    roomNumber: "কম্পিউটার ল্যাব / টিচিং লাউঞ্জ ২০৪",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/69d362f901f4de98ec0f9ed5",
   },
   "ANR": {
@@ -110,7 +110,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Afrida Nuzhat Rasha",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/6a290a00964f5ad4c1056eb1",
   },
   "STA": {
@@ -118,7 +118,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Ms. Sanzida Tasnim",
     designation: "Lecturer",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/68b7fcf40f510103bf039279",
   },
   "MMU": {
@@ -126,7 +126,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Khan Mohummad Mohiuddin",
     designation: "Assistant Professor (On Study Leave)",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/67a47b32d48fae46ca097510",
   },
   "DMI": {
@@ -134,7 +134,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Professor Dr. Md. Monirul Islam",
     designation: "Professor, Dept. of Business Administration",
     department: "Shahjalal University of Science and Technology (SUST)",
-    roomNumber: "Faculty Room 204 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৪ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/67ac44838c6ece738905ed79",
   },
   "DMNI": {
@@ -142,7 +142,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Professor Dr. Md. Monirul Islam",
     designation: "Professor, Dept. of Business Administration",
     department: "Shahjalal University of Science and Technology (SUST)",
-    roomNumber: "Faculty Room 204 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৪ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/67ac44838c6ece738905ed79",
   },
   "DMAFC": {
@@ -150,7 +150,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Professor Dr. Mohammad Ashraful Ferdous Chowdhury",
     designation: "Professor, Dept. of Business Administration",
     department: "Shahjalal University of Science and Technology (SUST)",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/67ac46d48c6ece738905ed7a",
   },
   "MRM": {
@@ -158,7 +158,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Mohammad Rajik Miah",
     designation: "Associate Professor, Department of English",
     department: "Shahjalal University of Science and Technology (SUST)",
-    roomNumber: "Faculty Room 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/678cce8af62247a7ce07e330",
   },
   "MAH": {
@@ -166,7 +166,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Md. Ashraful Haque",
     designation: "Assistant Professor, Department of Anthropology",
     department: "Shahjalal University of Science and Technology (SUST)",
-    roomNumber: "Faculty Room 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/678cd3bb00de34158e049d80",
   },
   "MFI": {
@@ -174,7 +174,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Md Fahimul Islam",
     designation: "Lecturer, Department of CSE",
     department: "Shahjalal University of Science and Technology (SUST)",
-    roomNumber: "Faculty Room 204 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৪ (২য় তলা)",
     profileUrl: "https://aibasylhet.edu.bd/my-profile-view/68b7fd51c5478e3cad09e148",
   },
   "DMNIA": {
@@ -182,28 +182,28 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
     fullName: "Dr. Munshi Naser Ibne Afzal",
     designation: "Professor, Department of Economics",
     department: "Shahjalal University of Science and Technology (SUST)",
-    roomNumber: "Dept. of Economics, SUST, Sylhet-3114",
+    roomNumber: "টিচিং লাউঞ্জ (গেস্ট প্রফেসর) / SUST অর্থনীতি বিভাগ",
   },
   "STMH": {
     code: "STMH",
     fullName: "Syed Tariq M. H.",
     designation: "Assistant Professor",
     department: "Army Institute of Business Administration (AIBA)",
-    roomNumber: "Faculty Room 309 (3rd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ৩০৯ (৩য় তলা)",
   },
   "AFMS": {
     code: "AFMS",
     fullName: "A. F. M. Shafiullah",
     designation: "Associate Professor",
     department: "Human Resource Management",
-    roomNumber: "Faculty Room 204 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৪ (২য় তলা)",
   },
   "DMMR": {
     code: "DMMR",
     fullName: "Dr. Md. Mizanur Rahman",
     designation: "Professor",
     department: "MIS & Technology Management",
-    roomNumber: "Faculty Room 206 (2nd Floor)",
+    roomNumber: "টিচিং লাউঞ্জ ২০৬ (২য় তলা)",
   },
 };
 
@@ -221,6 +221,6 @@ export function getFacultyInfo(code: string): FacultyMember {
     fullName: `Faculty (${cleanCode})`,
     designation: "Course Instructor",
     department: "AIBA BBA Program",
-    roomNumber: "Faculty Lounge (AIBA Campus)",
+    roomNumber: "টিচিং লাউঞ্জ (AIBA ক্যাম্পাস)",
   };
 }

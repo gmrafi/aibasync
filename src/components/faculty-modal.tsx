@@ -60,7 +60,7 @@ export function FacultyModal({ faculty, onClose }: FacultyModalProps) {
           <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800">
             <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
             <div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">ফ্যাকাল্টি রুম</div>
+              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">টিচিং লাউঞ্জ / অবস্থান</div>
               <div className="text-emerald-700 dark:text-emerald-300 font-bold">{faculty.roomNumber}</div>
             </div>
           </div>

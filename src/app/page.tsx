@@ -101,7 +101,9 @@ export default function HomePage() {
     preferences.batch,
     preferences.majorOrSection,
     effectiveTime,
-    preferences.minor
+    preferences.minor,
+    preferences.role,
+    preferences.teacherCode
   );
 
   const handlePreferencesSaved = (
@@ -235,11 +237,23 @@ export default function HomePage() {
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-                {preferences.batch}
+                {preferences.role === "teacher"
+                  ? (preferences.batch === "MY_CLASSES"
+                      ? "আমার ক্লাস সূচি"
+                      : preferences.batch === "ALL_BATCHES"
+                      ? "মাস্টার রুটিন (সকল ব্যাচ)"
+                      : preferences.batch)
+                  : preferences.batch}
               </h2>
-              <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 text-sky-800 dark:text-sky-300">
-                {preferences.majorOrSection}{minorDisplay}
-              </span>
+              {preferences.role === "teacher" ? (
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30 text-indigo-800 dark:text-indigo-300">
+                  {preferences.teacherCode ? `${preferences.teacherCode} ফ্যাকাল্টি` : "শিক্ষক প্রোফাইল"}
+                </span>
+              ) : (
+                <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 text-sky-800 dark:text-sky-300">
+                  {preferences.majorOrSection}{minorDisplay}
+                </span>
+              )}
               <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                 Fall 2026
               </span>
@@ -291,6 +305,8 @@ export default function HomePage() {
               onSelectFaculty={(fac) => setSelectedFaculty(fac)}
               batch={preferences.batch}
               minor={preferences.minor}
+              role={preferences.role}
+              teacherCode={preferences.teacherCode}
             />
           ) : (
             <WeekView
@@ -298,6 +314,8 @@ export default function HomePage() {
               batch={preferences.batch}
               majorOrSection={preferences.majorOrSection}
               minor={preferences.minor}
+              role={preferences.role}
+              teacherCode={preferences.teacherCode}
               currentRealDay={currentDayName}
               onSelectFaculty={(fac) => setSelectedFaculty(fac)}
             />

@@ -112,6 +112,26 @@ export function isSlotMatchingStudent(
   return false;
 }
 
+export function isSlotMatchingView(
+  slot: ClassSlot,
+  batch: string,
+  majorOrSection: string,
+  minor?: string,
+  role?: "student" | "teacher",
+  teacherCode?: string
+): boolean {
+  if (role === "teacher") {
+    if (batch === "MY_CLASSES" || (!batch && teacherCode)) {
+      return slot.instructor === teacherCode;
+    }
+    if (batch === "ALL_BATCHES") {
+      return true;
+    }
+    return slot.batch === batch;
+  }
+  return isSlotMatchingStudent(slot, batch, majorOrSection, minor);
+}
+
 export function isSlotMinor(slot: ClassSlot, batch: string, minor?: string): boolean {
   if (batch !== "BBA-11" || !minor || minor === "None" || !MINOR_COURSE_TITLES[minor]) return false;
   const targetTitle = MINOR_COURSE_TITLES[minor].toLowerCase();
@@ -124,7 +144,9 @@ export function getActiveAndUpcomingClass(
   batch: string,
   majorOrSection: string,
   simulatedTime?: Date,
-  minor?: string
+  minor?: string,
+  role?: "student" | "teacher",
+  teacherCode?: string
 ): ClassStatusResult {
   const now = simulatedTime || new Date();
   const currentDay = getDayName(now);
@@ -144,7 +166,7 @@ export function getActiveAndUpcomingClass(
   }
 
   const todayClasses = slots
-    .filter((s) => s.day === currentDay && isSlotMatchingStudent(s, batch, majorOrSection, minor))
+    .filter((s) => s.day === currentDay && isSlotMatchingView(s, batch, majorOrSection, minor, role, teacherCode))
     .sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
   if (todayClasses.length === 0) {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ClassSlot, FacultyMember } from "@/lib/types";
+import { ClassSlot, FacultyMember, UserRole } from "@/lib/types";
 import { minutesToTime12, timeToMinutes, isSlotMinor } from "@/lib/time-utils";
 import { TIME_PERIODS } from "@/data/routine";
 import { getFacultyInfo } from "@/data/faculty";
@@ -14,6 +14,8 @@ interface TodayTimelineProps {
   onSelectFaculty: (faculty: FacultyMember) => void;
   batch?: string;
   minor?: string;
+  role?: UserRole;
+  teacherCode?: string;
 }
 
 export function TodayTimeline({
@@ -23,6 +25,8 @@ export function TodayTimeline({
   onSelectFaculty,
   batch,
   minor,
+  role = "student",
+  teacherCode,
 }: TodayTimelineProps) {
   const [copiedRoom, setCopiedRoom] = useState<string | null>(null);
   const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
@@ -36,7 +40,11 @@ export function TodayTimeline({
   if (todayClasses.length === 0) {
     return (
       <div className="rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 p-8 text-center text-slate-500 dark:text-slate-400 bg-white/50 dark:bg-slate-950/40">
-        <p className="text-sm">আজকে ({currentDayName}) এই ব্যাচের জন্য কোনো ক্লাস নির্ধারিত নেই।</p>
+        <p className="text-sm">
+          {role === "teacher"
+            ? `আজকে (${currentDayName}) আপনার জন্য কোনো ক্লাস নির্ধারিত নেই।`
+            : `আজকে (${currentDayName}) এই ব্যাচের জন্য কোনো ক্লাস নির্ধারিত নেই।`}
+        </p>
       </div>
     );
   }
@@ -118,7 +126,7 @@ export function TodayTimeline({
 
                 <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                  {minutesToTime12(classInPeriod.startTime)} – {minutesToTime12(classInPeriod.endTime)}
+                  {minutesToTime12(classInPeriod.startTime)} - {minutesToTime12(classInPeriod.endTime)}
                 </span>
               </div>
 
@@ -146,6 +154,11 @@ export function TodayTimeline({
             {/* Course Title */}
             <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight my-2 flex items-center gap-2 flex-wrap">
               <span>{classInPeriod.courseTitle}</span>
+              {role === "teacher" && (
+                <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900">
+                  {classInPeriod.batch} {classInPeriod.majorOrSection}
+                </span>
+              )}
               {classInPeriod.isClub && (
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-violet-100 dark:bg-violet-500/20 text-violet-800 dark:text-violet-200 border border-violet-300 dark:border-violet-500/30">
                   Club Activity

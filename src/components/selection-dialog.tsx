@@ -193,21 +193,9 @@ export function SelectionDialog({
           {/* Role Selection Switcher */}
           <div>
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
-              আপনি কি শিক্ষার্থী নাকি শিক্ষক?
+              একাডেমিক প্রোফাইলের ধরন
             </label>
             <div className="grid grid-cols-2 p-1 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
-              <button
-                type="button"
-                onClick={() => setRole("student")}
-                className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                  role === "student"
-                    ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-sm"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
-                }`}
-              >
-                <GraduationCap className="w-4 h-4" />
-                <span>শিক্ষার্থী (Student)</span>
-              </button>
               <button
                 type="button"
                 onClick={() => {
@@ -217,6 +205,9 @@ export function SelectionDialog({
                     setName(FACULTY_LIST[0].fullName);
                     setNameError(false);
                   }
+                  if (selectedBatch !== "MY_CLASSES" && selectedBatch !== "ALL_BATCHES") {
+                    setSelectedBatch("MY_CLASSES");
+                  }
                 }}
                 className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   role === "teacher"
@@ -225,7 +216,24 @@ export function SelectionDialog({
                 }`}
               >
                 <User className="w-4 h-4" />
-                <span>শিক্ষক / ফ্যাকাল্টি (Teacher)</span>
+                <span>সম্মানিত শিক্ষক / ফ্যাকাল্টি</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setRole("student");
+                  if (selectedBatch === "MY_CLASSES" || selectedBatch === "ALL_BATCHES") {
+                    setSelectedBatch("BBA-14");
+                  }
+                }}
+                className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  role === "student"
+                    ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                }`}
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span>শিক্ষার্থী</span>
               </button>
             </div>
           </div>
@@ -235,7 +243,7 @@ export function SelectionDialog({
             <div className="space-y-4 animate-in fade-in">
               <div>
                 <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
-                  <span>ফ্যাকাল্টি তালিকা থেকে আপনার নাম নির্বাচন করুন</span>
+                  <span>সম্মানিত শিক্ষকবৃন্দের তালিকা থেকে আপনার প্রোফাইল নির্বাচন করুন</span>
                   {nameError && (
                     <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
                       অনুগ্রহ করে শিক্ষক নির্বাচন করুন
@@ -258,7 +266,7 @@ export function SelectionDialog({
                   <option value="">-- শিক্ষক নির্বাচন করুন --</option>
                   {FACULTY_LIST.map((f) => (
                     <option key={f.code} value={f.code}>
-                      {f.fullName} ({f.code}) — {f.designation}
+                      {f.fullName} ({f.code}) | {f.designation}
                     </option>
                   ))}
                 </select>
@@ -285,17 +293,53 @@ export function SelectionDialog({
 
               <div>
                 <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">
-                  প্রাথমিক ব্যাচ রুটিন নির্বাচন
+                  প্রাথমিক রুটিন প্রদর্শন মোড
                 </label>
-                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                <div className="grid grid-cols-2 gap-2 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBatch("MY_CLASSES")}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      selectedBatch === "MY_CLASSES"
+                        ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-800 dark:text-sky-200 shadow-xs font-bold"
+                        : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                    }`}
+                  >
+                    <div className="text-xs font-bold flex items-center justify-between">
+                      <span>আমার ক্লাস সূচি</span>
+                      {selectedBatch === "MY_CLASSES" && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />}
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">সবগুলো ব্যাচে নিজের ক্লাস</div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedBatch("ALL_BATCHES")}
+                    className={`p-3 rounded-xl border text-left transition-all cursor-pointer ${
+                      selectedBatch === "ALL_BATCHES"
+                        ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-800 dark:text-sky-200 shadow-xs font-bold"
+                        : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 font-medium"
+                    }`}
+                  >
+                    <div className="text-xs font-bold flex items-center justify-between">
+                      <span>মাস্টার রুটিন</span>
+                      {selectedBatch === "ALL_BATCHES" && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />}
+                    </div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">বিশ্ববিদ্যালয়ের সকল ব্যাচ</div>
+                  </button>
+                </div>
+
+                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5">
+                  অথবা নির্দিষ্ট একক ব্যাচের রুটিন দেখতে ক্লিক করুন:
+                </div>
+                <div className="grid grid-cols-5 gap-1.5">
                   {availableBatches.map((b) => {
                     const isSelected = selectedBatch === b;
                     return (
                       <button
                         key={b}
                         type="button"
-                        onClick={() => handleBatchSelect(b)}
-                        className={`py-2.5 px-3 rounded-xl border text-center transition-all cursor-pointer ${
+                        onClick={() => setSelectedBatch(b)}
+                        className={`py-2 px-2 rounded-xl border text-center transition-all cursor-pointer ${
                           isSelected
                             ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-200 shadow-xs font-bold"
                             : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
