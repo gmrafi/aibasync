@@ -380,6 +380,23 @@ export function SelectionDialog({
                 <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
                   {availableBatches.map((b) => {
                     const isSelected = selectedBatch === b;
+                    const yearLabel = (() => {
+                      switch (b) {
+                        case "BBA-11":
+                          return "Fourth Year";
+                        case "BBA-12":
+                          return "Third Year";
+                        case "BBA-13":
+                          return "Second Year";
+                        case "BBA-14":
+                          return "First Year";
+                        case "BBA-15":
+                          return "First Year";
+                        default:
+                          return "Regular";
+                      }
+                    })();
+
                     return (
                       <button
                         key={b}
@@ -393,7 +410,7 @@ export function SelectionDialog({
                       >
                         <div className="text-xs font-mono font-bold">{b}</div>
                         <div className="text-[9px] text-slate-500 dark:text-slate-400 truncate">
-                          {b === "BBA-11" ? "Senior" : "Regular"}
+                          {yearLabel}
                         </div>
                       </button>
                     );

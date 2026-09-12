@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { ClassSlot, DayOfWeek } from "@/lib/types";
 import { INSTITUTION_INFO } from "@/data/routine";
 import { minutesToTime12, isSlotMatchingStudent, isSlotMinor } from "@/lib/time-utils";
+import { getFacultyInfo } from "@/data/faculty";
 import { Download, Check, X, Loader2 } from "lucide-react";
 import { toPng } from "html-to-image";
 
@@ -36,6 +37,31 @@ export function ExportCardModal({
   const batchSlots = routineData.filter((s) =>
     isSlotMatchingStudent(s, batch, majorOrSection, minor)
   );
+
+  const getCourseAccent = (courseTitle: string, majorOrSection?: string) => {
+    const section = (majorOrSection || "").toUpperCase();
+    const t = `${courseTitle} ${majorOrSection || ""}`.toLowerCase().replace(/[^a-z0-9]+/g, " ");
+
+    if (["FIN", "FINANCE", "BANK", "INVESTMENT", "MONETARY", "FINANCIAL"].some((value) => section.includes(value)) || /(?:^|\s)(fin|finance|bank|investment|monetary|financial|economics)(?:$|\s)/.test(t)) {
+      return { bg: "bg-emerald-50", border: "border-emerald-300", badge: "bg-emerald-100 text-emerald-900 border-emerald-200" };
+    }
+    if (["ACC", "ACCOUNTING", "AUDIT", "TAX", "COST"].some((value) => section.includes(value)) || /(?:^|\s)(acc|accounting|account|audit|tax|cost)(?:$|\s)/.test(t)) {
+      return { bg: "bg-amber-50", border: "border-amber-300", badge: "bg-amber-100 text-amber-900 border-amber-200" };
+    }
+    if (["MKT", "MARKETING", "BRAND", "CONSUMER", "SALES", "PROMOTION"].some((value) => section.includes(value)) || /(?:^|\s)(mkt|marketing|brand|consumer|sales|promotion|advertising)(?:$|\s)/.test(t)) {
+      return { bg: "bg-rose-50", border: "border-rose-300", badge: "bg-rose-100 text-rose-900 border-rose-200" };
+    }
+    if (["HRM", "MANAGEMENT", "NEGOTIATION", "CONFLICT", "ORGANIZATION", "STRATEGY", "BEHAVIOR"].some((value) => section.includes(value)) || /(?:^|\s)(hrm|management|leader|organization|conflict|negotiation|behavior|strategy)(?:$|\s)/.test(t)) {
+      return { bg: "bg-indigo-50", border: "border-indigo-300", badge: "bg-indigo-100 text-indigo-900 border-indigo-200" };
+    }
+    if (["MIS", "TECHNOLOGY", "SYSTEM", "COMPUTER", "DATA", "INFORMATION"].some((value) => section.includes(value)) || /(?:^|\s)(mis|tech|technology|system|computer|data|database|information)(?:$|\s)/.test(t)) {
+      return { bg: "bg-cyan-50", border: "border-cyan-300", badge: "bg-cyan-100 text-cyan-900 border-cyan-200" };
+    }
+    if (["SCM", "SUPPLY", "OPERATIONS", "LOGISTICS", "PROCUREMENT", "PRODUCTION", "PLANNING"].some((value) => section.includes(value)) || /(?:^|\s)(scm|supply|operations|logistics|procurement|production|planning|stat|math)(?:$|\s)/.test(t)) {
+      return { bg: "bg-orange-50", border: "border-orange-300", badge: "bg-orange-100 text-orange-900 border-orange-200" };
+    }
+    return { bg: "bg-slate-50", border: "border-slate-300", badge: "bg-slate-100 text-slate-800 border-slate-200" };
+  };
 
   const handleDownloadImage = async () => {
     if (!cardRef.current) return;
@@ -87,17 +113,17 @@ export function ExportCardModal({
         </div>
 
         {/* Scrollable Preview Area */}
-        <div className="p-4 sm:p-6 overflow-y-auto bg-slate-100/60 dark:bg-slate-950/40 flex items-center justify-center">
+        <div className="p-4 sm:p-6 overflow-y-auto bg-gradient-to-br from-slate-100 via-sky-50 to-indigo-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center">
           {/* Card to be captured */}
           <div
             ref={cardRef}
-            className="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-6 shadow-2xl font-sans text-slate-900"
+            className="w-full max-w-md bg-gradient-to-br from-white via-sky-50 to-violet-50 border border-slate-200 rounded-[28px] p-5 shadow-[0_30px_80px_rgba(15,23,42,0.18)] font-sans text-slate-900"
             style={{ minWidth: "320px" }}
           >
             {/* Header of exported card */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-3.5 mb-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1 shrink-0">
+                <div className="w-11 h-11 rounded-2xl bg-white border border-slate-200 shadow-sm flex items-center justify-center p-1.5 shrink-0">
                   <img
                     src="/logo.png"
                     alt="AIBA Sylhet"
@@ -105,18 +131,18 @@ export function ExportCardModal({
                   />
                 </div>
                 <div>
-                  <div className="font-bold text-sm tracking-tight text-slate-900 flex items-center gap-1.5">
+                  <div className="font-black text-sm tracking-tight text-slate-900 flex items-center gap-1.5">
                     AIBA Sync
-                    <span className="text-[10px] font-mono font-semibold text-sky-700">Sylhet</span>
+                    <span className="text-[10px] font-mono font-bold text-sky-700 bg-sky-100 px-1.5 py-0.5 rounded-full border border-sky-200">Sylhet</span>
                   </div>
-                  <div className="text-[10px] text-slate-500 font-mono">
+                  <div className="text-[10px] text-slate-500 font-mono tracking-[0.08em] uppercase">
                     {INSTITUTION_INFO.term}
                   </div>
                 </div>
               </div>
 
               <div className="text-right">
-                <span className="px-2.5 py-1 rounded-xl bg-sky-50 border border-sky-200 text-xs font-mono font-bold text-sky-800">
+                <span className="px-2.5 py-1.5 rounded-2xl bg-gradient-to-r from-sky-600 to-indigo-600 text-white text-[10px] font-mono font-bold shadow-sm">
                   {batch} • {majorOrSection}{isBba11 && minor && minor !== "None" ? ` + ${minor.replace("-M", "")}` : ""}
                 </span>
               </div>
@@ -132,43 +158,59 @@ export function ExportCardModal({
                 return (
                   <div
                     key={day}
-                    className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80"
+                    className="p-3 rounded-2xl border border-slate-200 bg-white/85 shadow-inner shadow-slate-200/40"
                   >
-                    <div className="text-xs font-mono font-bold text-sky-800 mb-1.5 uppercase tracking-wide">
-                      {day}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-[10px] font-black text-slate-700 uppercase tracking-[0.18em]">
+                        {day}
+                      </div>
+                      <div className="text-[9px] font-bold text-slate-500">
+                        {daySlots.length} class{daySlots.length === 1 ? "" : "es"}
+                      </div>
                     </div>
 
                     {daySlots.length === 0 ? (
-                      <div className="text-[11px] font-mono text-slate-400 italic">
-                        নো ক্লাস
+                      <div className="text-[11px] font-mono text-slate-400 italic rounded-xl bg-slate-50 border border-dashed border-slate-200 px-2 py-2">
+                        No class
                       </div>
                     ) : (
                       <div className="space-y-1.5">
-                        {daySlots.map((slot) => (
-                          <div
-                            key={slot.id}
-                            className="flex items-center justify-between text-xs font-mono bg-white px-3 py-1.5 rounded-xl border border-slate-200"
-                          >
-                            <div className="truncate mr-2">
-                              <span className="text-slate-900 font-medium">
-                                {slot.courseTitle}
-                              </span>
-                              {(isSlotMinor(slot, batch, minor) || slot.isMinor) && (
-                                <span className="ml-1 text-[9px] text-indigo-700 font-bold">
-                                  [{minor && minor !== "None" ? minor : "Minor"}]
+                        {daySlots.map((slot) => {
+                          const accent = getCourseAccent(slot.courseTitle, slot.majorOrSection);
+                          const faculty = getFacultyInfo(slot.instructor);
+
+                          return (
+                            <div
+                              key={slot.id}
+                              className={`flex items-start justify-between gap-2 text-xs font-mono rounded-2xl border ${accent.border} ${accent.bg} px-2.5 py-2`}
+                            >
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className={`px-1.5 py-0.5 rounded-md border text-[9px] font-black ${accent.badge}`}>
+                                    P{slot.period}
+                                  </span>
+                                  <span className="text-slate-900 font-bold truncate">
+                                    {slot.courseTitle}
+                                  </span>
+                                </div>
+                                {slot.isMinor && (
+                                  <div className="mt-1 text-[9px] font-bold text-violet-700">
+                                    Minor / Elective
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex flex-col items-end text-[10px] shrink-0">
+                                <span className="text-sky-800 font-black bg-white/80 px-1.5 py-0.5 rounded-lg border border-slate-200">
+                                  R-{slot.room}
                                 </span>
-                              )}
+                                <span className="mt-1 text-violet-700 font-semibold max-w-[110px] text-right leading-tight">
+                                  {faculty.fullName}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-1.5 shrink-0 text-[11px]">
-                              <span className="text-sky-800 font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-                                R-{slot.room}
-                              </span>
-                              <span className="text-violet-700 font-semibold font-mono">
-                                {slot.instructor}
-                              </span>
-                            </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -179,8 +221,8 @@ export function ExportCardModal({
             {/* Footer Watermark */}
             <div className="mt-4 pt-3.5 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-1 text-[10px] font-mono text-slate-500">
               <span>Sylhet Cantonment Road, Sylhet</span>
-              <span className="text-slate-700 font-medium">
-                Designed & Developed by Md. Golam Mubasshir Rafi
+              <span className="text-slate-700 font-bold">
+                AIBA Sync • Routine Card
               </span>
             </div>
           </div>

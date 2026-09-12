@@ -34,77 +34,101 @@ const WEEK_DAYS: { key: DayOfWeek; label: string; short: string }[] = [
   { key: "Thursday", label: "বৃহস্পতিবার", short: "বৃহঃ" },
 ];
 
-// Rich, vibrant subject theme palette with high contrast
+// Keep color identity tied to the academic subject family, not to the batch or position.
 function getSubjectTheme(courseTitle: string, majorOrSection?: string) {
-  const t = (courseTitle + " " + (majorOrSection || "")).toLowerCase();
-  if (t.includes("acc") || t.includes("accounting") || t.includes("cost") || t.includes("audit")) {
-    return {
-      border: "border-amber-400 dark:border-amber-600/80",
-      bg: "bg-amber-50/95 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50",
-      text: "text-amber-950 dark:text-amber-50",
-      badge: "bg-amber-100 dark:bg-amber-500/25 text-amber-950 dark:text-amber-100 border-amber-400 dark:border-amber-500/40",
-      accent: "bg-amber-500",
-      chip: "text-amber-900 dark:text-amber-200",
-    };
-  }
-  if (t.includes("fin") || t.includes("finance") || t.includes("bank") || t.includes("monetary")) {
-    return {
-      border: "border-emerald-400 dark:border-emerald-600/80",
-      bg: "bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50",
-      text: "text-emerald-950 dark:text-emerald-50",
-      badge: "bg-emerald-100 dark:bg-emerald-500/25 text-emerald-950 dark:text-emerald-100 border-emerald-400 dark:border-emerald-500/40",
-      accent: "bg-emerald-500",
-      chip: "text-emerald-900 dark:text-emerald-200",
-    };
-  }
-  if (t.includes("mkt") || t.includes("marketing") || t.includes("consumer") || t.includes("brand") || t.includes("promot")) {
-    return {
-      border: "border-rose-400 dark:border-rose-600/80",
-      bg: "bg-rose-50/95 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50",
-      text: "text-rose-950 dark:text-rose-50",
-      badge: "bg-rose-100 dark:bg-rose-500/25 text-rose-950 dark:text-rose-100 border-rose-400 dark:border-rose-500/40",
-      accent: "bg-rose-500",
-      chip: "text-rose-900 dark:text-rose-200",
-    };
-  }
-  if (t.includes("mis") || t.includes("tech") || t.includes("computer") || t.includes("system") || t.includes("cse") || t.includes("data")) {
-    return {
-      border: "border-cyan-400 dark:border-cyan-600/80",
-      bg: "bg-cyan-50/95 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/50",
-      text: "text-cyan-950 dark:text-cyan-50",
-      badge: "bg-cyan-100 dark:bg-cyan-500/25 text-cyan-950 dark:text-cyan-100 border-cyan-400 dark:border-cyan-500/40",
-      accent: "bg-cyan-500",
-      chip: "text-cyan-900 dark:text-cyan-200",
-    };
-  }
-  if (t.includes("scm") || t.includes("supply") || t.includes("operations") || t.includes("procurement") || t.includes("stat") || t.includes("math")) {
-    return {
-      border: "border-orange-400 dark:border-orange-600/80",
-      bg: "bg-orange-50/95 dark:bg-orange-950/40 hover:bg-orange-100 dark:hover:bg-orange-900/50",
-      text: "text-orange-950 dark:text-orange-50",
-      badge: "bg-orange-100 dark:bg-orange-500/25 text-orange-950 dark:text-orange-100 border-orange-400 dark:border-orange-500/40",
-      accent: "bg-orange-500",
-      chip: "text-orange-900 dark:text-orange-200",
-    };
-  }
-  if (t.includes("hrm") || t.includes("management") || t.includes("conflict") || t.includes("organization") || t.includes("behavior")) {
-    return {
-      border: "border-indigo-400 dark:border-indigo-600/80",
-      bg: "bg-indigo-50/95 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50",
-      text: "text-indigo-950 dark:text-indigo-50",
-      badge: "bg-indigo-100 dark:bg-indigo-500/25 text-indigo-950 dark:text-indigo-100 border-indigo-400 dark:border-indigo-500/40",
-      accent: "bg-indigo-500",
-      chip: "text-indigo-900 dark:text-indigo-200",
-    };
-  }
-  return {
-    border: "border-sky-400 dark:border-sky-600/80",
-    bg: "bg-sky-50/95 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50",
-    text: "text-sky-950 dark:text-sky-50",
-    badge: "bg-sky-100 dark:bg-sky-500/25 text-sky-950 dark:text-sky-100 border-sky-400 dark:border-sky-500/40",
-    accent: "bg-sky-500",
-    chip: "text-sky-900 dark:text-sky-200",
+  const section = (majorOrSection || "").toUpperCase();
+  const haystack = `${courseTitle ?? ""} ${majorOrSection ?? ""}`.toLowerCase();
+  const normalized = haystack.replace(/[^a-z0-9]+/g, " ").trim();
+
+  const majorSignals = {
+    finance: ["FIN", "FINANCE", "BANK", "INVESTMENT", "MONETARY", "FINANCIAL"],
+    accounting: ["ACC", "ACCOUNTING", "AUDIT", "TAX", "COST"],
+    marketing: ["MKT", "MARKETING", "BRAND", "CONSUMER", "SALES", "PROMOTION"],
+    management: ["HRM", "MANAGEMENT", "NEGOTIATION", "CONFLICT", "ORGANIZATION", "STRATEGY", "BEHAVIOR"],
+    technology: ["MIS", "TECHNOLOGY", "SYSTEM", "COMPUTER", "DATA", "INFORMATION"],
+    operations: ["SCM", "SUPPLY", "OPERATIONS", "LOGISTICS", "PROCUREMENT", "PRODUCTION", "PLANNING"],
   };
+
+  const subject = Object.entries(majorSignals).find(([, signals]) =>
+    signals.some((signal) => section.includes(signal) || normalized.includes(signal.toLowerCase()))
+  )?.[0];
+
+  const fallbackSubject = Object.entries({
+    finance: ["finance", "fin", "bank", "investment", "monetary", "financial", "economics"],
+    accounting: ["acc", "accounting", "account", "audit", "tax", "cost", "advanced accounting"],
+    marketing: ["mkt", "marketing", "brand", "consumer", "sales", "advertising", "promotion", "retail"],
+    management: ["hrm", "management", "leader", "organization", "conflict", "negotiation", "behavior", "strategy"],
+    technology: ["mis", "technology", "tech", "system", "computer", "data", "database", "information"],
+    operations: ["scm", "supply", "operations", "logistics", "procurement", "production", "planning", "stat", "math"],
+  }).find(([, signals]) =>
+    signals.some((signal) => normalized.includes(signal))
+  )?.[0];
+
+  switch (subject || fallbackSubject) {
+    case "finance":
+      return {
+        border: "border-emerald-400 dark:border-emerald-600/80",
+        bg: "bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50",
+        text: "text-emerald-950 dark:text-emerald-50",
+        badge: "bg-emerald-100 dark:bg-emerald-500/25 text-emerald-950 dark:text-emerald-100 border-emerald-400 dark:border-emerald-500/40",
+        accent: "bg-emerald-500",
+        chip: "text-emerald-900 dark:text-emerald-200",
+      };
+    case "accounting":
+      return {
+        border: "border-amber-400 dark:border-amber-600/80",
+        bg: "bg-amber-50/95 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50",
+        text: "text-amber-950 dark:text-amber-50",
+        badge: "bg-amber-100 dark:bg-amber-500/25 text-amber-950 dark:text-amber-100 border-amber-400 dark:border-amber-500/40",
+        accent: "bg-amber-500",
+        chip: "text-amber-900 dark:text-amber-200",
+      };
+    case "marketing":
+      return {
+        border: "border-rose-400 dark:border-rose-600/80",
+        bg: "bg-rose-50/95 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50",
+        text: "text-rose-950 dark:text-rose-50",
+        badge: "bg-rose-100 dark:bg-rose-500/25 text-rose-950 dark:text-rose-100 border-rose-400 dark:border-rose-500/40",
+        accent: "bg-rose-500",
+        chip: "text-rose-900 dark:text-rose-200",
+      };
+    case "management":
+      return {
+        border: "border-indigo-400 dark:border-indigo-600/80",
+        bg: "bg-indigo-50/95 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50",
+        text: "text-indigo-950 dark:text-indigo-50",
+        badge: "bg-indigo-100 dark:bg-indigo-500/25 text-indigo-950 dark:text-indigo-100 border-indigo-400 dark:border-indigo-500/40",
+        accent: "bg-indigo-500",
+        chip: "text-indigo-900 dark:text-indigo-200",
+      };
+    case "technology":
+      return {
+        border: "border-cyan-400 dark:border-cyan-600/80",
+        bg: "bg-cyan-50/95 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/50",
+        text: "text-cyan-950 dark:text-cyan-50",
+        badge: "bg-cyan-100 dark:bg-cyan-500/25 text-cyan-950 dark:text-cyan-100 border-cyan-400 dark:border-cyan-500/40",
+        accent: "bg-cyan-500",
+        chip: "text-cyan-900 dark:text-cyan-200",
+      };
+    case "operations":
+      return {
+        border: "border-orange-400 dark:border-orange-600/80",
+        bg: "bg-orange-50/95 dark:bg-orange-950/40 hover:bg-orange-100 dark:hover:bg-orange-900/50",
+        text: "text-orange-950 dark:text-orange-50",
+        badge: "bg-orange-100 dark:bg-orange-500/25 text-orange-950 dark:text-orange-100 border-orange-400 dark:border-orange-500/40",
+        accent: "bg-orange-500",
+        chip: "text-orange-900 dark:text-orange-200",
+      };
+    default:
+      return {
+        border: "border-sky-400 dark:border-sky-600/80",
+        bg: "bg-sky-50/95 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50",
+        text: "text-sky-950 dark:text-sky-50",
+        badge: "bg-sky-100 dark:bg-sky-500/25 text-sky-950 dark:text-sky-100 border-sky-400 dark:border-sky-500/40",
+        accent: "bg-sky-500",
+        chip: "text-sky-900 dark:text-sky-200",
+      };
+  }
 }
 
 export function WeekView({
@@ -152,15 +176,9 @@ export function WeekView({
               <Calendar className="w-4 h-4" />
             </span>
             <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
-              {layoutMode === "GRID" ? "সাপ্তাহিক রুটিন ম্যাট্রিক্স" : "সাপ্তাহিক ক্লাস তালিকা"}
+              Weekly View
             </h3>
-            <span className="px-2 py-0.5 rounded-full text-[11px] font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
-              মোট {activeSlots.length}টি ক্লাস
-            </span>
           </div>
-          <p className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">
-            রবিবার থেকে বৃহস্পতিবার পূর্ণাঙ্গ ক্লাস সূচি • এক নজরে সাপ্তাহিক ৩টি পিরিয়ড
-          </p>
         </div>
 
         {/* View Switcher: Full Week Grid vs Day List */}
@@ -175,7 +193,7 @@ export function WeekView({
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
-            <span>টাইমটেবিল গ্রিড</span>
+            <span>Grid</span>
           </button>
           <button
             type="button"
@@ -187,7 +205,7 @@ export function WeekView({
             }`}
           >
             <ListFilter className="w-3.5 h-3.5" />
-            <span>দিনভিত্তিক ভিউ</span>
+            <span>Day</span>
           </button>
         </div>
       </div>
@@ -196,7 +214,7 @@ export function WeekView({
       {role === "teacher" && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar p-1.5 rounded-2xl bg-slate-100/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
           <span className="text-xs font-black text-slate-600 dark:text-slate-300 px-2 shrink-0">
-            রুটিন ফিল্টার:
+            Routine Filter:
           </span>
           <button
             type="button"
@@ -207,7 +225,7 @@ export function WeekView({
                 : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
             }`}
           >
-            আমার ক্লাস সূচি
+            My Classes
           </button>
           <button
             type="button"
@@ -218,7 +236,7 @@ export function WeekView({
                 : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
             }`}
           >
-            মাস্টার রুটিন (সকল ব্যাচ)
+            Master Routine (All Batches)
           </button>
           {allBatches.map((b) => (
             <button
@@ -250,17 +268,17 @@ export function WeekView({
                 {/* Column 1: Day Label (Sticky Left) */}
                 <div className="p-2 sm:p-2.5 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-20 bg-slate-100 dark:bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)]">
                   <span className="text-[11px] sm:text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
-                    বার
+                    Day
                   </span>
                   <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
-                    Day
+                    Week
                   </span>
                 </div>
 
                 {/* Column 2: Period 1 */}
                 <div className="p-2 sm:p-2.5 text-center border-r border-slate-200 dark:border-slate-800">
                   <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
-                    পিরিয়ড ১
+                    Period 1
                   </div>
                   <div className="text-[11px] font-bold text-sky-700 dark:text-sky-300">
                     09:30 - 11:00 AM
@@ -270,11 +288,11 @@ export function WeekView({
                 {/* Column 3: Short Break */}
                 <div
                   className="p-1 border-r border-amber-200/70 dark:border-amber-800/40 bg-amber-100/50 dark:bg-amber-950/40 flex flex-col items-center justify-center text-center"
-                  title="বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
+                  title="Break • 11:00 AM - 11:30 AM (30 minutes)"
                 >
                   <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 mb-0.5" />
                   <span className="text-[9px] font-black text-amber-950 dark:text-amber-200 leading-tight">
-                    বিরতি
+                    Break
                   </span>
                   <span className="text-[9px] font-bold text-amber-700 dark:text-amber-400 leading-none mt-0.5">
                     11:00
@@ -284,7 +302,7 @@ export function WeekView({
                 {/* Column 4: Period 2 */}
                 <div className="p-2 sm:p-2.5 text-center border-r border-slate-200 dark:border-slate-800">
                   <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
-                    পিরিয়ড ২
+                    Period 2
                   </div>
                   <div className="text-[11px] font-bold text-sky-700 dark:text-sky-300">
                     11:30 AM - 01:00 PM
@@ -294,11 +312,11 @@ export function WeekView({
                 {/* Column 5: Lunch Break */}
                 <div
                   className="p-1 border-r border-sky-200/70 dark:border-sky-800/40 bg-sky-100/50 dark:bg-sky-950/40 flex flex-col items-center justify-center text-center"
-                  title="মধ্যাহ্ন বিরতি • 01:00 PM - 01:30 PM (৩০ মিনিট)"
+                  title="Lunch Break • 01:00 PM - 01:30 PM (30 minutes)"
                 >
                   <Utensils className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 mb-0.5" />
                   <span className="text-[9px] font-black text-sky-950 dark:text-sky-200 leading-tight">
-                    মধ্যাহ্ন
+                    Lunch
                   </span>
                   <span className="text-[9px] font-bold text-sky-700 dark:text-sky-400 leading-none mt-0.5">
                     01:00
@@ -308,7 +326,7 @@ export function WeekView({
                 {/* Column 6: Period 3 */}
                 <div className="p-2 sm:p-2.5 text-center">
                   <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
-                    পিরিয়ড ৩
+                    Period 3
                   </div>
                   <div className="text-[11px] font-bold text-sky-700 dark:text-sky-300">
                     01:30 - 03:00 PM
@@ -354,7 +372,7 @@ export function WeekView({
                       </span>
                       {isToday && (
                         <span className="mt-1 px-1.5 py-0.2 rounded-full text-[9px] font-black bg-sky-600 text-white tracking-tight shadow-2xs">
-                          আজ
+                          Today
                         </span>
                       )}
                     </div>
@@ -460,26 +478,26 @@ export function WeekView({
 
           {/* Color Coding Legend */}
           <div className="p-3 sm:p-3.5 bg-slate-50/90 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-center gap-3.5 text-xs font-bold text-slate-700 dark:text-slate-300">
-            <span className="text-slate-900 dark:text-white font-black">বিষয়ভিত্তিক কালার কোড:</span>
+            <span className="text-slate-900 dark:text-white font-black">Subject color key:</span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-              <span>ফিন্যান্স (Finance)</span>
+              <span>Finance</span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-              <span>অ্যাকাউন্টিং (Accounting)</span>
+              <span>Accounting</span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-              <span>ম্যানেজমেন্ট / HRM</span>
+              <span>Management / HRM</span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-              <span>মার্কেটিং (Marketing)</span>
+              <span>Marketing</span>
             </span>
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
-              <span>এমআইএস / টেকনোলজি</span>
+              <span>MIS / Technology</span>
             </span>
           </div>
         </div>
