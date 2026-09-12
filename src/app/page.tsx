@@ -5,6 +5,7 @@ import Image from "next/image";
 import { ROUTINE_DATA, INSTITUTION_INFO } from "@/data/routine";
 import { DEFAULT_PREFERENCES, getStoredPreferences, savePreferences } from "@/lib/storage";
 import { getActiveAndUpcomingClass, getDayName } from "@/lib/time-utils";
+import { trackRoutineView } from "@/lib/tracking";
 import { DayOfWeek, FacultyMember, UserPreferences, UserRole } from "@/lib/types";
 import { Navbar } from "@/components/navbar";
 import { LiveStatusCard } from "@/components/live-status-card";
@@ -125,6 +126,16 @@ export default function HomePage() {
       minor,
       hasOnboarded: true,
     }));
+
+    // রুটিন ভিউ ট্র্যাক করুন (ব্যাকগ্রাউন্ডে নীরবে /api/track-এ পাঠানো হয়)
+    trackRoutineView({
+      name: name || undefined,
+      batch,
+      majorOrSection,
+      minor,
+      role: role || "student",
+      teacherCode: teacherCode || "",
+    });
   };
 
   const setSimulationPreset = (day: DayOfWeek, hours: number, minutes: number) => {
