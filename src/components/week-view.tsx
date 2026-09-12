@@ -246,7 +246,7 @@ export function WeekView({
           <div className="overflow-x-auto">
             <div className="min-w-[640px] sm:min-w-[720px]">
               {/* Table Column Headers */}
-              <div className="grid grid-cols-[84px_minmax(145px,1fr)_34px_minmax(145px,1fr)_34px_minmax(145px,1fr)] sm:grid-cols-[96px_minmax(170px,1fr)_40px_minmax(170px,1fr)_40px_minmax(170px,1fr)] border-b border-slate-200 dark:border-slate-800 bg-slate-100/95 dark:bg-slate-950">
+              <div className="grid grid-cols-[84px_minmax(145px,1fr)_38px_minmax(145px,1fr)_38px_minmax(145px,1fr)] sm:grid-cols-[96px_minmax(170px,1fr)_44px_minmax(170px,1fr)_44px_minmax(170px,1fr)] border-b border-slate-200 dark:border-slate-800 bg-slate-100/95 dark:bg-slate-950">
                 {/* Column 1: Day Label (Sticky Left) */}
                 <div className="p-2 sm:p-2.5 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-20 bg-slate-100 dark:bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)]">
                   <span className="text-[11px] sm:text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
@@ -269,12 +269,15 @@ export function WeekView({
 
                 {/* Column 3: Short Break (Tea Break) */}
                 <div
-                  className="p-1 border-r border-amber-200/70 dark:border-amber-800/40 bg-amber-100/40 dark:bg-amber-950/40 flex flex-col items-center justify-center"
+                  className="p-1 border-r border-amber-200/70 dark:border-amber-800/40 bg-amber-100/50 dark:bg-amber-950/40 flex flex-col items-center justify-center text-center"
                   title="চা বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
                 >
-                  <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                  <span className="text-[8px] sm:text-[9px] font-black text-amber-900 dark:text-amber-200 mt-0.5 leading-none">
+                  <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 mb-0.5" />
+                  <span className="text-[9px] font-black text-amber-950 dark:text-amber-200 leading-tight">
                     বিরতি
+                  </span>
+                  <span className="text-[8px] font-mono font-bold text-amber-700 dark:text-amber-400 leading-none mt-0.5">
+                    11:00
                   </span>
                 </div>
 
@@ -290,12 +293,15 @@ export function WeekView({
 
                 {/* Column 5: Lunch Break */}
                 <div
-                  className="p-1 border-r border-sky-200/70 dark:border-sky-800/40 bg-sky-100/40 dark:bg-sky-950/40 flex flex-col items-center justify-center"
+                  className="p-1 border-r border-sky-200/70 dark:border-sky-800/40 bg-sky-100/50 dark:bg-sky-950/40 flex flex-col items-center justify-center text-center"
                   title="মধ্যাহ্ন বিরতি • 01:00 PM - 01:30 PM (৩০ মিনিট)"
                 >
-                  <Utensils className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                  <span className="text-[8px] sm:text-[9px] font-black text-sky-900 dark:text-sky-200 mt-0.5 leading-none">
+                  <Utensils className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 mb-0.5" />
+                  <span className="text-[9px] font-black text-sky-950 dark:text-sky-200 leading-tight">
                     মধ্যাহ্ন
+                  </span>
+                  <span className="text-[8px] font-mono font-bold text-sky-700 dark:text-sky-400 leading-none mt-0.5">
+                    01:00
                   </span>
                 </div>
 
@@ -311,7 +317,7 @@ export function WeekView({
               </div>
 
               {/* TIMETABLE ROWS (Days as Rows: Sunday to Thursday) */}
-              {WEEK_DAYS.map((day) => {
+              {WEEK_DAYS.map((day, dayIdx) => {
                 const isToday = currentRealDay === day.key;
                 const p1Slots = activeSlots.filter((s) => s.day === day.key && s.period === 1);
                 const p2Slots = activeSlots.filter((s) => s.day === day.key && s.period === 2);
@@ -320,7 +326,7 @@ export function WeekView({
                 return (
                   <div
                     key={day.key}
-                    className={`grid grid-cols-[84px_minmax(145px,1fr)_34px_minmax(145px,1fr)_34px_minmax(145px,1fr)] sm:grid-cols-[96px_minmax(170px,1fr)_40px_minmax(170px,1fr)_40px_minmax(170px,1fr)] border-b last:border-b-0 border-slate-200 dark:border-slate-800 min-h-[115px] sm:min-h-[130px] transition-colors ${
+                    className={`grid grid-cols-[84px_minmax(145px,1fr)_38px_minmax(145px,1fr)_38px_minmax(145px,1fr)] sm:grid-cols-[96px_minmax(170px,1fr)_44px_minmax(170px,1fr)_44px_minmax(170px,1fr)] border-b last:border-b-0 border-slate-200 dark:border-slate-800 min-h-[115px] sm:min-h-[130px] transition-colors ${
                       isToday ? "bg-sky-50/20 dark:bg-sky-500/5" : ""
                     }`}
                   >
@@ -371,16 +377,25 @@ export function WeekView({
                       )}
                     </div>
 
-                    {/* Short Break Column */}
-                    <div
-                      className="p-0.5 border-r border-amber-200/50 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20 flex flex-col items-center justify-center text-center"
-                      title="চা বিরতি (৩০ মিনিট)"
-                    >
-                      <Coffee className="w-3.5 h-3.5 text-amber-600/70 dark:text-amber-400/70 mb-1 shrink-0" />
-                      <span className="[writing-mode:vertical-lr] text-[8px] sm:text-[9px] font-black text-amber-900/80 dark:text-amber-300/80 tracking-widest rotate-180 select-none">
-                        বিরতি
-                      </span>
-                    </div>
+                    {/* Short Break Column: Centered badge in the exact middle row (Tuesday / dayIdx 2) */}
+                    {dayIdx === 2 ? (
+                      <div
+                        className="p-1 border-r border-amber-200/60 dark:border-amber-800/40 bg-amber-100/70 dark:bg-amber-900/35 flex flex-col items-center justify-center text-center shadow-2xs"
+                        title="চা বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
+                      >
+                        <Coffee className="w-3.5 h-3.5 text-amber-700 dark:text-amber-300 mb-1 shrink-0" />
+                        <span className="[writing-mode:vertical-lr] text-[9px] font-black text-amber-950 dark:text-amber-100 tracking-wider rotate-180 select-none">
+                          চা বিরতি • 11:00-11:30
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        className="border-r border-amber-200/40 dark:border-amber-800/30 bg-amber-50/20 dark:bg-amber-950/10 flex items-center justify-center"
+                        title="চা বিরতি • 11:00 AM - 11:30 AM"
+                      >
+                        <div className="w-0.5 h-10 bg-amber-300/60 dark:bg-amber-700/40 rounded-full" />
+                      </div>
+                    )}
 
                     {/* Period 2 Cell */}
                     <div className="p-1.5 sm:p-2 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-1.5 justify-center">
@@ -400,16 +415,25 @@ export function WeekView({
                       )}
                     </div>
 
-                    {/* Lunch Break Column */}
-                    <div
-                      className="p-0.5 border-r border-sky-200/50 dark:border-sky-800/40 bg-sky-50/50 dark:bg-sky-950/20 flex flex-col items-center justify-center text-center"
-                      title="মধ্যাহ্ন বিরতি (৩০ মিনিট)"
-                    >
-                      <Utensils className="w-3.5 h-3.5 text-sky-600/70 dark:text-sky-400/70 mb-1 shrink-0" />
-                      <span className="[writing-mode:vertical-lr] text-[8px] sm:text-[9px] font-black text-sky-900/80 dark:text-sky-300/80 tracking-widest rotate-180 select-none">
-                        মধ্যাহ্ন
-                      </span>
-                    </div>
+                    {/* Lunch Break Column: Centered badge in the exact middle row (Tuesday / dayIdx 2) */}
+                    {dayIdx === 2 ? (
+                      <div
+                        className="p-1 border-r border-sky-200/60 dark:border-sky-800/40 bg-sky-100/70 dark:bg-sky-900/35 flex flex-col items-center justify-center text-center shadow-2xs"
+                        title="মধ্যাহ্ন বিরতি • 01:00 PM - 01:30 PM (৩০ মিনিট)"
+                      >
+                        <Utensils className="w-3.5 h-3.5 text-sky-700 dark:text-sky-300 mb-1 shrink-0" />
+                        <span className="[writing-mode:vertical-lr] text-[9px] font-black text-sky-950 dark:text-sky-100 tracking-wider rotate-180 select-none">
+                          মধ্যাহ্ন বিরতি • 01:00-01:30
+                        </span>
+                      </div>
+                    ) : (
+                      <div
+                        className="border-r border-sky-200/40 dark:border-sky-800/30 bg-sky-50/20 dark:bg-sky-950/10 flex items-center justify-center"
+                        title="মধ্যাহ্ন বিরতি • 01:00 PM - 01:30 PM"
+                      >
+                        <div className="w-0.5 h-10 bg-sky-300/60 dark:bg-sky-700/40 rounded-full" />
+                      </div>
+                    )}
 
                     {/* Period 3 Cell */}
                     <div className="p-1.5 sm:p-2 flex flex-col gap-1.5 justify-center">

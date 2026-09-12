@@ -42,7 +42,8 @@ export function SelectionDialog({
   const [role, setRole] = useState<UserRole>(currentRole);
   const [teacherCode, setTeacherCode] = useState(currentTeacherCode);
   const [name, setName] = useState(currentName);
-  const [nameError, setNameError] = useState(false);
+  const [teacherError, setTeacherError] = useState(false);
+  const [bba11Error, setBba11Error] = useState<string>("");
 
   const safeData = routineData || [];
   const availableBatches = useMemo(() => {
@@ -73,21 +74,19 @@ export function SelectionDialog({
     return Array.from(set).sort();
   }, [safeData, selectedBatch, isBba11]);
 
-  // Major state for BBA-11
-  const [selectedMajor, setSelectedMajor] = useState(
+  // Major state for BBA-11: DO NOT pre-select default
+  const [selectedMajor, setSelectedMajor] = useState<string>(
     isBba11 && currentMajorOrSection && BBA11_MAJORS.some((m) => m.code === currentMajorOrSection)
       ? currentMajorOrSection
-      : "FIN"
+      : ""
   );
 
-  // Minor state for BBA-11
-  const normalizedInitialMinor =
-    currentMinor?.replace("-M", "") || "MIS";
-
-  const [selectedMinor, setSelectedMinor] = useState(
+  // Minor state for BBA-11: DO NOT pre-select default
+  const normalizedInitialMinor = currentMinor?.replace("-M", "");
+  const [selectedMinor, setSelectedMinor] = useState<string>(
     isBba11 && currentMinor && (currentMinor === "None" || BBA11_MINORS.some((m) => m.code === normalizedInitialMinor))
       ? normalizedInitialMinor
-      : "MIS"
+      : ""
   );
 
   // Section state for non-BBA-11
@@ -101,9 +100,10 @@ export function SelectionDialog({
 
   const handleBatchSelect = (batchName: string) => {
     setSelectedBatch(batchName);
+    setBba11Error("");
     if (batchName === "BBA-11") {
-      setSelectedMajor("FIN");
-      setSelectedMinor("MIS");
+      setSelectedMajor("");
+      setSelectedMinor("");
     } else {
       const sections = Array.from(
         new Set(
@@ -120,10 +120,10 @@ export function SelectionDialog({
 
   const handleMajorSelect = (majorCode: string) => {
     setSelectedMajor(majorCode);
-    // If current minor matches new major, automatically switch minor to another discipline
+    setBba11Error("");
+    // If current minor matches new major, clear minor
     if (selectedMinor === majorCode) {
-      const nextAvailableMinor = BBA11_MINORS.find((m) => m.code !== majorCode)?.code || "None";
-      setSelectedMinor(nextAvailableMinor);
+      setSelectedMinor("");
     }
   };
 
@@ -131,26 +131,53 @@ export function SelectionDialog({
   const selectedMinorObj = BBA11_MINORS.find((m) => m.code === selectedMinor);
 
   const handleSave = () => {
-    if (!name || name.trim().length === 0) {
-      setNameError(true);
+    if (role === "teacher") {
+      if (!teacherCode) {
+        setTeacherError(true);
+        return;
+      }
+      setTeacherError(false);
+      const faculty = FACULTY_LIST.find((f) => f.code === teacherCode);
+      const displayName = name.trim() || faculty?.fullName || teacherCode;
+      savePreferences({
+        role: "teacher",
+        studentName: displayName,
+        teacherCode,
+        batch: "MY_CLASSES",
+        majorOrSection: "",
+        minor: "None",
+      });
+      onSaved(displayName, "MY_CLASSES", "", "None", "teacher", teacherCode);
+      onClose();
       return;
     }
-    setNameError(false);
 
-    const finalMajorOrSection = role === "teacher"
-      ? (isBba11 ? "FIN" : (availableSections[0] || "Alpha"))
-      : (isBba11 ? selectedMajor : selectedSection);
-    const finalMinor = role === "teacher" ? "None" : (isBba11 ? selectedMinor : "None");
+    // Student validation: If BBA-11, both Major and Minor must be explicitly chosen
+    if (isBba11) {
+      if (!selectedMajor) {
+        setBba11Error("অনুগ্রহ করে আপনার মেজর বিষয় নির্বাচন করুন");
+        return;
+      }
+      if (!selectedMinor) {
+        setBba11Error("অনুগ্রহ করে আপনার মাইনর কোর্স নির্বাচন করুন");
+        return;
+      }
+    }
+    setBba11Error("");
+
+    const finalMajorOrSection = isBba11 ? selectedMajor : selectedSection;
+    const finalMinor = isBba11 ? (selectedMinor === "None" ? "None" : `${selectedMinor}-M`) : "None";
+    const studentDisplayName = name.trim();
 
     savePreferences({
-      role,
-      studentName: name.trim(),
-      teacherCode: role === "teacher" ? teacherCode : undefined,
+      role: "student",
+      studentName: studentDisplayName,
+      teacherCode: undefined,
       batch: selectedBatch,
       majorOrSection: finalMajorOrSection,
       minor: finalMinor,
     });
-    onSaved(name.trim(), selectedBatch, finalMajorOrSection, finalMinor, role, teacherCode);
+    onSaved(studentDisplayName, selectedBatch, finalMajorOrSection, finalMinor, "student");
     onClose();
   };
 
@@ -174,7 +201,7 @@ export function SelectionDialog({
           <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-1 shrink-0 shadow-xs">
             <img
               src="/logo.png"
-              alt="AIBA Sylhet Crest"
+              alt="AIBA Logo"
               className="w-full h-full object-contain"
             />
           </div>
@@ -190,7 +217,7 @@ export function SelectionDialog({
 
         {/* Scrollable Content Body */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
-          {/* Role Selection Switcher */}
+          {/* Role Selection Switcher: Student First, Teacher Second */}
           <div>
             <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
               একাডেমিক প্রোফাইলের ধরন
@@ -213,6 +240,7 @@ export function SelectionDialog({
                 <GraduationCap className="w-4 h-4" />
                 <span>শিক্ষার্থী</span>
               </button>
+
               <button
                 type="button"
                 onClick={() => {
@@ -220,7 +248,7 @@ export function SelectionDialog({
                   if (!teacherCode && FACULTY_LIST.length > 0) {
                     setTeacherCode(FACULTY_LIST[0].code);
                     setName(FACULTY_LIST[0].fullName);
-                    setNameError(false);
+                    setTeacherError(false);
                   }
                   setSelectedBatch("MY_CLASSES");
                 }}
@@ -242,7 +270,7 @@ export function SelectionDialog({
               <div>
                 <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
                   <span>শিক্ষকদের তালিকা থেকে আপনার প্রোফাইল নির্বাচন করুন</span>
-                  {nameError && (
+                  {teacherError && (
                     <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
                       অনুগ্রহ করে শিক্ষক নির্বাচন করুন
                     </span>
@@ -256,7 +284,7 @@ export function SelectionDialog({
                     const faculty = FACULTY_LIST.find((f) => f.code === code);
                     if (faculty) {
                       setName(faculty.fullName);
-                      setNameError(false);
+                      setTeacherError(false);
                     }
                   }}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-sky-500 cursor-pointer"
@@ -279,10 +307,7 @@ export function SelectionDialog({
                   <input
                     type="text"
                     value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      if (e.target.value.trim().length > 0) setNameError(false);
-                    }}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="যেমন: Chinmoy Das Gupta"
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-semibold text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500"
                   />
@@ -325,71 +350,31 @@ export function SelectionDialog({
                     <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">বিশ্ববিদ্যালয়ের সকল ব্যাচ</div>
                   </button>
                 </div>
-
-                <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-1.5">
-                  অথবা নির্দিষ্ট একক ব্যাচের রুটিন দেখতে ক্লিক করুন:
-                </div>
-                <div className="grid grid-cols-5 gap-1.5">
-                  {availableBatches.map((b) => {
-                    const isSelected = selectedBatch === b;
-                    return (
-                      <button
-                        key={b}
-                        type="button"
-                        onClick={() => setSelectedBatch(b)}
-                        className={`py-2 px-2 rounded-xl border text-center transition-all cursor-pointer ${
-                          isSelected
-                            ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-200 shadow-xs font-bold"
-                            : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                        }`}
-                      >
-                        <div className="text-xs font-mono font-bold">{b}</div>
-                      </button>
-                    );
-                  })}
-                </div>
               </div>
             </div>
           ) : (
             /* STUDENT CONTROLS */
             <>
-              {/* Field 1: Student Full Name */}
+              {/* Field 1: Student Full Name (Optional - Never blocks) */}
               <div>
                 <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
-                  <span>শিক্ষার্থীর নাম</span>
-                  {nameError && (
-                    <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
-                      অনুগ্রহ করে নামটি লিখুন
-                    </span>
-                  )}
+                  <span>
+                    শিক্ষার্থীর নাম <span className="text-slate-400 dark:text-slate-500 font-normal">(ঐচ্ছিক)</span>
+                  </span>
                 </label>
                 <div className="relative">
-                  <User className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
-                    nameError ? "text-rose-500" : "text-slate-400"
-                  }`} />
+                  <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                   <input
                     type="text"
-                    required
                     value={name}
-                    onChange={(e) => {
-                      setName(e.target.value);
-                      if (e.target.value.trim().length > 0) {
-                        setNameError(false);
-                      }
-                    }}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="যেমন: Md. Golam Mubasshir Rafi"
-                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-all ${
-                      nameError
-                        ? "border-rose-500 ring-2 ring-rose-500/20"
-                        : "border-slate-200 dark:border-slate-800 focus:border-sky-500"
-                    }`}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-all"
                   />
                 </div>
-                {nameError && (
-                  <p className="text-xs font-medium text-rose-500 dark:text-rose-400 mt-1">
-                    আপনার নাম প্রদান করলে রুটিন কার্ড ও লাইভ কাউন্টডাউনে আপনার নাম প্রদর্শিত হবে।
-                  </p>
-                )}
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
+                  নাম খালি রাখলেও সরাসরি রুটিনে প্রবেশ করা যাবে।
+                </p>
               </div>
 
               {/* Field 2: Batch Selection */}
@@ -421,173 +406,206 @@ export function SelectionDialog({
                 </div>
               </div>
 
-          {/* Field 3: If BBA-11 -> Show Major & Minor Options */}
-          {isBba11 ? (
-            <div className="space-y-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 animate-in fade-in">
-              {/* Major Selection */}
-              <div>
-                <label className="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 block mb-2 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5">
-                    <BookOpen className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                    <span>২. মেজর নির্বাচন (Major Discipline)</span>
-                  </span>
-                  <span className="text-[10px] text-sky-600 dark:text-sky-400 font-mono font-normal">
-                    মূল পাঠ্যক্রম
-                  </span>
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {BBA11_MAJORS.map((m) => {
-                    const isSelected = selectedMajor === m.code;
-                    return (
-                      <button
-                        key={m.code}
-                        type="button"
-                        onClick={() => handleMajorSelect(m.code)}
-                        className={`p-3 rounded-xl border text-left transition-all cursor-pointer flex items-start justify-between ${
-                          isSelected
-                            ? "bg-sky-50 dark:bg-sky-500/25 border-sky-500 text-sky-950 dark:text-sky-100 shadow-xs font-semibold"
-                            : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                        }`}
-                      >
-                        <div>
-                          <div className="text-xs font-bold">{m.name}</div>
-                          <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">
-                            {m.fullName}
-                          </div>
-                        </div>
-                        {isSelected && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              {/* Field 3: If BBA-11 -> Show Major & Minor in Sequence */}
+              {isBba11 ? (
+                <div className="space-y-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 animate-in fade-in">
+                  {/* Major Selection */}
+                  <div>
+                    <label className="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 block mb-2 flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        <BookOpen className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+                        <span>২. মেজর নির্বাচন করুন (Major Discipline)</span>
+                      </span>
+                      {!selectedMajor ? (
+                        <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold animate-pulse">
+                          * নির্বাচন আবশ্যক
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                          ✓ নির্বাচিত: {selectedMajor}
+                        </span>
+                      )}
+                    </label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {BBA11_MAJORS.map((m) => {
+                        const isSelected = selectedMajor === m.code;
+                        return (
+                          <button
+                            key={m.code}
+                            type="button"
+                            onClick={() => handleMajorSelect(m.code)}
+                            className={`p-3 rounded-xl border-2 text-left transition-all cursor-pointer flex items-start justify-between ${
+                              isSelected
+                                ? "bg-sky-50 dark:bg-sky-500/25 border-sky-500 text-sky-950 dark:text-sky-100 shadow-xs font-semibold"
+                                : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-sky-300 dark:hover:border-sky-700"
+                            }`}
+                          >
+                            <div>
+                              <div className="text-xs font-black">{m.name}</div>
+                              <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+                                {m.fullName}
+                              </div>
+                            </div>
+                            {isSelected && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0 mt-0.5" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-              {/* Minor Selection */}
-              <div>
-                <label className="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5">
-                    <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-                    <span>৩. মাইনর কোর্স নির্বাচন (Minor Course)</span>
-                  </span>
-                  <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-mono font-normal">
-                    সাপ্তাহিক ২ পিরিয়ড
-                  </span>
-                </label>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mb-2">
-                  প্রতিটি মেজরের সাথে নির্ধারিত মাইনর কোর্সটি সিলেক্ট করুন:
-                </p>
-
-                <div className="space-y-1.5">
-                  {BBA11_MINORS.map((m) => {
-                    const isSelected = selectedMinor === m.code;
-                    const isOwnMajor = selectedMajor === m.code;
-
-                    return (
-                      <button
-                        key={m.code}
-                        type="button"
-                        disabled={isOwnMajor}
-                        onClick={() => setSelectedMinor(m.code)}
-                        className={`w-full p-2.5 rounded-xl border text-left transition-all flex items-center justify-between gap-2 ${
-                          isOwnMajor
-                            ? "opacity-40 bg-slate-100 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed"
-                            : isSelected
-                            ? "bg-indigo-50 dark:bg-indigo-500/25 border-indigo-500 text-indigo-950 dark:text-indigo-100 shadow-xs cursor-pointer font-medium"
-                            : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 cursor-pointer"
-                        }`}
-                      >
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="px-1.5 py-0.5 rounded-md font-mono text-[10px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
-                              {m.code}
-                            </span>
-                            <span className="text-xs font-semibold text-slate-900 dark:text-white truncate">
-                              {m.courseTitle}
-                            </span>
-                            {isOwnMajor && (
-                              <span className="text-[10px] text-amber-600 dark:text-amber-400 font-normal">
-                                (আপনার মেজর)
-                              </span>
-                            )}
-                          </div>
-                          {m.shortDescription && (
-                            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-mono truncate">
-                              {m.shortDescription}
-                            </p>
-                          )}
-                        </div>
-
-                        {isSelected && !isOwnMajor && (
-                          <div className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
-                            <Check className="w-3 h-3" />
-                          </div>
+                  {/* Minor Selection: Immediately revealed when Major is selected */}
+                  {selectedMajor ? (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-200 pt-2 border-t border-slate-200 dark:border-slate-800">
+                      <label className="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5">
+                          <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
+                          <span>৩. মাইনর কোর্স নির্বাচন করুন (Minor Course)</span>
+                        </span>
+                        {!selectedMinor ? (
+                          <span className="text-[10px] text-amber-600 dark:text-amber-400 font-bold animate-pulse">
+                            * নির্বাচন আবশ্যক
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
+                            ✓ নির্বাচিত
+                          </span>
                         )}
-                      </button>
-                    );
-                  })}
+                      </label>
+                      <p className="text-[11px] font-medium text-slate-600 dark:text-slate-400 mb-2">
+                        আপনার মেজরের সাথে নির্ধারিত মাইনরটি সিলেক্ট করুন:
+                      </p>
 
-                  {/* None Option */}
-                  <button
-                    type="button"
-                    onClick={() => setSelectedMinor("None")}
-                    className={`w-full p-2.5 rounded-xl border text-left transition-all flex items-center justify-between cursor-pointer ${
-                      selectedMinor === "None"
-                        ? "bg-indigo-50 dark:bg-indigo-500/25 border-indigo-500 text-indigo-950 dark:text-indigo-100 font-medium"
-                        : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-                    }`}
-                  >
-                    <span className="text-xs">কোনো মাইনর নেই (শুধুমাত্র মেজরের কোর্সসমূহ)</span>
-                    {selectedMinor === "None" && (
-                      <div className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
-                        <Check className="w-3 h-3" />
+                      <div className="space-y-2">
+                        {BBA11_MINORS.map((m) => {
+                          const isSelected = selectedMinor === m.code;
+                          const isOwnMajor = selectedMajor === m.code;
+
+                          return (
+                            <button
+                              key={m.code}
+                              type="button"
+                              disabled={isOwnMajor}
+                              onClick={() => {
+                                setSelectedMinor(m.code);
+                                setBba11Error("");
+                              }}
+                              className={`w-full p-2.5 rounded-xl border-2 text-left transition-all flex items-center justify-between gap-2 ${
+                                isOwnMajor
+                                  ? "opacity-40 bg-slate-100 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-400 cursor-not-allowed"
+                                  : isSelected
+                                  ? "bg-indigo-50 dark:bg-indigo-500/25 border-indigo-500 text-indigo-950 dark:text-indigo-100 shadow-xs cursor-pointer font-bold"
+                                  : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-indigo-300 dark:hover:border-indigo-700 cursor-pointer"
+                              }`}
+                            >
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="px-1.5 py-0.5 rounded-md font-mono text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                                    {m.code}
+                                  </span>
+                                  <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
+                                    {m.courseTitle}
+                                  </span>
+                                  {isOwnMajor && (
+                                    <span className="text-[10px] text-amber-600 dark:text-amber-400 font-semibold">
+                                      (আপনার মেজর)
+                                    </span>
+                                  )}
+                                </div>
+                                {m.shortDescription && (
+                                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 font-medium truncate">
+                                    {m.shortDescription}
+                                  </p>
+                                )}
+                              </div>
+
+                              {isSelected && !isOwnMajor && (
+                                <div className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                                  <Check className="w-3 h-3" />
+                                </div>
+                              )}
+                            </button>
+                          );
+                        })}
+
+                        {/* None Option */}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setSelectedMinor("None");
+                            setBba11Error("");
+                          }}
+                          className={`w-full p-2.5 rounded-xl border-2 text-left transition-all flex items-center justify-between cursor-pointer ${
+                            selectedMinor === "None"
+                              ? "bg-indigo-50 dark:bg-indigo-500/25 border-indigo-500 text-indigo-950 dark:text-indigo-100 font-bold"
+                              : "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-indigo-300 dark:hover:border-indigo-700"
+                          }`}
+                        >
+                          <span className="text-xs font-semibold">কোনো মাইনর নেই (শুধুমাত্র মেজরের কোর্সসমূহ)</span>
+                          {selectedMinor === "None" && (
+                            <div className="w-5 h-5 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                              <Check className="w-3 h-3" />
+                            </div>
+                          )}
+                        </button>
                       </div>
-                    )}
-                  </button>
-                </div>
-              </div>
+                    </div>
+                  ) : (
+                    <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-[11px] font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-2">
+                      <span>👉 উপরে প্রথমে আপনার মেজর নির্বাচন করুন, এরপর মাইনর অপশনগুলো উন্মুক্ত হবে।</span>
+                    </div>
+                  )}
 
-              {/* Live Combination Preview Badge */}
-              <div className="p-2.5 rounded-xl bg-sky-100/60 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/30 text-[11px] text-sky-900 dark:text-sky-200 flex items-center gap-2">
-                <span className="font-bold">সারাংশ:</span>
-                <span className="font-mono">{selectedBatch}</span>
-                <span>•</span>
-                <span>{selectedMajorObj?.name || selectedMajor}</span>
-                {selectedMinor !== "None" && selectedMinorObj && (
-                  <>
-                    <span>+</span>
-                    <span className="font-medium">{selectedMinorObj.code} ({selectedMinorObj.courseTitle})</span>
-                  </>
-                )}
-              </div>
-            </div>
-          ) : (
-          /* Field 3 Alternative: Non-BBA-11 Section selection */
-          <div className="mb-6 animate-in fade-in">
-            <label className="text-xs font-mono font-medium text-slate-700 dark:text-slate-300 block mb-2">
-              ২. সেকশন নির্বাচন
-            </label>
-            <div className="grid grid-cols-3 gap-2">
-              {availableSections.map((sec) => {
-                const isSelected = selectedSection === sec;
-                return (
-                  <button
-                    key={sec}
-                    type="button"
-                    onClick={() => setSelectedSection(sec)}
-                    className={`py-2.5 px-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
-                      isSelected
-                        ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-200 shadow-sm"
-                        : "bg-slate-50/70 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                    }`}
-                  >
-                    {isSelected && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />}
-                    <span>{sec}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        )}
+                  {/* Validation Error Notice if any */}
+                  {bba11Error && (
+                    <p className="text-xs font-bold text-rose-600 dark:text-rose-400 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 animate-pulse">
+                      ⚠️ {bba11Error}
+                    </p>
+                  )}
+
+                  {/* Live Combination Preview Badge */}
+                  {selectedMajor && selectedMinor && (
+                    <div className="p-2.5 rounded-xl bg-sky-100/60 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/30 text-[11px] text-sky-900 dark:text-sky-200 flex items-center gap-2">
+                      <span className="font-bold">সারাংশ:</span>
+                      <span className="font-mono font-bold">{selectedBatch}</span>
+                      <span>•</span>
+                      <span className="font-bold">{selectedMajorObj?.name || selectedMajor}</span>
+                      {selectedMinor !== "None" && selectedMinorObj && (
+                        <>
+                          <span>+</span>
+                          <span className="font-semibold">{selectedMinorObj.code} ({selectedMinorObj.courseTitle})</span>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                /* Field 3 Alternative: Non-BBA-11 Section selection */
+                <div className="mb-6 animate-in fade-in">
+                  <label className="text-xs font-mono font-medium text-slate-700 dark:text-slate-300 block mb-2">
+                    ২. সেকশন নির্বাচন
+                  </label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {availableSections.map((sec) => {
+                      const isSelected = selectedSection === sec;
+                      return (
+                        <button
+                          key={sec}
+                          type="button"
+                          onClick={() => setSelectedSection(sec)}
+                          className={`py-2.5 px-3 rounded-xl border text-sm font-semibold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            isSelected
+                              ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-200 shadow-sm"
+                              : "bg-slate-50/70 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                          }`}
+                        >
+                          {isSelected && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />}
+                          <span>{sec}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </>
           )}
         </div>
