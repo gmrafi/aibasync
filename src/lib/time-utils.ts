@@ -72,7 +72,8 @@ export function getActiveAndUpcomingClass(
   slots: ClassSlot[],
   batch: string,
   majorOrSection: string,
-  simulatedTime?: Date
+  simulatedTime?: Date,
+  minor?: string
 ): ClassStatusResult {
   const now = simulatedTime || new Date();
   const currentDay = getDayName(now);
@@ -92,12 +93,12 @@ export function getActiveAndUpcomingClass(
   }
 
   const todayClasses = slots
-    .filter(
-      (s) =>
-        s.batch === batch &&
-        s.majorOrSection === majorOrSection &&
-        s.day === currentDay
-    )
+    .filter((s) => {
+      if (s.batch !== batch || s.day !== currentDay) return false;
+      if (s.majorOrSection === majorOrSection) return true;
+      if (minor && minor !== "None" && s.majorOrSection === minor) return true;
+      return false;
+    })
     .sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
   if (todayClasses.length === 0) {

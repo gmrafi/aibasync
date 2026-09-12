@@ -1,11 +1,39 @@
 @import "tailwindcss";
 
 :root {
+  /* Default: Pure Crisp Light Theme */
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --card-subtle: #f1f5f9;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0284c7;
+  --primary-foreground: #ffffff;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #7c3aed;
+  --accent-foreground: #ffffff;
+  --destructive: #e11d48;
+  --destructive-foreground: #ffffff;
+  --border: #e2e8f0;
+  --border-subtle: #cbd5e1;
+  --input: #e2e8f0;
+  --ring: #0284c7;
+  --radius: 1rem;
+}
+
+.dark {
+  /* Premium Midnight Slate Dark Theme */
   --background: #090d1a;
   --foreground: #f8fafc;
-  --card: #10172a;
+  --card: #0f172a;
   --card-foreground: #f8fafc;
-  --popover: #10172a;
+  --card-subtle: #1e293b;
+  --popover: #0f172a;
   --popover-foreground: #f8fafc;
   --primary: #06b6d4;
   --primary-foreground: #04101e;
@@ -18,9 +46,9 @@
   --destructive: #f43f5e;
   --destructive-foreground: #ffffff;
   --border: #1e293b;
+  --border-subtle: #334155;
   --input: #1e293b;
   --ring: #06b6d4;
-  --radius: 1rem;
 }
 
 @theme inline {
@@ -53,19 +81,27 @@
 
 html,
 body {
-  background-color: #090d1a;
-  color: #f8fafc;
+  background-color: var(--background);
+  color: var(--foreground);
   font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-/* Subtle luxury ambient lighting */
-.ambient-glow {
+/* Light mode subtle background pattern */
+.academic-canvas-light {
+  background: 
+    radial-gradient(ellipse 60% 40% at 50% -10%, rgba(2, 132, 199, 0.07), transparent 70%),
+    radial-gradient(circle 500px at 100% 10%, rgba(124, 58, 237, 0.04), transparent 70%),
+    #f8fafc;
+}
+
+/* Dark mode luxury ambient glow */
+.academic-canvas-dark {
   background: 
     radial-gradient(ellipse 80% 50% at 50% -20%, rgba(6, 182, 212, 0.12), transparent 70%),
     radial-gradient(circle 600px at 100% 200px, rgba(139, 92, 246, 0.08), transparent 70%),
-    radial-gradient(circle 500px at 0% 500px, rgba(16, 185, 129, 0.05), transparent 70%),
     #090d1a;
 }
 
@@ -75,21 +111,18 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090d1a;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #cbd5e1;
   border-radius: 9999px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+.dark ::-webkit-scrollbar-thumb {
+  background: #1e293b;
 }
-
-/* Premium frosted glass card */
-.glass-card {
-  background: rgba(16, 23, 42, 0.65);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #334155;
 }

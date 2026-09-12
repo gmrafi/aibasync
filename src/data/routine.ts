@@ -5,6 +5,7 @@ export const INSTITUTION_INFO = {
   shortName: "AIBA Sylhet",
   subTitle: "Sylhet Cantonment Road, Sylhet",
   term: "Fall 2026 (BBA Program)",
+  appName: "AIBA Sync",
 };
 
 export const TIME_PERIODS = [
@@ -20,11 +21,24 @@ export const ALL_ROOMS = [
   "301", "302", "303", "304", "305", "306", "307", "308", "310", "311", "312"
 ];
 
+export const BBA11_MAJORS = [
+  { code: "FIN", name: "Finance (FIN)" },
+  { code: "ACC", name: "Accounting (ACC)" },
+  { code: "MKT", name: "Marketing (MKT)" },
+  { code: "SCM", name: "Supply Chain Management (SCM)" },
+];
+
+export const BBA11_MINORS = [
+  { code: "MIS-M", name: "Management Information Systems (MIS)" },
+  { code: "HRM-M", name: "Human Resource Management (HRM)" },
+];
+
 export const BATCH_LIST: BatchInfo[] = [
   {
     batch: "BBA-11",
     isMajorBased: true,
-    sectionsOrMajors: ["FIN", "ACC", "MKT", "SCM", "MIS-M", "HRM-M"],
+    sectionsOrMajors: ["FIN", "ACC", "MKT", "SCM"],
+    minors: ["MIS-M", "HRM-M"],
   },
   {
     batch: "BBA-12",

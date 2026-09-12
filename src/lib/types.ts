@@ -13,6 +13,7 @@ export interface ClassSlot {
   instructor: string;
   room: string;
   isClub?: boolean;
+  isMinor?: boolean;
 }
 
 export interface AcademicEvent {
@@ -26,12 +27,15 @@ export interface BatchInfo {
   batch: string;
   sectionsOrMajors: string[];
   isMajorBased: boolean;
+  minors?: string[];
 }
 
 export interface UserPreferences {
   studentName?: string;
   batch: string;
   majorOrSection: string;
+  minor?: string; // e.g. "MIS-M" or "HRM-M" for BBA-11
+  theme?: "light" | "dark";
   hasOnboarded: boolean;
 }
 
