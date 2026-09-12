@@ -52,24 +52,30 @@ export function LiveStatusCard({
   onSwitchToWeekView,
 }: LiveStatusCardProps) {
   const [copiedRoom, setCopiedRoom] = useState<string | null>(null);
-  const [currentTime, setCurrentTime] = useState<Date>(simulatedTime || new Date());
+  const [hasMounted, setHasMounted] = useState(false);
+  const [currentTime, setCurrentTime] = useState<Date>(new Date("2024-01-01T09:00:00"));
 
   useEffect(() => {
-    if (simulatedTime) {
-      setCurrentTime(simulatedTime);
-      return;
-    }
+    setHasMounted(true);
+    setCurrentTime(simulatedTime || new Date());
+  }, [simulatedTime]);
+
+  useEffect(() => {
+    if (simulatedTime) return;
+
     const interval = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
     return () => clearInterval(interval);
   }, [simulatedTime]);
 
+  const displayTime = hasMounted ? currentTime : new Date("2024-01-01T09:00:00");
+
   const status = getActiveAndUpcomingClass(
     routineData,
     batch,
     majorOrSection,
-    currentTime,
+    displayTime,
     minor
   );
 
@@ -81,7 +87,8 @@ export function LiveStatusCard({
 
   // Natural Human Academic Greeting
   const getGreeting = () => {
-    const hours = currentTime.getHours();
+    const timeSource = hasMounted ? currentTime : new Date("2024-01-01T09:00:00");
+    const hours = timeSource.getHours();
     let timeGreeting = "স্বাগতম";
     if (hours < 12) timeGreeting = "শুভ সকাল";
     else if (hours < 17) timeGreeting = "শুভ অপরাহ্ন";
@@ -105,16 +112,16 @@ export function LiveStatusCard({
   // Case 1: Weekend (Friday / Saturday)
   if (status.isWeekend) {
     return (
-      <div className="relative overflow-hidden rounded-3xl border border-indigo-200/80 dark:border-indigo-500/30 bg-white dark:bg-slate-900 shadow-lg p-5 sm:p-7 text-slate-900 dark:text-slate-100 transition-colors">
-        <div className="absolute top-0 left-0 w-2 h-full bg-indigo-600 dark:bg-indigo-500" />
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="flex items-start gap-3.5">
-            <div className="p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 mt-0.5 shadow-xs shrink-0">
-              <CalendarX className="w-5 h-5 sm:w-6 sm:h-6" />
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-emerald-200/80 dark:border-emerald-500/30 bg-white dark:bg-slate-900 shadow-lg p-4 sm:p-7 text-slate-900 dark:text-slate-100 transition-colors">
+        <div className="absolute top-0 left-0 w-2 h-full bg-emerald-600 dark:bg-emerald-500" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2.5 sm:p-3 rounded-2xl bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 mt-0.5 shadow-xs shrink-0">
+              <CalendarX className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm font-bold text-indigo-700 dark:text-indigo-300">
+                <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">
                   {getGreeting()}
                 </span>
               </div>
@@ -130,7 +137,7 @@ export function LiveStatusCard({
             <button
               type="button"
               onClick={onSwitchToWeekView}
-              className="self-start sm:self-center px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white shadow-md shadow-indigo-600/20 transition-all flex items-center gap-2 cursor-pointer active:scale-98 shrink-0"
+              className="self-start sm:self-center px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white shadow-md shadow-emerald-600/20 transition-all flex items-center gap-2 cursor-pointer active:scale-98 shrink-0"
             >
               <CalendarDays className="w-4 h-4 text-white" />
               <span>সাপ্তাহিক রুটিন দেখুন</span>
@@ -147,8 +154,8 @@ export function LiveStatusCard({
     const faculty = getFacultyInfo(cls.instructor);
 
     return (
-      <div className="relative overflow-hidden rounded-3xl border border-rose-200 dark:border-rose-500/40 bg-white dark:bg-slate-900/90 shadow-xl shadow-rose-500/5 dark:shadow-rose-950/20 p-6 sm:p-7 text-slate-900 dark:text-slate-100 transition-colors">
-        <div className="absolute top-0 left-0 w-2 h-full bg-rose-500 animate-pulse" />
+      <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl border border-emerald-200 dark:border-emerald-500/40 bg-white dark:bg-slate-900/90 shadow-xl shadow-emerald-500/5 dark:shadow-emerald-950/20 p-4 sm:p-7 text-slate-900 dark:text-slate-100 transition-colors">
+        <div className="absolute top-0 left-0 w-2 h-full bg-emerald-500 animate-pulse" />
 
         {/* Greeting & Status Bar */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
@@ -161,16 +168,16 @@ export function LiveStatusCard({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-rose-500" />
               </span>
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-rose-50 dark:bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30 uppercase tracking-wider">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30 uppercase tracking-wider">
                 চলমান ক্লাস • {cls.isClub ? "Club Activity" : `Period ${cls.period}`}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 self-start sm:self-auto">
+          <div className="flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-[11px] sm:text-xs font-semibold text-slate-800 dark:text-slate-200 self-start sm:self-auto">
             <Clock className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             <span>
-              শেষ হতে বাকি: <strong className="text-slate-900 dark:text-white font-bold">{formatSecondsBengali(status.secondsLeftInCurrent || 0)}</strong>
+              শেষ হতে বাকি: <strong className="text-emerald-700 dark:text-emerald-300 font-bold">{formatSecondsBengali(status.secondsLeftInCurrent || 0)}</strong>
             </span>
           </div>
         </div>
@@ -218,7 +225,10 @@ export function LiveStatusCard({
               title="শিক্ষকের তথ্য দেখুন"
             >
               <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-              <span>{cls.instructor}</span>
+              <span className="max-w-[180px] truncate">{faculty.fullName}</span>
+              <span className="text-[10px] font-bold text-violet-700 dark:text-violet-300 bg-violet-100 dark:bg-violet-500/15 px-1.5 py-0.5 rounded-md border border-violet-200 dark:border-violet-500/30">
+                {cls.instructor}
+              </span>
               <Info className="w-3 h-3 text-slate-400" />
             </button>
           </div>
@@ -310,7 +320,10 @@ export function LiveStatusCard({
               className="flex items-center gap-1.5 bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-violet-400 text-slate-800 dark:text-slate-200 transition-colors cursor-pointer font-semibold"
             >
               <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-              <span>{next.instructor}</span>
+              <span className="max-w-[180px] truncate">{faculty.fullName}</span>
+              <span className="text-[10px] font-bold text-violet-700 dark:text-violet-300 bg-violet-100 dark:bg-violet-500/15 px-1.5 py-0.5 rounded-md border border-violet-200 dark:border-violet-500/30">
+                {next.instructor}
+              </span>
               <Info className="w-3 h-3 text-slate-400" />
             </button>
           </div>

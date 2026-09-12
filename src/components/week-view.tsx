@@ -34,38 +34,58 @@ const WEEK_DAYS: { key: DayOfWeek; label: string; short: string }[] = [
   { key: "Thursday", label: "বৃহস্পতিবার", short: "বৃহঃ" },
 ];
 
-// Keep color identity tied to the academic subject family, not to the batch or position.
+// Map each distinct course title to its own color so BBA-11 courses like Corporate Finance and International Financial Management stay visually different.
 function getSubjectTheme(courseTitle: string, majorOrSection?: string) {
-  const section = (majorOrSection || "").toUpperCase();
-  const haystack = `${courseTitle ?? ""} ${majorOrSection ?? ""}`.toLowerCase();
-  const normalized = haystack.replace(/[^a-z0-9]+/g, " ").trim();
+  const normalized = `${courseTitle ?? ""} ${majorOrSection ?? ""}`.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
 
-  const majorSignals = {
-    finance: ["FIN", "FINANCE", "BANK", "INVESTMENT", "MONETARY", "FINANCIAL"],
-    accounting: ["ACC", "ACCOUNTING", "AUDIT", "TAX", "COST"],
-    marketing: ["MKT", "MARKETING", "BRAND", "CONSUMER", "SALES", "PROMOTION"],
-    management: ["HRM", "MANAGEMENT", "NEGOTIATION", "CONFLICT", "ORGANIZATION", "STRATEGY", "BEHAVIOR"],
-    technology: ["MIS", "TECHNOLOGY", "SYSTEM", "COMPUTER", "DATA", "INFORMATION"],
-    operations: ["SCM", "SUPPLY", "OPERATIONS", "LOGISTICS", "PROCUREMENT", "PRODUCTION", "PLANNING"],
-  };
+  const courseTheme = (() => {
+    if (normalized.includes("corporate finance")) return "finance-corporate";
+    if (normalized.includes("bank fund management")) return "finance-banking";
+    if (normalized.includes("financial institutions") || normalized.includes("financial markets")) return "finance-markets";
+    if (normalized.includes("international financial management")) return "finance-global";
+    if (normalized.includes("principles of finance")) return "finance-principles";
 
-  const subject = Object.entries(majorSignals).find(([, signals]) =>
-    signals.some((signal) => section.includes(signal) || normalized.includes(signal.toLowerCase()))
-  )?.[0];
+    if (normalized.includes("taxation")) return "accounting-tax";
+    if (normalized.includes("cost accounting")) return "accounting-cost";
+    if (normalized.includes("auditing")) return "accounting-audit";
+    if (normalized.includes("advanced accounting")) return "accounting-advanced";
+    if (normalized.includes("principles of accounting")) return "accounting-principles";
 
-  const fallbackSubject = Object.entries({
-    finance: ["finance", "fin", "bank", "investment", "monetary", "financial", "economics"],
-    accounting: ["acc", "accounting", "account", "audit", "tax", "cost", "advanced accounting"],
-    marketing: ["mkt", "marketing", "brand", "consumer", "sales", "advertising", "promotion", "retail"],
-    management: ["hrm", "management", "leader", "organization", "conflict", "negotiation", "behavior", "strategy"],
-    technology: ["mis", "technology", "tech", "system", "computer", "data", "database", "information"],
-    operations: ["scm", "supply", "operations", "logistics", "procurement", "production", "planning", "stat", "math"],
-  }).find(([, signals]) =>
-    signals.some((signal) => normalized.includes(signal))
-  )?.[0];
+    if (normalized.includes("marketing research")) return "marketing-research";
+    if (normalized.includes("brand management")) return "marketing-brand";
+    if (normalized.includes("strategic marketing")) return "marketing-strategy";
+    if (normalized.includes("consumer behavior")) return "marketing-consumer";
 
-  switch (subject || fallbackSubject) {
-    case "finance":
+    if (normalized.includes("human resources management")) return "management-hrm";
+    if (normalized.includes("conflict management") || normalized.includes("negotiation")) return "management-conflict";
+    if (normalized.includes("leadership")) return "management-leadership";
+
+    if (normalized.includes("management of innovation and technology")) return "technology-innovation";
+    if (normalized.includes("management information system") || normalized.includes("mis")) return "technology-mis";
+    if (normalized.includes("computer and its application")) return "technology-computer";
+
+    if (normalized.includes("production planning")) return "operations-planning";
+    if (normalized.includes("logistics management")) return "operations-logistics";
+    if (normalized.includes("procurement management")) return "operations-procurement";
+    if (normalized.includes("supply chain")) return "operations-scm";
+
+    if (normalized.includes("business leadership")) return "business-leadership";
+    if (normalized.includes("fundamentals of management")) return "management-foundation";
+    if (normalized.includes("entrepreneurship")) return "business-entrepreneurship";
+
+    if (normalized.includes("microeconomics")) return "economics-micro";
+    if (normalized.includes("macroeconomics")) return "economics-macro";
+    if (normalized.includes("business statistics")) return "analytics-stats";
+    if (normalized.includes("business mathematics")) return "analytics-math";
+
+    if (normalized.includes("presentation skill") || normalized.includes("functional english") || normalized.includes("communicative english") || normalized.includes("communication")) return "language-communication";
+    if (normalized.includes("environmental studies") || normalized.includes("bangladesh") || normalized.includes("international studies")) return "general-social";
+
+    return "general-core";
+  })();
+
+  switch (courseTheme) {
+    case "finance-corporate":
       return {
         border: "border-emerald-400 dark:border-emerald-600/80",
         bg: "bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50",
@@ -74,7 +94,43 @@ function getSubjectTheme(courseTitle: string, majorOrSection?: string) {
         accent: "bg-emerald-500",
         chip: "text-emerald-900 dark:text-emerald-200",
       };
-    case "accounting":
+    case "finance-banking":
+      return {
+        border: "border-teal-400 dark:border-teal-600/80",
+        bg: "bg-teal-50/95 dark:bg-teal-950/40 hover:bg-teal-100 dark:hover:bg-teal-900/50",
+        text: "text-teal-950 dark:text-teal-50",
+        badge: "bg-teal-100 dark:bg-teal-500/25 text-teal-950 dark:text-teal-100 border-teal-400 dark:border-teal-500/40",
+        accent: "bg-teal-500",
+        chip: "text-teal-900 dark:text-teal-200",
+      };
+    case "finance-markets":
+      return {
+        border: "border-lime-400 dark:border-lime-600/80",
+        bg: "bg-lime-50/95 dark:bg-lime-950/40 hover:bg-lime-100 dark:hover:bg-lime-900/50",
+        text: "text-lime-950 dark:text-lime-50",
+        badge: "bg-lime-100 dark:bg-lime-500/25 text-lime-950 dark:text-lime-100 border-lime-400 dark:border-lime-500/40",
+        accent: "bg-lime-500",
+        chip: "text-lime-900 dark:text-lime-200",
+      };
+    case "finance-global":
+      return {
+        border: "border-green-400 dark:border-green-600/80",
+        bg: "bg-green-50/95 dark:bg-green-950/40 hover:bg-green-100 dark:hover:bg-green-900/50",
+        text: "text-green-950 dark:text-green-50",
+        badge: "bg-green-100 dark:bg-green-500/25 text-green-950 dark:text-green-100 border-green-400 dark:border-green-500/40",
+        accent: "bg-green-500",
+        chip: "text-green-900 dark:text-green-200",
+      };
+    case "finance-principles":
+      return {
+        border: "border-emerald-300 dark:border-emerald-500/80",
+        bg: "bg-emerald-100/90 dark:bg-emerald-900/35 hover:bg-emerald-200 dark:hover:bg-emerald-900/40",
+        text: "text-emerald-950 dark:text-emerald-50",
+        badge: "bg-emerald-200 dark:bg-emerald-500/30 text-emerald-950 dark:text-emerald-100 border-emerald-400 dark:border-emerald-500/40",
+        accent: "bg-emerald-400",
+        chip: "text-emerald-900 dark:text-emerald-200",
+      };
+    case "accounting-tax":
       return {
         border: "border-amber-400 dark:border-amber-600/80",
         bg: "bg-amber-50/95 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50",
@@ -83,34 +139,16 @@ function getSubjectTheme(courseTitle: string, majorOrSection?: string) {
         accent: "bg-amber-500",
         chip: "text-amber-900 dark:text-amber-200",
       };
-    case "marketing":
+    case "accounting-cost":
       return {
-        border: "border-rose-400 dark:border-rose-600/80",
-        bg: "bg-rose-50/95 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50",
-        text: "text-rose-950 dark:text-rose-50",
-        badge: "bg-rose-100 dark:bg-rose-500/25 text-rose-950 dark:text-rose-100 border-rose-400 dark:border-rose-500/40",
-        accent: "bg-rose-500",
-        chip: "text-rose-900 dark:text-rose-200",
+        border: "border-yellow-400 dark:border-yellow-600/80",
+        bg: "bg-yellow-50/95 dark:bg-yellow-950/40 hover:bg-yellow-100 dark:hover:bg-yellow-900/50",
+        text: "text-yellow-950 dark:text-yellow-50",
+        badge: "bg-yellow-100 dark:bg-yellow-500/25 text-yellow-950 dark:text-yellow-100 border-yellow-400 dark:border-yellow-500/40",
+        accent: "bg-yellow-500",
+        chip: "text-yellow-900 dark:text-yellow-200",
       };
-    case "management":
-      return {
-        border: "border-indigo-400 dark:border-indigo-600/80",
-        bg: "bg-indigo-50/95 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50",
-        text: "text-indigo-950 dark:text-indigo-50",
-        badge: "bg-indigo-100 dark:bg-indigo-500/25 text-indigo-950 dark:text-indigo-100 border-indigo-400 dark:border-indigo-500/40",
-        accent: "bg-indigo-500",
-        chip: "text-indigo-900 dark:text-indigo-200",
-      };
-    case "technology":
-      return {
-        border: "border-cyan-400 dark:border-cyan-600/80",
-        bg: "bg-cyan-50/95 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/50",
-        text: "text-cyan-950 dark:text-cyan-50",
-        badge: "bg-cyan-100 dark:bg-cyan-500/25 text-cyan-950 dark:text-cyan-100 border-cyan-400 dark:border-cyan-500/40",
-        accent: "bg-cyan-500",
-        chip: "text-cyan-900 dark:text-cyan-200",
-      };
-    case "operations":
+    case "accounting-audit":
       return {
         border: "border-orange-400 dark:border-orange-600/80",
         bg: "bg-orange-50/95 dark:bg-orange-950/40 hover:bg-orange-100 dark:hover:bg-orange-900/50",
@@ -119,7 +157,106 @@ function getSubjectTheme(courseTitle: string, majorOrSection?: string) {
         accent: "bg-orange-500",
         chip: "text-orange-900 dark:text-orange-200",
       };
-    default:
+    case "accounting-advanced":
+      return {
+        border: "border-amber-300 dark:border-amber-500/80",
+        bg: "bg-amber-100/90 dark:bg-amber-900/35 hover:bg-amber-200 dark:hover:bg-amber-900/40",
+        text: "text-amber-950 dark:text-amber-50",
+        badge: "bg-amber-200 dark:bg-amber-500/30 text-amber-950 dark:text-amber-100 border-amber-400 dark:border-amber-500/40",
+        accent: "bg-amber-400",
+        chip: "text-amber-900 dark:text-amber-200",
+      };
+    case "accounting-principles":
+      return {
+        border: "border-rose-400 dark:border-rose-600/80",
+        bg: "bg-rose-50/95 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50",
+        text: "text-rose-950 dark:text-rose-50",
+        badge: "bg-rose-100 dark:bg-rose-500/25 text-rose-950 dark:text-rose-100 border-rose-400 dark:border-rose-500/40",
+        accent: "bg-rose-500",
+        chip: "text-rose-900 dark:text-rose-200",
+      };
+    case "marketing-research":
+      return {
+        border: "border-rose-400 dark:border-rose-600/80",
+        bg: "bg-rose-50/95 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50",
+        text: "text-rose-950 dark:text-rose-50",
+        badge: "bg-rose-100 dark:bg-rose-500/25 text-rose-950 dark:text-rose-100 border-rose-400 dark:border-rose-500/40",
+        accent: "bg-rose-500",
+        chip: "text-rose-900 dark:text-rose-200",
+      };
+    case "marketing-brand":
+      return {
+        border: "border-pink-400 dark:border-pink-600/80",
+        bg: "bg-pink-50/95 dark:bg-pink-950/40 hover:bg-pink-100 dark:hover:bg-pink-900/50",
+        text: "text-pink-950 dark:text-pink-50",
+        badge: "bg-pink-100 dark:bg-pink-500/25 text-pink-950 dark:text-pink-100 border-pink-400 dark:border-pink-500/40",
+        accent: "bg-pink-500",
+        chip: "text-pink-900 dark:text-pink-200",
+      };
+    case "marketing-strategy":
+      return {
+        border: "border-red-400 dark:border-red-600/80",
+        bg: "bg-red-50/95 dark:bg-red-950/40 hover:bg-red-100 dark:hover:bg-red-900/50",
+        text: "text-red-950 dark:text-red-50",
+        badge: "bg-red-100 dark:bg-red-500/25 text-red-950 dark:text-red-100 border-red-400 dark:border-red-500/40",
+        accent: "bg-red-500",
+        chip: "text-red-900 dark:text-red-200",
+      };
+    case "marketing-consumer":
+      return {
+        border: "border-fuchsia-400 dark:border-fuchsia-600/80",
+        bg: "bg-fuchsia-50/95 dark:bg-fuchsia-950/40 hover:bg-fuchsia-100 dark:hover:bg-fuchsia-900/50",
+        text: "text-fuchsia-950 dark:text-fuchsia-50",
+        badge: "bg-fuchsia-100 dark:bg-fuchsia-500/25 text-fuchsia-950 dark:text-fuchsia-100 border-fuchsia-400 dark:border-fuchsia-500/40",
+        accent: "bg-fuchsia-500",
+        chip: "text-fuchsia-900 dark:text-fuchsia-200",
+      };
+    case "management-hrm":
+      return {
+        border: "border-indigo-400 dark:border-indigo-600/80",
+        bg: "bg-indigo-50/95 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50",
+        text: "text-indigo-950 dark:text-indigo-50",
+        badge: "bg-indigo-100 dark:bg-indigo-500/25 text-indigo-950 dark:text-indigo-100 border-indigo-400 dark:border-indigo-500/40",
+        accent: "bg-indigo-500",
+        chip: "text-indigo-900 dark:text-indigo-200",
+      };
+    case "management-conflict":
+      return {
+        border: "border-violet-400 dark:border-violet-600/80",
+        bg: "bg-violet-50/95 dark:bg-violet-950/40 hover:bg-violet-100 dark:hover:bg-violet-900/50",
+        text: "text-violet-950 dark:text-violet-50",
+        badge: "bg-violet-100 dark:bg-violet-500/25 text-violet-950 dark:text-violet-100 border-violet-400 dark:border-violet-500/40",
+        accent: "bg-violet-500",
+        chip: "text-violet-900 dark:text-violet-200",
+      };
+    case "management-foundation":
+      return {
+        border: "border-indigo-300 dark:border-indigo-500/80",
+        bg: "bg-indigo-100/90 dark:bg-indigo-900/35 hover:bg-indigo-200 dark:hover:bg-indigo-900/40",
+        text: "text-indigo-950 dark:text-indigo-50",
+        badge: "bg-indigo-200 dark:bg-indigo-500/30 text-indigo-950 dark:text-indigo-100 border-indigo-400 dark:border-indigo-500/40",
+        accent: "bg-indigo-400",
+        chip: "text-indigo-900 dark:text-indigo-200",
+      };
+    case "management-leadership":
+      return {
+        border: "border-purple-400 dark:border-purple-600/80",
+        bg: "bg-purple-50/95 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/50",
+        text: "text-purple-950 dark:text-purple-50",
+        badge: "bg-purple-100 dark:bg-purple-500/25 text-purple-950 dark:text-purple-100 border-purple-400 dark:border-purple-500/40",
+        accent: "bg-purple-500",
+        chip: "text-purple-900 dark:text-purple-200",
+      };
+    case "technology-innovation":
+      return {
+        border: "border-cyan-400 dark:border-cyan-600/80",
+        bg: "bg-cyan-50/95 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/50",
+        text: "text-cyan-950 dark:text-cyan-50",
+        badge: "bg-cyan-100 dark:bg-cyan-500/25 text-cyan-950 dark:text-cyan-100 border-cyan-400 dark:border-cyan-500/40",
+        accent: "bg-cyan-500",
+        chip: "text-cyan-900 dark:text-cyan-200",
+      };
+    case "technology-mis":
       return {
         border: "border-sky-400 dark:border-sky-600/80",
         bg: "bg-sky-50/95 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50",
@@ -127,6 +264,123 @@ function getSubjectTheme(courseTitle: string, majorOrSection?: string) {
         badge: "bg-sky-100 dark:bg-sky-500/25 text-sky-950 dark:text-sky-100 border-sky-400 dark:border-sky-500/40",
         accent: "bg-sky-500",
         chip: "text-sky-900 dark:text-sky-200",
+      };
+    case "technology-computer":
+      return {
+        border: "border-sky-300 dark:border-sky-500/80",
+        bg: "bg-sky-100/90 dark:bg-sky-900/35 hover:bg-sky-200 dark:hover:bg-sky-900/40",
+        text: "text-sky-950 dark:text-sky-50",
+        badge: "bg-sky-200 dark:bg-sky-500/30 text-sky-950 dark:text-sky-100 border-sky-400 dark:border-sky-500/40",
+        accent: "bg-sky-400",
+        chip: "text-sky-900 dark:text-sky-200",
+      };
+    case "operations-planning":
+      return {
+        border: "border-orange-400 dark:border-orange-600/80",
+        bg: "bg-orange-50/95 dark:bg-orange-950/40 hover:bg-orange-100 dark:hover:bg-orange-900/50",
+        text: "text-orange-950 dark:text-orange-50",
+        badge: "bg-orange-100 dark:bg-orange-500/25 text-orange-950 dark:text-orange-100 border-orange-400 dark:border-orange-500/40",
+        accent: "bg-orange-500",
+        chip: "text-orange-900 dark:text-orange-200",
+      };
+    case "operations-logistics":
+      return {
+        border: "border-yellow-400 dark:border-yellow-600/80",
+        bg: "bg-yellow-50/95 dark:bg-yellow-950/40 hover:bg-yellow-100 dark:hover:bg-yellow-900/50",
+        text: "text-yellow-950 dark:text-yellow-50",
+        badge: "bg-yellow-100 dark:bg-yellow-500/25 text-yellow-950 dark:text-yellow-100 border-yellow-400 dark:border-yellow-500/40",
+        accent: "bg-yellow-500",
+        chip: "text-yellow-900 dark:text-yellow-200",
+      };
+    case "operations-procurement":
+      return {
+        border: "border-orange-300 dark:border-orange-500/80",
+        bg: "bg-orange-100/90 dark:bg-orange-900/35 hover:bg-orange-200 dark:hover:bg-orange-900/40",
+        text: "text-orange-950 dark:text-orange-50",
+        badge: "bg-orange-200 dark:bg-orange-500/30 text-orange-950 dark:text-orange-100 border-orange-400 dark:border-orange-500/40",
+        accent: "bg-orange-400",
+        chip: "text-orange-900 dark:text-orange-200",
+      };
+    case "operations-scm":
+      return {
+        border: "border-amber-400 dark:border-amber-600/80",
+        bg: "bg-amber-50/95 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50",
+        text: "text-amber-950 dark:text-amber-50",
+        badge: "bg-amber-100 dark:bg-amber-500/25 text-amber-950 dark:text-amber-100 border-amber-400 dark:border-amber-500/40",
+        accent: "bg-amber-500",
+        chip: "text-amber-900 dark:text-amber-200",
+      };
+    case "business-leadership":
+      return {
+        border: "border-violet-400 dark:border-violet-600/80",
+        bg: "bg-violet-50/95 dark:bg-violet-950/40 hover:bg-violet-100 dark:hover:bg-violet-900/50",
+        text: "text-violet-950 dark:text-violet-50",
+        badge: "bg-violet-100 dark:bg-violet-500/25 text-violet-950 dark:text-violet-100 border-violet-400 dark:border-violet-500/40",
+        accent: "bg-violet-500",
+        chip: "text-violet-900 dark:text-violet-200",
+      };
+    case "business-entrepreneurship":
+      return {
+        border: "border-purple-400 dark:border-purple-600/80",
+        bg: "bg-purple-50/95 dark:bg-purple-950/40 hover:bg-purple-100 dark:hover:bg-purple-900/50",
+        text: "text-purple-950 dark:text-purple-50",
+        badge: "bg-purple-100 dark:bg-purple-500/25 text-purple-950 dark:text-purple-100 border-purple-400 dark:border-purple-500/40",
+        accent: "bg-purple-500",
+        chip: "text-purple-900 dark:text-purple-200",
+      };
+    case "economics-micro":
+      return {
+        border: "border-fuchsia-400 dark:border-fuchsia-600/80",
+        bg: "bg-fuchsia-50/95 dark:bg-fuchsia-950/40 hover:bg-fuchsia-100 dark:hover:bg-fuchsia-900/50",
+        text: "text-fuchsia-950 dark:text-fuchsia-50",
+        badge: "bg-fuchsia-100 dark:bg-fuchsia-500/25 text-fuchsia-950 dark:text-fuchsia-100 border-fuchsia-400 dark:border-fuchsia-500/40",
+        accent: "bg-fuchsia-500",
+        chip: "text-fuchsia-900 dark:text-fuchsia-200",
+      };
+    case "economics-macro":
+      return {
+        border: "border-pink-400 dark:border-pink-600/80",
+        bg: "bg-pink-50/95 dark:bg-pink-950/40 hover:bg-pink-100 dark:hover:bg-pink-900/50",
+        text: "text-pink-950 dark:text-pink-50",
+        badge: "bg-pink-100 dark:bg-pink-500/25 text-pink-950 dark:text-pink-100 border-pink-400 dark:border-pink-500/40",
+        accent: "bg-pink-500",
+        chip: "text-pink-900 dark:text-pink-200",
+      };
+    case "analytics-stats":
+      return {
+        border: "border-sky-400 dark:border-sky-600/80",
+        bg: "bg-sky-50/95 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50",
+        text: "text-sky-950 dark:text-sky-50",
+        badge: "bg-sky-100 dark:bg-sky-500/25 text-sky-950 dark:text-sky-100 border-sky-400 dark:border-sky-500/40",
+        accent: "bg-sky-500",
+        chip: "text-sky-900 dark:text-sky-200",
+      };
+    case "analytics-math":
+      return {
+        border: "border-cyan-400 dark:border-cyan-600/80",
+        bg: "bg-cyan-50/95 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/50",
+        text: "text-cyan-950 dark:text-cyan-50",
+        badge: "bg-cyan-100 dark:bg-cyan-500/25 text-cyan-950 dark:text-cyan-100 border-cyan-400 dark:border-cyan-500/40",
+        accent: "bg-cyan-500",
+        chip: "text-cyan-900 dark:text-cyan-200",
+      };
+    case "language-communication":
+      return {
+        border: "border-pink-400 dark:border-pink-600/80",
+        bg: "bg-pink-50/95 dark:bg-pink-950/40 hover:bg-pink-100 dark:hover:bg-pink-900/50",
+        text: "text-pink-950 dark:text-pink-50",
+        badge: "bg-pink-100 dark:bg-pink-500/25 text-pink-950 dark:text-pink-100 border-pink-400 dark:border-pink-500/40",
+        accent: "bg-pink-500",
+        chip: "text-pink-900 dark:text-pink-200",
+      };
+    default:
+      return {
+        border: "border-slate-400 dark:border-slate-600/80",
+        bg: "bg-slate-50/95 dark:bg-slate-950/40 hover:bg-slate-100 dark:hover:bg-slate-900/50",
+        text: "text-slate-950 dark:text-slate-50",
+        badge: "bg-slate-100 dark:bg-slate-500/25 text-slate-950 dark:text-slate-100 border-slate-400 dark:border-slate-500/40",
+        accent: "bg-slate-500",
+        chip: "text-slate-900 dark:text-slate-200",
       };
   }
 }
@@ -165,6 +419,19 @@ export function WeekView({
       isSlotMatchingView(s, effectiveBatch, majorOrSection, minor, role, teacherCode)
     );
   }, [routineData, role, teacherFilter, batch, majorOrSection, minor, teacherCode]);
+
+  const subjectLegend = useMemo(() => {
+    const byCourse = new Map<string, { label: string; accent: string }>();
+    activeSlots.forEach((slot) => {
+      const label = slot.courseTitle.trim();
+      if (!label) return;
+      if (!byCourse.has(label)) {
+        const theme = getSubjectTheme(slot.courseTitle, slot.majorOrSection);
+        byCourse.set(label, { label, accent: theme.accent });
+      }
+    });
+    return Array.from(byCourse.values());
+  }, [activeSlots]);
 
   return (
     <div className="space-y-3.5">
@@ -476,29 +743,19 @@ export function WeekView({
             </div>
           </div>
 
-          {/* Color Coding Legend */}
-          <div className="p-3 sm:p-3.5 bg-slate-50/90 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-center gap-3.5 text-xs font-bold text-slate-700 dark:text-slate-300">
-            <span className="text-slate-900 dark:text-white font-black">Subject color key:</span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-              <span>Finance</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-              <span>Accounting</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
-              <span>Management / HRM</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-              <span>Marketing</span>
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
-              <span>MIS / Technology</span>
-            </span>
+          {/* Course-specific Color Legend */}
+          <div className="p-3 sm:p-3.5 bg-slate-50/90 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-center gap-2.5 text-[10px] sm:text-xs font-bold text-slate-700 dark:text-slate-300">
+            <span className="text-slate-900 dark:text-white font-black mr-1">Active course key:</span>
+            {subjectLegend.length === 0 ? (
+              <span className="text-slate-500 dark:text-slate-400">No active courses</span>
+            ) : (
+              subjectLegend.map((entry) => (
+                <span key={entry.label} className="flex items-center gap-1.5 rounded-full border border-slate-200 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 px-2 py-1">
+                  <span className={`w-2.5 h-2.5 rounded-full ${entry.accent}`} />
+                  <span className="truncate max-w-[120px] sm:max-w-[160px]">{entry.label}</span>
+                </span>
+              ))
+            )}
           </div>
         </div>
       )}

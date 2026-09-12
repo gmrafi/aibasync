@@ -74,7 +74,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
   },
   "LF": {
     code: "LF",
-    fullName: "Lubna Farzana",
+    fullName: "Limuza Fairuz",
     designation: "Lecturer",
     department: "Management & E-Business",
     roomNumber: "টিচিং লাউঞ্জ",
@@ -130,7 +130,7 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
   },
   "DMAFC": {
     code: "DMAFC",
-    fullName: "Dr. Md. A. F. Chowdhury",
+    fullName: "Professor Dr. Mohammad Ashraful Ferdous Chowdhury",
     designation: "Professor",
     department: "Banking & Financial Institutions",
     roomNumber: "টিচিং লাউঞ্জ",
@@ -144,15 +144,15 @@ export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
   },
   "GMST": {
     code: "GMST",
-    fullName: "G. M. S. Tariq",
+    fullName: "Golam Morshed Shahriar Tanim",
     designation: "Assistant Professor",
     department: "Marketing & Entrepreneurship",
     roomNumber: "টিচিং লাউঞ্জ",
   },
   "N. M. A": {
     code: "N. M. A",
-    fullName: "N. M. Al-Amin",
-    designation: "Assistant Professor",
+    fullName: "N. M. Ashikuzzaman",
+    designation: "Lecturer",
     department: "Financial & Advanced Accounting",
     roomNumber: "টিচিং লাউঞ্জ",
   },

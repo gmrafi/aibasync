@@ -40,45 +40,45 @@ export function Navbar({
   const minorTag = isBba11 && minor && minor !== "None" ? ` + ${minor.replace("-M", "")}` : "";
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800/80 bg-white/85 dark:bg-slate-950/80 backdrop-blur-xl transition-colors">
-      <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
+    <header className="sticky top-0 z-40 w-full border-b border-emerald-200/80 dark:border-emerald-900/80 bg-white/90 dark:bg-slate-950/85 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl transition-colors">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
         {/* Left: Brand Logo & Name (AIBA Sync) */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
           <div className="relative flex items-center justify-center shrink-0">
             <img
               src="/logo.png"
               alt="AIBA Sylhet Crest"
-              className="w-11 h-11 sm:w-12 sm:h-12 object-contain drop-shadow-sm transition-transform hover:scale-105"
+              className="w-11 h-11 sm:w-12 sm:h-12 object-contain transition-transform hover:scale-105"
             />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-base sm:text-lg tracking-tight text-slate-900 dark:text-white">
+          <div className="min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="font-black text-base sm:text-lg tracking-[-0.02em] text-slate-900 dark:text-white">
                 AIBA Sync
               </span>
-              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-bold bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-200 border border-sky-300 dark:border-sky-500/30">
-                {INSTITUTION_INFO.shortName}
-              </span>
             </div>
-            <p className="text-xs font-semibold text-slate-600 dark:text-slate-300 mt-0.5">
+            <p className="text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-slate-300 mt-0.5 tracking-wide">
               {currentDayStr} • {currentTimeStr}
+            </p>
+            <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
+              {INSTITUTION_INFO.shortName}
             </p>
           </div>
         </div>
 
         {/* Center/Right: Selection Pill & Actions */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
           {/* Quick Batch/Section/Minor Chip */}
           <button
             type="button"
             onClick={onOpenSelector}
-            className="group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500 hover:bg-white dark:hover:bg-slate-800 transition-all text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer shadow-xs active:scale-98"
+            className="group inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50/80 dark:bg-slate-900/95 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 dark:hover:border-emerald-500/50 hover:bg-white dark:hover:bg-slate-800 transition-all text-[10px] sm:text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer shadow-sm active:scale-[0.99]"
             title={role === "teacher" ? "ফ্যাকাল্টি প্রোফাইল বা ব্যাচ পরিবর্তন করুন" : "ব্যাচ অথবা মেজর/মাইনর পরিবর্তন করুন"}
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-500/20" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-500/20" />
             {role === "teacher" ? (
               <>
-                <span className="font-bold text-sky-700 dark:text-sky-300">শিক্ষক</span>
+                <span className="font-bold text-emerald-700 dark:text-emerald-300">শিক্ষক</span>
                 {teacherCode && (
                   <>
                     <span className="text-slate-400 dark:text-slate-500">•</span>
@@ -86,25 +86,25 @@ export function Navbar({
                   </>
                 )}
                 <span className="text-slate-400 dark:text-slate-500">•</span>
-                <span className="text-slate-600 dark:text-slate-400 text-[11px]">
+                <span className="text-slate-600 dark:text-slate-400">
                   {batch === "MY_CLASSES" ? "আমার ক্লাস" : batch === "ALL_BATCHES" ? "মাস্টার রুটিন" : batch}
                 </span>
               </>
             ) : (
               <>
-                <span className="text-sky-700 dark:text-sky-300 font-bold">{batch}</span>
+                <span className="text-emerald-700 dark:text-emerald-300 font-bold">{batch}</span>
                 <span className="text-slate-400 dark:text-slate-500">•</span>
                 <span className="text-slate-700 dark:text-slate-300 font-medium">{majorOrSection}{minorTag}</span>
               </>
             )}
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-transform group-hover:translate-y-0.5" />
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-transform group-hover:translate-y-0.5" />
           </button>
 
           {/* Theme Toggle (Light / Dark) */}
           <button
             type="button"
             onClick={onToggleTheme}
-            className="p-2 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:text-sky-600 dark:hover:text-sky-400 hover:bg-slate-200/60 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-emerald-50 dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-colors cursor-pointer shadow-sm shrink-0"
             title={theme === "dark" ? "লাইট মোডে স্যুইচ করুন" : "ডার্ক মোডে স্যুইচ করুন"}
             aria-label="Toggle theme"
           >
@@ -119,10 +119,10 @@ export function Navbar({
           <button
             type="button"
             onClick={onOpenEmptyRooms}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-violet-400 dark:hover:border-violet-500/50 hover:bg-violet-50 dark:hover:bg-violet-500/10 text-slate-800 dark:text-slate-200 hover:text-violet-700 dark:hover:text-violet-300 transition-all text-xs font-semibold cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-500/50 hover:bg-blue-100 dark:hover:bg-blue-500/10 text-slate-800 dark:text-slate-200 hover:text-blue-700 dark:hover:text-blue-300 transition-all text-[11px] sm:text-xs font-semibold cursor-pointer shadow-sm"
             title="ফাঁকা ক্লাসরুম তালিকা"
           >
-            <Building2 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
+            <Building2 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-300" />
             <span className="hidden md:inline">ফাঁকা রুম</span>
           </button>
 
@@ -130,10 +130,10 @@ export function Navbar({
           <button
             type="button"
             onClick={onOpenCalendar}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500/50 hover:bg-sky-50 dark:hover:bg-sky-500/10 text-slate-800 dark:text-slate-200 hover:text-sky-700 dark:hover:text-sky-300 transition-all text-xs font-semibold cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-slate-800 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all text-[11px] sm:text-xs font-semibold cursor-pointer shadow-sm"
             title="একাডেমিক ক্যালেন্ডার ও নোটিশ"
           >
-            <CalendarDays className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+            <CalendarDays className="w-3.5 h-3.5 text-blue-600 dark:text-blue-300" />
             <span className="hidden md:inline">ক্যালেন্ডার</span>
           </button>
 
@@ -141,10 +141,10 @@ export function Navbar({
           <button
             type="button"
             onClick={onOpenExport}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/50 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-slate-800 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all text-xs font-semibold cursor-pointer"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white border border-emerald-600 hover:bg-emerald-700 shadow-[0_8px_20px_rgba(16,185,129,0.18)] transition-all text-[11px] sm:text-xs font-bold cursor-pointer"
             title="রুটিন ইমেজ হিসেবে ডাউনলোড করুন"
           >
-            <Download className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <Download className="w-3.5 h-3.5" />
             <span className="hidden lg:inline">এক্সপোর্ট</span>
           </button>
         </div>

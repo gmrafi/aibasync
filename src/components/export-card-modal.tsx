@@ -39,26 +39,49 @@ export function ExportCardModal({
   );
 
   const getCourseAccent = (courseTitle: string, majorOrSection?: string) => {
-    const section = (majorOrSection || "").toUpperCase();
     const t = `${courseTitle} ${majorOrSection || ""}`.toLowerCase().replace(/[^a-z0-9]+/g, " ");
 
-    if (["FIN", "FINANCE", "BANK", "INVESTMENT", "MONETARY", "FINANCIAL"].some((value) => section.includes(value)) || /(?:^|\s)(fin|finance|bank|investment|monetary|financial|economics)(?:$|\s)/.test(t)) {
+    if (t.includes("corporate finance")) {
       return { bg: "bg-emerald-50", border: "border-emerald-300", badge: "bg-emerald-100 text-emerald-900 border-emerald-200" };
     }
-    if (["ACC", "ACCOUNTING", "AUDIT", "TAX", "COST"].some((value) => section.includes(value)) || /(?:^|\s)(acc|accounting|account|audit|tax|cost)(?:$|\s)/.test(t)) {
+    if (t.includes("bank fund management")) {
+      return { bg: "bg-teal-50", border: "border-teal-300", badge: "bg-teal-100 text-teal-900 border-teal-200" };
+    }
+    if (t.includes("financial institutions") || t.includes("financial markets")) {
+      return { bg: "bg-lime-50", border: "border-lime-300", badge: "bg-lime-100 text-lime-900 border-lime-200" };
+    }
+    if (t.includes("international financial management")) {
+      return { bg: "bg-green-50", border: "border-green-300", badge: "bg-green-100 text-green-900 border-green-200" };
+    }
+    if (t.includes("principles of finance")) {
+      return { bg: "bg-emerald-100", border: "border-emerald-300", badge: "bg-emerald-200 text-emerald-950 border-emerald-300" };
+    }
+    if (t.includes("taxation")) {
       return { bg: "bg-amber-50", border: "border-amber-300", badge: "bg-amber-100 text-amber-900 border-amber-200" };
     }
-    if (["MKT", "MARKETING", "BRAND", "CONSUMER", "SALES", "PROMOTION"].some((value) => section.includes(value)) || /(?:^|\s)(mkt|marketing|brand|consumer|sales|promotion|advertising)(?:$|\s)/.test(t)) {
+    if (t.includes("cost accounting") || t.includes("auditing") || t.includes("advanced accounting") || t.includes("principles of accounting") || t.includes("accounting")) {
+      return { bg: "bg-amber-50", border: "border-amber-300", badge: "bg-amber-100 text-amber-900 border-amber-200" };
+    }
+    if (t.includes("marketing research") || t.includes("brand management") || t.includes("strategic marketing") || t.includes("consumer behavior") || t.includes("marketing")) {
       return { bg: "bg-rose-50", border: "border-rose-300", badge: "bg-rose-100 text-rose-900 border-rose-200" };
     }
-    if (["HRM", "MANAGEMENT", "NEGOTIATION", "CONFLICT", "ORGANIZATION", "STRATEGY", "BEHAVIOR"].some((value) => section.includes(value)) || /(?:^|\s)(hrm|management|leader|organization|conflict|negotiation|behavior|strategy)(?:$|\s)/.test(t)) {
+    if (t.includes("human resources management") || t.includes("conflict management") || t.includes("negotiation") || t.includes("leadership") || t.includes("hrm")) {
       return { bg: "bg-indigo-50", border: "border-indigo-300", badge: "bg-indigo-100 text-indigo-900 border-indigo-200" };
     }
-    if (["MIS", "TECHNOLOGY", "SYSTEM", "COMPUTER", "DATA", "INFORMATION"].some((value) => section.includes(value)) || /(?:^|\s)(mis|tech|technology|system|computer|data|database|information)(?:$|\s)/.test(t)) {
+    if (t.includes("management information system") || t.includes("management of innovation and technology") || t.includes("computer and its application") || t.includes("technology") || t.includes("mis")) {
       return { bg: "bg-cyan-50", border: "border-cyan-300", badge: "bg-cyan-100 text-cyan-900 border-cyan-200" };
     }
-    if (["SCM", "SUPPLY", "OPERATIONS", "LOGISTICS", "PROCUREMENT", "PRODUCTION", "PLANNING"].some((value) => section.includes(value)) || /(?:^|\s)(scm|supply|operations|logistics|procurement|production|planning|stat|math)(?:$|\s)/.test(t)) {
+    if (t.includes("production planning") || t.includes("logistics management") || t.includes("procurement management") || t.includes("supply chain") || t.includes("scm")) {
       return { bg: "bg-orange-50", border: "border-orange-300", badge: "bg-orange-100 text-orange-900 border-orange-200" };
+    }
+    if (t.includes("entrepreneurship") || t.includes("fundamentals of management") || t.includes("business leadership")) {
+      return { bg: "bg-violet-50", border: "border-violet-300", badge: "bg-violet-100 text-violet-900 border-violet-200" };
+    }
+    if (t.includes("microeconomics") || t.includes("macroeconomics") || t.includes("economics")) {
+      return { bg: "bg-fuchsia-50", border: "border-fuchsia-300", badge: "bg-fuchsia-100 text-fuchsia-900 border-fuchsia-200" };
+    }
+    if (t.includes("business statistics") || t.includes("business mathematics")) {
+      return { bg: "bg-sky-50", border: "border-sky-300", badge: "bg-sky-100 text-sky-900 border-sky-200" };
     }
     return { bg: "bg-slate-50", border: "border-slate-300", badge: "bg-slate-100 text-slate-800 border-slate-200" };
   };

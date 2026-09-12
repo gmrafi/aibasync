@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, Smartphone, X } from "lucide-react";
+import { Download, X } from "lucide-react";
+
+const PWA_DISMISS_KEY = "aibasync_pwa_dismissed_until";
+const PWA_DISMISS_MS = 24 * 60 * 60 * 1000;
 
 export function PwaInstallBanner() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -9,17 +12,15 @@ export function PwaInstallBanner() {
   const [isIos, setIsIos] = useState(false);
 
   useEffect(() => {
-    // Check if already installed
     if (window.matchMedia("(display-mode: standalone)").matches) {
       return;
     }
 
-    // Check if previously dismissed
-    if (sessionStorage.getItem("classr_pwa_dismissed")) {
+    const dismissedUntil = Number(localStorage.getItem(PWA_DISMISS_KEY) || "0");
+    if (Date.now() < dismissedUntil) {
       return;
     }
 
-    // iOS detection
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isApple = /iphone|ipad|ipod/.test(userAgent);
     setIsIos(isApple);
@@ -32,10 +33,12 @@ export function PwaInstallBanner() {
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstall);
 
-    // If iOS and not standalone, show after a delay
     if (isApple && !(window.navigator as any).standalone) {
       const timer = setTimeout(() => setShowBanner(true), 3000);
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        window.removeEventListener("beforeinstallprompt", handleBeforeInstall);
+      };
     }
 
     return () => {
@@ -55,7 +58,7 @@ export function PwaInstallBanner() {
   };
 
   const handleDismiss = () => {
-    sessionStorage.setItem("classr_pwa_dismissed", "true");
+    localStorage.setItem(PWA_DISMISS_KEY, String(Date.now() + PWA_DISMISS_MS));
     setShowBanner(false);
   };
 

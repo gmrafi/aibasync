@@ -26,6 +26,8 @@ export const BBA11_MAJORS = [
   { code: "ACC", name: "Accounting (ACC)", fullName: "Accounting" },
   { code: "MKT", name: "Marketing (MKT)", fullName: "Marketing" },
   { code: "SCM", name: "Supply Chain Management (SCM)", fullName: "Supply Chain Management" },
+  { code: "HRM", name: "Human Resource Management (HRM)", fullName: "Human Resource Management" },
+  { code: "MIS", name: "Management Information Systems (MIS)", fullName: "Management Information Systems" },
 ];
 
 export const BBA11_MINORS: MinorCourseInfo[] = [

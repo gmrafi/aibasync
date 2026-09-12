@@ -33,7 +33,8 @@ import {
 export default function HomePage() {
   const [preferences, setPreferences] = useState<UserPreferences>(DEFAULT_PREFERENCES);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [viewMode, setViewMode] = useState<"TODAY" | "WEEK">("TODAY");
+  const [isHydrated, setIsHydrated] = useState(false);
+  const [viewMode, setViewMode] = useState<"TODAY" | "WEEK">("WEEK");
 
   // Modals state
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
@@ -43,11 +44,14 @@ export default function HomePage() {
   const [selectedFaculty, setSelectedFaculty] = useState<FacultyMember | null>(null);
 
   // Time & Simulator state
-  const [currentTime, setCurrentTime] = useState<Date>(new Date());
+  const [currentTime, setCurrentTime] = useState<Date>(new Date("2024-01-01T09:00:00"));
   const [isSimulationMode, setIsSimulationMode] = useState(false);
   const [simulatedTime, setSimulatedTime] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
+    setIsHydrated(true);
+    setCurrentTime(new Date());
+
     const stored = getStoredPreferences();
     setPreferences(stored);
     setIsLoaded(true);
@@ -59,11 +63,8 @@ export default function HomePage() {
       document.documentElement.classList.remove("dark");
     }
 
-    // Default to WEEK view on Friday & Saturday (Weekend)
-    const todayName = getDayName(new Date());
-    if (todayName === "Friday" || todayName === "Saturday") {
-      setViewMode("WEEK");
-    }
+    // Default to WEEK view for the first-load experience, because it is the primary dashboard view.
+    setViewMode("WEEK");
 
     // If first visit, show the academic selection dialog
     if (!stored.hasOnboarded) {
@@ -95,7 +96,9 @@ export default function HomePage() {
     setPreferences(updated);
   };
 
-  const effectiveTime = isSimulationMode && simulatedTime ? simulatedTime : currentTime;
+  const effectiveTime = isHydrated
+    ? isSimulationMode && simulatedTime ? simulatedTime : currentTime
+    : new Date("2024-01-01T09:00:00");
   const currentDayName = getDayName(effectiveTime);
 
   const status = getActiveAndUpcomingClass(
@@ -192,7 +195,7 @@ export default function HomePage() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-5 sm:py-7 space-y-6 pb-24 md:pb-12">
+      <main className="flex-1 w-full mx-auto max-w-[420px] sm:max-w-4xl px-3 sm:px-4 py-3 sm:py-7 space-y-4 sm:space-y-6 pb-24 md:pb-12">
         {/* Simulation Banner */}
         {isSimulationMode && (
           <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-center justify-between text-xs font-medium text-amber-800 dark:text-amber-300 animate-in fade-in">
@@ -232,14 +235,14 @@ export default function HomePage() {
 
         {/* Weekend Quick Switch Helper Banner */}
         {status.isWeekend && viewMode === "TODAY" && (
-          <div className="p-3.5 sm:p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-between gap-3 text-xs text-indigo-950 dark:text-indigo-200 animate-in fade-in">
-            <span>আজকের ক্লাস নেই (সাপ্তাহিক ছুটি)। আগামী সপ্তাহের সম্পূর্ণ রুটিন দেখুন:</span>
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 flex items-center justify-between gap-3 text-xs text-emerald-950 dark:text-emerald-200 animate-in fade-in">
+            <span>No classes today — weekend break. View the full weekly schedule below.</span>
             <button
               type="button"
               onClick={() => setViewMode("WEEK")}
-              className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shrink-0 cursor-pointer shadow-xs active:scale-98"
+              className="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs shrink-0 cursor-pointer shadow-xs active:scale-98"
             >
-              সাপ্তাহিক রুটিন
+              Weekly View
             </button>
           </div>
         )}
@@ -251,18 +254,18 @@ export default function HomePage() {
               <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                 {preferences.role === "teacher"
                   ? (preferences.batch === "MY_CLASSES"
-                      ? "আমার ক্লাস সূচি"
+                      ? "My Class Schedule"
                       : preferences.batch === "ALL_BATCHES"
-                      ? "মাস্টার রুটিন (সকল ব্যাচ)"
+                      ? "Master Routine (All Batches)"
                       : preferences.batch)
                   : preferences.batch}
               </h2>
               {preferences.role === "teacher" ? (
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-500/15 border border-indigo-200 dark:border-indigo-500/30 text-indigo-800 dark:text-indigo-300">
-                  {preferences.teacherCode ? `${preferences.teacherCode} ফ্যাকাল্টি` : "শিক্ষক প্রোফাইল"}
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300">
+                  {preferences.teacherCode ? `${preferences.teacherCode} Faculty` : "Faculty Profile"}
                 </span>
               ) : (
-                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 text-sky-800 dark:text-sky-300">
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/15 border border-blue-200 dark:border-blue-500/30 text-blue-800 dark:text-blue-300">
                   {preferences.majorOrSection}{minorDisplay}
                 </span>
               )}
@@ -272,8 +275,8 @@ export default function HomePage() {
             </div>
             <p className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 mt-1">
               {viewMode === "TODAY"
-                ? `আজকের সূচি (${currentDayName}) • ${status.todayClasses.length}টি ক্লাস নির্ধারিত`
-                : "রবিবার থেকে বৃহস্পতিবার পর্যন্ত পূর্ণাঙ্গ সাপ্তাহিক ক্লাস শিডিউল"}
+                ? `${currentDayName} • ${status.todayClasses.length} classes scheduled`
+                : `${currentDayName} • ${status.todayClasses.length} classes scheduled`}
             </p>
           </div>
 
@@ -289,7 +292,7 @@ export default function HomePage() {
               }`}
             >
               <Clock className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-              <span>আজকের রুটিন</span>
+              <span>Today</span>
             </button>
 
             <button
@@ -302,7 +305,7 @@ export default function HomePage() {
               }`}
             >
               <Layers className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-              <span>সাপ্তাহিক ভিউ</span>
+              <span>Weekly</span>
             </button>
           </div>
         </div>
@@ -389,14 +392,16 @@ export default function HomePage() {
           </div>
         </div>
 
+        <div className="mt-12 border-t border-slate-200/90 dark:border-slate-800/90" />
+
         {/* Upgraded Interactive Footer */}
-        <footer className="mt-12 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
+        <footer className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
           {/* Top Section: Institutional & Quick Shortcuts */}
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 pb-5 border-b border-slate-100 dark:border-slate-800/80">
             <div className="flex items-center gap-3.5">
               <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/80 p-1.5 border border-slate-200/80 dark:border-slate-700/60 shadow-xs flex items-center justify-center shrink-0">
                 <Image
-                  src="/icons/logo-clean.png"
+                  src="/logo.png"
                   alt="AIBA Sylhet Logo"
                   width={40}
                   height={40}
