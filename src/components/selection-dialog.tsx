@@ -199,28 +199,6 @@ export function SelectionDialog({
               <button
                 type="button"
                 onClick={() => {
-                  setRole("teacher");
-                  if (!teacherCode && FACULTY_LIST.length > 0) {
-                    setTeacherCode(FACULTY_LIST[0].code);
-                    setName(FACULTY_LIST[0].fullName);
-                    setNameError(false);
-                  }
-                  if (selectedBatch !== "MY_CLASSES" && selectedBatch !== "ALL_BATCHES") {
-                    setSelectedBatch("MY_CLASSES");
-                  }
-                }}
-                className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                  role === "teacher"
-                    ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-sm"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
-                }`}
-              >
-                <User className="w-4 h-4" />
-                <span>সম্মানিত শিক্ষক / ফ্যাকাল্টি</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
                   setRole("student");
                   if (selectedBatch === "MY_CLASSES" || selectedBatch === "ALL_BATCHES") {
                     setSelectedBatch("BBA-14");
@@ -235,6 +213,26 @@ export function SelectionDialog({
                 <GraduationCap className="w-4 h-4" />
                 <span>শিক্ষার্থী</span>
               </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setRole("teacher");
+                  if (!teacherCode && FACULTY_LIST.length > 0) {
+                    setTeacherCode(FACULTY_LIST[0].code);
+                    setName(FACULTY_LIST[0].fullName);
+                    setNameError(false);
+                  }
+                  setSelectedBatch("MY_CLASSES");
+                }}
+                className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  role === "teacher"
+                    ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                }`}
+              >
+                <User className="w-4 h-4" />
+                <span>শিক্ষক / ফ্যাকাল্টি</span>
+              </button>
             </div>
           </div>
 
@@ -243,7 +241,7 @@ export function SelectionDialog({
             <div className="space-y-4 animate-in fade-in">
               <div>
                 <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
-                  <span>সম্মানিত শিক্ষকবৃন্দের তালিকা থেকে আপনার প্রোফাইল নির্বাচন করুন</span>
+                  <span>শিক্ষকদের তালিকা থেকে আপনার প্রোফাইল নির্বাচন করুন</span>
                   {nameError && (
                     <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
                       অনুগ্রহ করে শিক্ষক নির্বাচন করুন

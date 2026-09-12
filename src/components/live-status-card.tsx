@@ -92,7 +92,7 @@ export function LiveStatusCard({
       if (displayName) {
         return `${timeGreeting}, ${displayName} স্যার/ম্যাম!`;
       }
-      return `${timeGreeting}, সম্মানিত শিক্ষক!`;
+      return `${timeGreeting}, স্যার/ম্যাম!`;
     }
 
     if (studentName && studentName.trim().length > 0) {

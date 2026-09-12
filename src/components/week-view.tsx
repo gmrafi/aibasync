@@ -120,7 +120,11 @@ export function WeekView({
   const [layoutMode, setLayoutMode] = useState<"GRID" | "DAY">("GRID");
   const [selectedDay, setSelectedDay] = useState<DayOfWeek | "ALL">("ALL");
   const [teacherFilter, setTeacherFilter] = useState<string>(
-    role === "teacher" ? batch || "MY_CLASSES" : batch
+    role === "teacher"
+      ? batch === "ALL_BATCHES"
+        ? "ALL_BATCHES"
+        : "MY_CLASSES"
+      : batch
   );
 
   // Available batches for teachers to quick-switch
@@ -139,23 +143,23 @@ export function WeekView({
   }, [routineData, role, teacherFilter, batch, majorOrSection, minor, teacherCode]);
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3.5">
       {/* Top Header & View Mode Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-2 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400">
+            <span className="p-1.5 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400">
               <Calendar className="w-4 h-4" />
             </span>
-            <h3 className="text-base font-black text-slate-900 dark:text-white">
+            <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
               {layoutMode === "GRID" ? "সাপ্তাহিক রুটিন ম্যাট্রিক্স" : "সাপ্তাহিক ক্লাস তালিকা"}
             </h3>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
+            <span className="px-2 py-0.5 rounded-full text-[11px] font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
               মোট {activeSlots.length}টি ক্লাস
             </span>
           </div>
-          <p className="text-xs font-bold text-slate-600 dark:text-slate-400 mt-1">
-            রবিবার থেকে বৃহস্পতিবার পূর্ণাঙ্গ ক্লাস সূচি • বামে দিন এবং উপরে পিরিয়ডভিত্তিক টাইমটেবিল
+          <p className="text-[11px] sm:text-xs font-bold text-slate-500 dark:text-slate-400 mt-0.5">
+            রবিবার থেকে বৃহস্পতিবার পূর্ণাঙ্গ ক্লাস সূচি • এক নজরে সাপ্তাহিক ৩টি পিরিয়ড
           </p>
         </div>
 
@@ -234,70 +238,74 @@ export function WeekView({
       )}
 
       {/* ========================================================= */}
-      {/* MODE 1: SINGLE-GLANCE WEEKLY TIMETABLE MATRIX (GRID)     */}
-      {/* DAYS AS ROWS (LEFT), PERIODS AS COLUMNS (TOP)            */}
+      {/* MODE 1: COMPACT SINGLE-GLANCE WEEKLY TIMETABLE MATRIX     */}
+      {/* DAYS AS ROWS (LEFT), ALL 3 PERIODS VISIBLE/PEEKING       */}
       {/* ========================================================= */}
       {layoutMode === "GRID" && (
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg overflow-hidden transition-all">
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md overflow-hidden transition-all">
           <div className="overflow-x-auto">
-            <div className="min-w-[960px]">
-              {/* Table Column Headers: Days on Left, Periods on Top */}
-              <div className="grid grid-cols-[140px_minmax(210px,1fr)_86px_minmax(210px,1fr)_98px_minmax(210px,1fr)] border-b border-slate-200 dark:border-slate-800 bg-slate-100/90 dark:bg-slate-950">
+            <div className="min-w-[640px] sm:min-w-[720px]">
+              {/* Table Column Headers */}
+              <div className="grid grid-cols-[84px_minmax(145px,1fr)_34px_minmax(145px,1fr)_34px_minmax(145px,1fr)] sm:grid-cols-[96px_minmax(170px,1fr)_40px_minmax(170px,1fr)_40px_minmax(170px,1fr)] border-b border-slate-200 dark:border-slate-800 bg-slate-100/95 dark:bg-slate-950">
                 {/* Column 1: Day Label (Sticky Left) */}
-                <div className="p-3.5 sm:p-4 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-20 bg-slate-100 dark:bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)]">
-                  <span className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
-                    বার / দিন
+                <div className="p-2 sm:p-2.5 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-20 bg-slate-100 dark:bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)]">
+                  <span className="text-[11px] sm:text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                    বার
                   </span>
-                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-mono">
-                    Day / Time
+                  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 font-mono">
+                    Day
                   </span>
                 </div>
 
                 {/* Column 2: Period 1 */}
-                <div className="p-3 text-center border-r border-slate-200 dark:border-slate-800">
-                  <div className="text-sm font-black text-slate-900 dark:text-white">
+                <div className="p-2 sm:p-2.5 text-center border-r border-slate-200 dark:border-slate-800">
+                  <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                     পিরিয়ড ১
                   </div>
-                  <div className="text-xs font-mono font-black text-sky-700 dark:text-sky-300 mt-0.5">
-                    09:30 AM - 11:00 AM
+                  <div className="text-[10px] sm:text-[11px] font-mono font-black text-sky-700 dark:text-sky-300">
+                    09:30 - 11:00 AM
                   </div>
                 </div>
 
                 {/* Column 3: Short Break (Tea Break) */}
-                <div className="p-2 text-center border-r border-amber-200/70 dark:border-amber-800/40 bg-amber-100/40 dark:bg-amber-950/40 flex flex-col items-center justify-center">
-                  <Coffee className="w-4 h-4 text-amber-600 dark:text-amber-400 mb-0.5" />
-                  <span className="text-xs font-black text-amber-900 dark:text-amber-200">বিরতি</span>
-                  <span className="text-[10px] font-mono font-bold text-amber-800 dark:text-amber-300">
-                    11:00-11:30
+                <div
+                  className="p-1 border-r border-amber-200/70 dark:border-amber-800/40 bg-amber-100/40 dark:bg-amber-950/40 flex flex-col items-center justify-center"
+                  title="চা বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
+                >
+                  <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                  <span className="text-[8px] sm:text-[9px] font-black text-amber-900 dark:text-amber-200 mt-0.5 leading-none">
+                    বিরতি
                   </span>
                 </div>
 
                 {/* Column 4: Period 2 */}
-                <div className="p-3 text-center border-r border-slate-200 dark:border-slate-800">
-                  <div className="text-sm font-black text-slate-900 dark:text-white">
+                <div className="p-2 sm:p-2.5 text-center border-r border-slate-200 dark:border-slate-800">
+                  <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                     পিরিয়ড ২
                   </div>
-                  <div className="text-xs font-mono font-black text-sky-700 dark:text-sky-300 mt-0.5">
+                  <div className="text-[10px] sm:text-[11px] font-mono font-black text-sky-700 dark:text-sky-300">
                     11:30 AM - 01:00 PM
                   </div>
                 </div>
 
-                {/* Column 5: Lunch Break (NO prayer mention) */}
-                <div className="p-2 text-center border-r border-sky-200/70 dark:border-sky-800/40 bg-sky-100/40 dark:bg-sky-950/40 flex flex-col items-center justify-center">
-                  <Utensils className="w-4 h-4 text-sky-600 dark:text-sky-400 mb-0.5" />
-                  <span className="text-xs font-black text-sky-900 dark:text-sky-200">মধ্যাহ্ন বিরতি</span>
-                  <span className="text-[10px] font-mono font-bold text-sky-800 dark:text-sky-300">
-                    01:00-01:30
+                {/* Column 5: Lunch Break */}
+                <div
+                  className="p-1 border-r border-sky-200/70 dark:border-sky-800/40 bg-sky-100/40 dark:bg-sky-950/40 flex flex-col items-center justify-center"
+                  title="মধ্যাহ্ন বিরতি • 01:00 PM - 01:30 PM (৩০ মিনিট)"
+                >
+                  <Utensils className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+                  <span className="text-[8px] sm:text-[9px] font-black text-sky-900 dark:text-sky-200 mt-0.5 leading-none">
+                    মধ্যাহ্ন
                   </span>
                 </div>
 
                 {/* Column 6: Period 3 */}
-                <div className="p-3 text-center">
-                  <div className="text-sm font-black text-slate-900 dark:text-white">
+                <div className="p-2 sm:p-2.5 text-center">
+                  <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                     পিরিয়ড ৩
                   </div>
-                  <div className="text-xs font-mono font-black text-sky-700 dark:text-sky-300 mt-0.5">
-                    01:30 PM - 03:00 PM
+                  <div className="text-[10px] sm:text-[11px] font-mono font-black text-sky-700 dark:text-sky-300">
+                    01:30 - 03:00 PM
                   </div>
                 </div>
               </div>
@@ -312,45 +320,44 @@ export function WeekView({
                 return (
                   <div
                     key={day.key}
-                    className={`grid grid-cols-[140px_minmax(210px,1fr)_86px_minmax(210px,1fr)_98px_minmax(210px,1fr)] border-b last:border-b-0 border-slate-200 dark:border-slate-800 min-h-[140px] transition-colors ${
+                    className={`grid grid-cols-[84px_minmax(145px,1fr)_34px_minmax(145px,1fr)_34px_minmax(145px,1fr)] sm:grid-cols-[96px_minmax(170px,1fr)_40px_minmax(170px,1fr)_40px_minmax(170px,1fr)] border-b last:border-b-0 border-slate-200 dark:border-slate-800 min-h-[115px] sm:min-h-[130px] transition-colors ${
                       isToday ? "bg-sky-50/20 dark:bg-sky-500/5" : ""
                     }`}
                   >
                     {/* Day Header Cell (Sticky Left) */}
                     <div
-                      className={`p-3 sm:p-4 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-10 transition-colors ${
+                      className={`p-2 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-10 transition-colors ${
                         isToday
                           ? "bg-sky-100/95 dark:bg-slate-900 border-r-2 border-r-sky-500 shadow-[2px_0_8px_-2px_rgba(14,165,233,0.3)]"
                           : "bg-slate-50/95 dark:bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)]"
                       }`}
                     >
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-base font-black text-slate-900 dark:text-white">
+                      <div className="flex items-center gap-1">
+                        <span className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-tight">
                           {day.label}
                         </span>
                         {isToday && (
                           <span
-                            className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse"
+                            className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse shrink-0"
                             title="আজকের দিন"
                           />
                         )}
                       </div>
-                      <span className="text-xs font-mono font-bold text-slate-600 dark:text-slate-400 mt-0.5">
-                        {day.key}
+                      <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">
+                        {day.key.slice(0, 3)}
                       </span>
                       {isToday && (
-                        <span className="mt-2 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-sky-600 text-white tracking-wide shadow-2xs">
-                          আজকের দিন
+                        <span className="mt-1 px-1.5 py-0.2 rounded-full text-[9px] font-black bg-sky-600 text-white tracking-tight shadow-2xs">
+                          আজ
                         </span>
                       )}
                     </div>
 
                     {/* Period 1 Cell */}
-                    <div className="p-2.5 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-2 justify-center">
+                    <div className="p-1.5 sm:p-2 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-1.5 justify-center">
                       {p1Slots.length === 0 ? (
-                        <div className="h-full min-h-[105px] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-xs font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                        <div className="h-full min-h-[85px] rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-[11px] font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
                           <span>ফাঁকা</span>
-                          <span className="text-[11px] font-semibold opacity-60">ক্লাস নেই</span>
                         </div>
                       ) : (
                         p1Slots.map((s) => (
@@ -365,18 +372,21 @@ export function WeekView({
                     </div>
 
                     {/* Short Break Column */}
-                    <div className="p-2 border-r border-amber-200/50 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20 flex flex-col items-center justify-center text-center">
-                      <Coffee className="w-4 h-4 text-amber-600/80 dark:text-amber-400/80 mb-1" />
-                      <span className="text-xs font-bold text-amber-900/80 dark:text-amber-300/80">বিরতি</span>
-                      <span className="text-[11px] font-mono font-bold text-amber-700/80 dark:text-amber-400/80">৩০ মি.</span>
+                    <div
+                      className="p-0.5 border-r border-amber-200/50 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20 flex flex-col items-center justify-center text-center"
+                      title="চা বিরতি (৩০ মিনিট)"
+                    >
+                      <Coffee className="w-3.5 h-3.5 text-amber-600/70 dark:text-amber-400/70 mb-1 shrink-0" />
+                      <span className="[writing-mode:vertical-lr] text-[8px] sm:text-[9px] font-black text-amber-900/80 dark:text-amber-300/80 tracking-widest rotate-180 select-none">
+                        বিরতি
+                      </span>
                     </div>
 
                     {/* Period 2 Cell */}
-                    <div className="p-2.5 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-2 justify-center">
+                    <div className="p-1.5 sm:p-2 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-1.5 justify-center">
                       {p2Slots.length === 0 ? (
-                        <div className="h-full min-h-[105px] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-xs font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                        <div className="h-full min-h-[85px] rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-[11px] font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
                           <span>ফাঁকা</span>
-                          <span className="text-[11px] font-semibold opacity-60">ক্লাস নেই</span>
                         </div>
                       ) : (
                         p2Slots.map((s) => (
@@ -391,22 +401,21 @@ export function WeekView({
                     </div>
 
                     {/* Lunch Break Column */}
-                    <div className="p-2 border-r border-sky-200/50 dark:border-sky-800/40 bg-sky-50/50 dark:bg-sky-950/20 flex flex-col items-center justify-center text-center">
-                      <Utensils className="w-4 h-4 text-sky-600/80 dark:text-sky-400/80 mb-1" />
-                      <span className="text-xs font-bold text-sky-900/80 dark:text-sky-300/80 leading-tight">
-                        মধ্যাহ্ন বিরতি
-                      </span>
-                      <span className="text-[11px] font-mono font-bold text-sky-700/80 dark:text-sky-400/80 mt-0.5">
-                        ৩০ মি.
+                    <div
+                      className="p-0.5 border-r border-sky-200/50 dark:border-sky-800/40 bg-sky-50/50 dark:bg-sky-950/20 flex flex-col items-center justify-center text-center"
+                      title="মধ্যাহ্ন বিরতি (৩০ মিনিট)"
+                    >
+                      <Utensils className="w-3.5 h-3.5 text-sky-600/70 dark:text-sky-400/70 mb-1 shrink-0" />
+                      <span className="[writing-mode:vertical-lr] text-[8px] sm:text-[9px] font-black text-sky-900/80 dark:text-sky-300/80 tracking-widest rotate-180 select-none">
+                        মধ্যাহ্ন
                       </span>
                     </div>
 
                     {/* Period 3 Cell */}
-                    <div className="p-2.5 flex flex-col gap-2 justify-center">
+                    <div className="p-1.5 sm:p-2 flex flex-col gap-1.5 justify-center">
                       {p3Slots.length === 0 ? (
-                        <div className="h-full min-h-[105px] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-xs font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                        <div className="h-full min-h-[85px] rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-[11px] font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
                           <span>ফাঁকা</span>
-                          <span className="text-[11px] font-semibold opacity-60">ক্লাস নেই</span>
                         </div>
                       ) : (
                         p3Slots.map((s) => (
@@ -426,26 +435,26 @@ export function WeekView({
           </div>
 
           {/* Color Coding Legend */}
-          <div className="p-3.5 sm:p-4 bg-slate-50/90 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-700 dark:text-slate-300">
+          <div className="p-3 sm:p-3.5 bg-slate-50/90 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-center gap-3.5 text-xs font-bold text-slate-700 dark:text-slate-300">
             <span className="text-slate-900 dark:text-white font-black">বিষয়ভিত্তিক কালার কোড:</span>
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-emerald-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
               <span>ফিন্যান্স (Finance)</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-amber-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
               <span>অ্যাকাউন্টিং (Accounting)</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-indigo-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
               <span>ম্যানেজমেন্ট / HRM</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-rose-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
               <span>মার্কেটিং (Marketing)</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-3 h-3 rounded-full bg-cyan-500" />
+              <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
               <span>এমআইএস / টেকনোলজি</span>
             </span>
           </div>
@@ -505,13 +514,13 @@ export function WeekView({
               return (
                 <div
                   key={day.key}
-                  className={`rounded-3xl border p-5 sm:p-6 transition-all ${
+                  className={`rounded-3xl border p-4 sm:p-5 transition-all ${
                     isToday
                       ? "bg-white dark:bg-slate-900 border-2 border-sky-400 dark:border-sky-500 shadow-md"
                       : "bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800"
                   }`}
                 >
-                  <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800">
+                  <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                       <h3 className="text-base font-black text-slate-900 dark:text-white">{day.label}</h3>
@@ -538,11 +547,11 @@ export function WeekView({
                         return (
                           <div
                             key={slot.id}
-                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between shadow-xs ${theme.bg} ${theme.border}`}
+                            className={`p-3.5 sm:p-4 rounded-2xl border-2 transition-all flex flex-col justify-between shadow-xs ${theme.bg} ${theme.border}`}
                           >
                             <div>
-                              <div className="flex items-center justify-between text-xs font-black mb-2">
-                                <span className={`px-2.5 py-0.5 rounded-lg border font-black text-xs ${theme.badge}`}>
+                              <div className="flex items-center justify-between text-xs font-black mb-1.5">
+                                <span className={`px-2 py-0.5 rounded-lg border font-black text-xs ${theme.badge}`}>
                                   পিরিয়ড {slot.period}
                                 </span>
                                 <span className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-bold text-xs">
@@ -551,7 +560,7 @@ export function WeekView({
                                 </span>
                               </div>
 
-                              <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-snug my-2">
+                              <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-snug my-1.5">
                                 {slot.courseTitle}
                               </h4>
 
@@ -569,8 +578,8 @@ export function WeekView({
                               </div>
                             </div>
 
-                            <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-300/60 dark:border-slate-800 text-xs">
-                              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-800 shadow-2xs">
+                            <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-300/60 dark:border-slate-800 text-xs">
+                              <span className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-800 shadow-2xs">
                                 <MapPin className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                                 রুম {slot.room}
                               </span>
@@ -578,7 +587,7 @@ export function WeekView({
                               <button
                                 type="button"
                                 onClick={() => onSelectFaculty(faculty)}
-                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-800 hover:border-violet-400 transition-colors cursor-pointer"
+                                className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-800 hover:border-violet-400 transition-colors cursor-pointer"
                                 title="শিক্ষকের প্রোফাইল দেখুন"
                               >
                                 <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
@@ -615,40 +624,40 @@ function TimetableSlotCard({
 
   return (
     <div
-      className={`p-3 rounded-2xl border-2 transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between group ${theme.bg} ${theme.border}`}
+      className={`p-2 sm:p-2.5 rounded-xl border-2 transition-all duration-200 shadow-2xs hover:shadow-md flex flex-col justify-between group ${theme.bg} ${theme.border}`}
     >
       <div>
         {/* Top Badges */}
-        <div className="flex items-center justify-between gap-1.5 mb-1.5">
-          <span className={`px-2 py-0.5 rounded-lg font-mono text-xs font-black border ${theme.badge}`}>
+        <div className="flex items-center justify-between gap-1 mb-1">
+          <span className={`px-1.5 py-0.5 rounded-md font-mono text-[10px] sm:text-[11px] font-black border ${theme.badge}`}>
             {showBatch ? `${slot.batch}` : slot.majorOrSection || "Class"}
           </span>
-          <span className="flex items-center gap-1 text-xs font-black text-slate-900 dark:text-slate-100 bg-white/90 dark:bg-slate-900/90 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
-            <MapPin className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
-            <span>রুম {slot.room}</span>
+          <span className="flex items-center gap-0.5 text-[10px] sm:text-[11px] font-black text-slate-900 dark:text-slate-100 bg-white/90 dark:bg-slate-900/90 px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-slate-800 shadow-2xs shrink-0">
+            <MapPin className="w-3 h-3 text-sky-600 dark:text-sky-400 shrink-0" />
+            <span>{slot.room}</span>
           </span>
         </div>
 
         {/* Course Title: BOLD, CLEAR, HIGH CONTRAST */}
-        <h5 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-snug line-clamp-2 my-1 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+        <h5 className="text-xs sm:text-[13px] font-black text-slate-900 dark:text-white leading-snug line-clamp-2 my-0.5 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
           {slot.courseTitle}
         </h5>
       </div>
 
       {/* Footer: Instructor & Batch */}
-      <div className="flex items-center justify-between gap-1 pt-2 mt-1 border-t border-slate-300/60 dark:border-slate-800">
+      <div className="flex items-center justify-between gap-1 pt-1.5 mt-1 border-t border-slate-300/50 dark:border-slate-800">
         <button
           type="button"
           onClick={() => onSelectFaculty(faculty)}
-          className="inline-flex items-center gap-1.5 text-xs font-black text-violet-700 dark:text-violet-300 hover:text-violet-900 dark:hover:text-violet-100 hover:underline cursor-pointer"
+          className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-black text-violet-700 dark:text-violet-300 hover:text-violet-900 dark:hover:text-violet-100 hover:underline cursor-pointer truncate"
           title={`${faculty.fullName} (${faculty.designation})`}
         >
-          <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400 shrink-0" />
-          <span className="truncate max-w-[125px]">{slot.instructor}</span>
+          <User className="w-3 h-3 text-violet-600 dark:text-violet-400 shrink-0" />
+          <span className="truncate max-w-[95px] sm:max-w-[125px]">{slot.instructor}</span>
         </button>
 
         {showBatch && slot.majorOrSection && (
-          <span className="text-xs font-black text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded-md bg-slate-200/70 dark:bg-slate-800 truncate">
+          <span className="text-[10px] font-black text-slate-600 dark:text-slate-300 px-1.5 py-0.2 rounded-md bg-slate-200/70 dark:bg-slate-800 truncate">
             {slot.majorOrSection}
           </span>
         )}
