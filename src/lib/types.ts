@@ -29,6 +29,7 @@ export interface BatchInfo {
 }
 
 export interface UserPreferences {
+  studentName?: string;
   batch: string;
   majorOrSection: string;
   hasOnboarded: boolean;
@@ -42,4 +43,13 @@ export interface EmptyRoomStatus {
   nextClass?: ClassSlot;
   freeUntil?: string;
   freeDurationMinutes?: number;
+}
+
+export interface FacultyMember {
+  code: string;
+  fullName: string;
+  designation: string;
+  department: string;
+  roomNumber: string;
+  email?: string;
 }

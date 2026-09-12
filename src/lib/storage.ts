@@ -1,8 +1,9 @@
 import { UserPreferences } from "./types";
 
-const STORAGE_KEY = "classr_user_pref_v1";
+const STORAGE_KEY = "aiba_radar_user_pref_v2";
 
 export const DEFAULT_PREFERENCES: UserPreferences = {
+  studentName: "",
   batch: "BBA-14",
   majorOrSection: "Charlie",
   hasOnboarded: false,
@@ -15,9 +16,23 @@ export function getStoredPreferences(): UserPreferences {
 
   try {
     const item = localStorage.getItem(STORAGE_KEY);
-    if (!item) return DEFAULT_PREFERENCES;
+    if (!item) {
+      // Check for legacy classr key
+      const legacy = localStorage.getItem("classr_user_pref_v1");
+      if (legacy) {
+        const p = JSON.parse(legacy);
+        return {
+          studentName: "",
+          batch: p.batch || DEFAULT_PREFERENCES.batch,
+          majorOrSection: p.majorOrSection || DEFAULT_PREFERENCES.majorOrSection,
+          hasOnboarded: Boolean(p.hasOnboarded),
+        };
+      }
+      return DEFAULT_PREFERENCES;
+    }
     const parsed = JSON.parse(item);
     return {
+      studentName: parsed.studentName || "",
       batch: parsed.batch || DEFAULT_PREFERENCES.batch,
       majorOrSection: parsed.majorOrSection || DEFAULT_PREFERENCES.majorOrSection,
       hasOnboarded: Boolean(parsed.hasOnboarded),
@@ -40,7 +55,7 @@ export function savePreferences(prefs: Partial<UserPreferences>): UserPreference
       hasOnboarded: true,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-    window.dispatchEvent(new CustomEvent("classr_pref_changed", { detail: updated }));
+    window.dispatchEvent(new CustomEvent("aiba_radar_pref_changed", { detail: updated }));
     return updated;
   } catch {
     return { ...DEFAULT_PREFERENCES, ...prefs, hasOnboarded: true };

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#09090b",
+  themeColor: "#090d1a",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -21,9 +21,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "CLASSR // AIBA Sylhet Routine Terminal",
+  title: "AIBA Radar // Routine & Room Finder",
   description:
-    "Zero-friction, blazing-fast campus class routine and empty room finder for Army Institute of Business Administration (AIBA), Sylhet. Fall 2026.",
+    "Zero-friction, blazing-fast campus class routine and empty room radar for Army Institute of Business Administration (AIBA), Sylhet. Fall 2026.",
   manifest: "/manifest.json",
   icons: {
     icon: "/icon.svg",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   ],
   creator: "Md. Golam Mubasshir Rafi",
   openGraph: {
-    title: "CLASSR // AIBA Sylhet Routine Terminal",
+    title: "AIBA Radar // Routine & Room Finder",
     description: "Instant class countdowns, empty room finder & offline routine for AIBA Sylhet students.",
     type: "website",
   },

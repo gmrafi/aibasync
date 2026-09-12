@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ACADEMIC_CALENDAR, INSTITUTION_INFO } from "@/data/routine";
 import { AcademicEvent } from "@/lib/types";
-import { Calendar, CalendarDays, Flag, Sparkles, X } from "lucide-react";
+import { CalendarDays, X } from "lucide-react";
 
 interface AcademicCalendarModalProps {
   isOpen: boolean;
@@ -27,25 +27,25 @@ export function AcademicCalendarModal({
     switch (type) {
       case "holiday":
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">
             ছুটি (Holiday)
           </span>
         );
       case "exam":
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">
             পরীক্ষা (Exam)
           </span>
         );
       case "academic":
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
             একাডেমিক
           </span>
         );
       case "event":
         return (
-          <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-violet-500/15 text-violet-300 border border-violet-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-violet-500/15 text-violet-300 border border-violet-500/30">
             ইভেন্ট
           </span>
         );
@@ -53,22 +53,22 @@ export function AcademicCalendarModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl animate-in fade-in duration-200">
       <div
-        className="w-full max-w-2xl max-h-[85vh] bg-zinc-950 border border-zinc-800 rounded-2xl shadow-2xl flex flex-col text-zinc-100 overflow-hidden"
+        className="w-full max-w-2xl max-h-[85vh] bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950 border border-slate-700/60 rounded-3xl shadow-2xl shadow-cyan-950/40 flex flex-col text-slate-100 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="p-5 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center text-cyan-400">
+        <div className="p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
+          <div className="flex items-center gap-3.5">
+            <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-blue-600/30 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shadow-inner">
               <CalendarDays className="w-5 h-5" />
             </div>
             <div>
               <h3 className="text-lg font-bold text-white tracking-tight">
                 একাডেমিক ক্যালেন্ডার • {INSTITUTION_INFO.term}
               </h3>
-              <p className="text-xs text-zinc-400">
+              <p className="text-xs text-slate-400">
                 {INSTITUTION_INFO.name}, {INSTITUTION_INFO.subTitle}
               </p>
             </div>
@@ -76,7 +76,7 @@ export function AcademicCalendarModal({
 
           <button
             onClick={onClose}
-            className="p-2 text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800 rounded-full transition-colors"
+            className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-full transition-colors cursor-pointer"
             aria-label="Close"
           >
             <X className="w-5 h-5" />
@@ -84,14 +84,14 @@ export function AcademicCalendarModal({
         </div>
 
         {/* Filter Pills */}
-        <div className="p-3.5 border-b border-zinc-800/80 bg-zinc-900/30 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="p-3.5 border-b border-slate-800/80 bg-slate-950/40 flex items-center gap-2 overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => setFilterType("ALL")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
               filterType === "ALL"
-                ? "bg-cyan-500 text-zinc-950 font-bold"
-                : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                ? "bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20"
+                : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             সকল নোটিশ ({ACADEMIC_CALENDAR.length})
@@ -99,10 +99,10 @@ export function AcademicCalendarModal({
           <button
             type="button"
             onClick={() => setFilterType("holiday")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
               filterType === "holiday"
-                ? "bg-rose-500 text-white font-bold"
-                : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                ? "bg-rose-500 text-white font-bold shadow-md shadow-rose-500/20"
+                : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             ছুটির তালিকা
@@ -110,10 +110,10 @@ export function AcademicCalendarModal({
           <button
             type="button"
             onClick={() => setFilterType("exam")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
               filterType === "exam"
-                ? "bg-amber-500 text-zinc-950 font-bold"
-                : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/20"
+                : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             পরীক্ষা
@@ -121,10 +121,10 @@ export function AcademicCalendarModal({
           <button
             type="button"
             onClick={() => setFilterType("academic")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
               filterType === "academic"
-                ? "bg-cyan-500 text-zinc-950 font-bold"
-                : "bg-zinc-900 border border-zinc-800 text-zinc-400 hover:text-zinc-200"
+                ? "bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/20"
+                : "bg-slate-900 border border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             ক্লাস ও এডমিট কার্ড
@@ -136,7 +136,7 @@ export function AcademicCalendarModal({
           {filtered.map((item, idx) => (
             <div
               key={idx}
-              className="p-3.5 sm:p-4 rounded-xl border border-zinc-800/80 bg-zinc-900/40 hover:bg-zinc-900/70 transition-colors flex items-start justify-between gap-3"
+              className="p-4 rounded-2xl border border-slate-800/80 bg-slate-950/40 hover:bg-slate-900/60 transition-colors flex items-start justify-between gap-3"
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
@@ -149,7 +149,7 @@ export function AcademicCalendarModal({
                   {item.title}
                 </h4>
                 {item.note && (
-                  <p className="text-[11px] font-mono text-zinc-500 italic">
+                  <p className="text-[11px] font-mono text-slate-400 italic">
                     *{item.note}
                   </p>
                 )}
