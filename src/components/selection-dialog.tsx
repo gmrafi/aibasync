@@ -27,11 +27,12 @@ export function SelectionDialog({
   const [name, setName] = useState(currentName);
 
   // 1. Dynamic Unique Batches from routineData (Zero hardcoding)
+  const safeData = routineData || [];
   const availableBatches = useMemo(() => {
     const set = new Set<string>();
-    routineData.forEach((slot) => set.add(slot.batch));
+    safeData.forEach((slot) => set.add(slot.batch));
     return Array.from(set).sort();
-  }, [routineData]);
+  }, [safeData]);
 
   const [selectedBatch, setSelectedBatch] = useState(
     currentBatch && availableBatches.includes(currentBatch)
@@ -42,7 +43,7 @@ export function SelectionDialog({
   // 2. Dynamic Majors/Sections for the selected batch
   const availableSubOptions = useMemo(() => {
     const set = new Set<string>();
-    routineData
+    safeData
       .filter((slot) => slot.batch === selectedBatch)
       .forEach((slot) => {
         if (slot.majorOrSection) {
@@ -50,7 +51,7 @@ export function SelectionDialog({
         }
       });
     return Array.from(set).sort();
-  }, [routineData, selectedBatch]);
+  }, [safeData, selectedBatch]);
 
   // Is this batch major-based or section-based or single?
   const isMajorBased = selectedBatch === "BBA-11";
