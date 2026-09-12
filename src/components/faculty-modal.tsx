@@ -1,7 +1,7 @@
 "use client";
 
 import { FacultyMember } from "@/lib/types";
-import { ExternalLink, GraduationCap, MapPin, User, X } from "lucide-react";
+import { Building2, User, X } from "lucide-react";
 
 interface FacultyModalProps {
   faculty: FacultyMember | null;
@@ -40,43 +40,17 @@ export function FacultyModal({ faculty, onClose }: FacultyModalProps) {
             <p className="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-1">
               {faculty.designation}
             </p>
-            <div className="mt-1.5 flex items-center gap-1.5">
-              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-200 border border-sky-300 dark:border-sky-500/30">
-                {faculty.code}
-              </span>
-            </div>
           </div>
         </div>
 
-        <div className="space-y-2.5 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
-          <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800">
-            <GraduationCap className="w-4 h-4 text-violet-600 dark:text-violet-400 shrink-0" />
-            <div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">বিভাগ / প্রতিষ্ঠান</div>
-              <div className="text-slate-800 dark:text-slate-200 font-bold">{faculty.department}</div>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800">
-            <MapPin className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <div>
-              <div className="text-[11px] font-semibold text-slate-500 dark:text-slate-400">টিচিং লাউঞ্জ / অবস্থান</div>
-              <div className="text-emerald-700 dark:text-emerald-300 font-bold">{faculty.roomNumber}</div>
+        <div className="pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+          <div className="flex items-start gap-2.5 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/80 dark:border-slate-800">
+            <Building2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+            <div className="text-emerald-700 dark:text-emerald-300 font-bold leading-relaxed">
+              {faculty.institution || "Army Institute of Business Administration (AIBA), Sylhet"}
             </div>
           </div>
         </div>
-
-        {faculty.profileUrl && (
-          <a
-            href={faculty.profileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-3.5 w-full py-2.5 px-3 rounded-xl bg-sky-50 dark:bg-sky-500/15 hover:bg-sky-100 dark:hover:bg-sky-500/25 border border-sky-200 dark:border-sky-500/30 text-sky-700 dark:text-sky-300 font-bold text-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
-          >
-            <span>অফিশিয়াল প্রোফাইল দেখুন</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </a>
-        )}
 
         <button
           type="button"

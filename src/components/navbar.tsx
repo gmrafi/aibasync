@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, CalendarDays, ChevronDown, Download, Moon, Sun } from "lucide-react";
+import { CalendarDays, ChevronDown, Download, GraduationCap, Moon, Sun } from "lucide-react";
 import { INSTITUTION_INFO } from "@/data/routine";
 import { getFacultyInfo } from "@/data/faculty";
 
@@ -14,7 +14,7 @@ interface NavbarProps {
   theme: "light" | "dark";
   onToggleTheme: () => void;
   onOpenSelector: () => void;
-  onOpenEmptyRooms: () => void;
+  onOpenFacultyDirectory: () => void;
   onOpenCalendar: () => void;
   onOpenExport: () => void;
   currentTimeStr: string;
@@ -31,7 +31,7 @@ export function Navbar({
   theme,
   onToggleTheme,
   onOpenSelector,
-  onOpenEmptyRooms,
+  onOpenFacultyDirectory,
   onOpenCalendar,
   onOpenExport,
   currentTimeStr,
@@ -70,7 +70,7 @@ export function Navbar({
             type="button"
             onClick={onOpenSelector}
             className="group inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50/80 dark:bg-slate-900/95 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 dark:hover:border-emerald-500/50 hover:bg-white dark:hover:bg-slate-800 transition-all text-[10px] sm:text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer shadow-sm active:scale-[0.99]"
-            title={role === "teacher" ? "ফ্যাকাল্টি প্রোফাইল বা ব্যাচ পরিবর্তন করুন" : "ব্যাচ অথবা মেজর/মাইনর পরিবর্তন করুন"}
+            title={role === "teacher" ? "ফ্যাকাল্টি প্রোফাইল বা ব্যাচ নির্বাচন করুন" : "ব্যাচ / মেজর / মাইনর নির্বাচন করুন"}
           >
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-500/20" />
             {role === "teacher" ? (
@@ -115,12 +115,12 @@ export function Navbar({
           {/* Empty Rooms Button */}
           <button
             type="button"
-            onClick={onOpenEmptyRooms}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-slate-900 border border-blue-200 dark:border-blue-800 hover:border-blue-400 dark:hover:border-blue-500/50 hover:bg-blue-100 dark:hover:bg-blue-500/10 text-slate-800 dark:text-slate-200 hover:text-blue-700 dark:hover:text-blue-300 transition-all text-[11px] sm:text-xs font-semibold cursor-pointer shadow-sm"
-            title="ফাঁকা ক্লাসরুম তালিকা"
+            onClick={onOpenFacultyDirectory}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 dark:bg-slate-900 border border-sky-200 dark:border-sky-800 hover:border-sky-400 dark:hover:border-sky-500/50 hover:bg-sky-100 dark:hover:bg-sky-500/10 text-slate-800 dark:text-slate-200 hover:text-sky-700 dark:hover:text-sky-300 transition-all text-[11px] sm:text-xs font-semibold cursor-pointer shadow-sm"
+            title="ফ্যাকাল্টি ডিরেক্টরি"
           >
-            <Building2 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-300" />
-            <span className="hidden md:inline">ফাঁকা রুম</span>
+            <GraduationCap className="w-3.5 h-3.5 text-sky-600 dark:text-sky-300" />
+            <span className="hidden md:inline">ফ্যাকাল্টি</span>
           </button>
 
           {/* Academic Calendar Button */}

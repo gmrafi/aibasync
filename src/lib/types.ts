@@ -67,6 +67,7 @@ export interface FacultyMember {
   fullName: string;
   designation: string;
   department: string;
+  institution?: string;
   roomNumber: string;
   email?: string;
   profileUrl?: string;

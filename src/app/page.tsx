@@ -18,9 +18,9 @@ import { LiveStatusCard } from "@/components/live-status-card";
 import { TodayTimeline } from "@/components/today-timeline";
 import { WeekView } from "@/components/week-view";
 import { SelectionDialog } from "@/components/selection-dialog";
-import { EmptyRoomFinder } from "@/components/empty-room-finder";
 import { AcademicCalendarModal } from "@/components/academic-calendar-modal";
 import { ExportCardModal } from "@/components/export-card-modal";
+import { FacultyDirectoryModal } from "@/components/faculty-directory-modal";
 import { FacultyModal } from "@/components/faculty-modal";
 import { PwaInstallBanner } from "@/components/pwa-install-banner";
 import { getFacultyInfo } from "@/data/faculty";
@@ -45,7 +45,7 @@ export default function HomePage() {
 
   // Modals state
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
-  const [isEmptyRoomsOpen, setIsEmptyRoomsOpen] = useState(false);
+  const [isFacultyDirectoryOpen, setIsFacultyDirectoryOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
   const [selectedFaculty, setSelectedFaculty] = useState<FacultyMember | null>(null);
@@ -242,7 +242,7 @@ export default function HomePage() {
         theme={preferences.theme || "light"}
         onToggleTheme={toggleTheme}
         onOpenSelector={() => setIsSelectorOpen(true)}
-        onOpenEmptyRooms={() => setIsEmptyRoomsOpen(true)}
+        onOpenFacultyDirectory={() => setIsFacultyDirectoryOpen(true)}
         onOpenCalendar={() => setIsCalendarOpen(true)}
         onOpenExport={() => setIsExportOpen(true)}
         currentTimeStr={effectiveTime.toLocaleTimeString([], {
@@ -285,7 +285,7 @@ export default function HomePage() {
             majorOrSection={preferences.majorOrSection}
             minor={preferences.minor}
             simulatedTime={isSimulationMode ? effectiveTime : undefined}
-            onOpenEmptyRooms={() => setIsEmptyRoomsOpen(true)}
+            onOpenEmptyRooms={() => setIsFacultyDirectoryOpen(true)}
             onSelectFaculty={(fac) => setSelectedFaculty(fac)}
             onSwitchToWeekView={() => setViewMode("WEEK")}
           />
@@ -491,15 +491,15 @@ export default function HomePage() {
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-50 hover:text-sky-700 dark:hover:bg-sky-500/15 dark:hover:text-sky-300 transition-colors cursor-pointer border border-transparent hover:border-sky-200 dark:hover:border-sky-500/30"
               >
                 <Layers className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                <span>ব্যাচ বদল</span>
+                <span>ব্যাচ / প্রোফাইল</span>
               </button>
               <button
                 type="button"
-                onClick={() => setIsEmptyRoomsOpen(true)}
+                onClick={() => setIsFacultyDirectoryOpen(true)}
                 className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-violet-50 hover:text-violet-700 dark:hover:bg-violet-500/15 dark:hover:text-violet-300 transition-colors cursor-pointer border border-transparent hover:border-violet-200 dark:hover:border-violet-500/30"
               >
                 <Building2 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-                <span>ফাঁকা রুম</span>
+                <span>খালি রুম</span>
               </button>
               <button
                 type="button"
@@ -589,11 +589,11 @@ export default function HomePage() {
 
         <button
           type="button"
-          onClick={() => setIsEmptyRoomsOpen(true)}
-          className="flex flex-col items-center gap-1 py-1 px-2 rounded-xl hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-all"
+          onClick={() => setIsFacultyDirectoryOpen(true)}
+          className="flex flex-col items-center gap-1 py-1 px-2 rounded-xl hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer transition-all"
         >
-          <Building2 className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-          <span>ফাঁকা রুম</span>
+          <GraduationCap className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+          <span>ফ্যাকাল্টি</span>
         </button>
 
         <button
@@ -611,7 +611,7 @@ export default function HomePage() {
           className="flex flex-col items-center gap-1 py-1 px-2 rounded-xl hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer transition-all"
         >
           <GraduationCap className="w-5 h-5 text-sky-600 dark:text-sky-400" />
-          <span>ব্যাচ বদল</span>
+          <span>প্রোফাইল</span>
         </button>
 
         <button
@@ -638,11 +638,10 @@ export default function HomePage() {
         onSaved={handlePreferencesSaved}
       />
 
-      <EmptyRoomFinder
-        isOpen={isEmptyRoomsOpen}
-        onClose={() => setIsEmptyRoomsOpen(false)}
-        routineData={ROUTINE_DATA}
-        currentTime={effectiveTime}
+      <FacultyDirectoryModal
+        isOpen={isFacultyDirectoryOpen}
+        onClose={() => setIsFacultyDirectoryOpen(false)}
+        onSelectFaculty={(faculty) => setSelectedFaculty(faculty)}
       />
 
       <AcademicCalendarModal

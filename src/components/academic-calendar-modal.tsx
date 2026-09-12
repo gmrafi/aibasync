@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ACADEMIC_CALENDAR, INSTITUTION_INFO } from "@/data/routine";
 import { AcademicEvent } from "@/lib/types";
 import { CalendarDays, X } from "lucide-react";
@@ -10,18 +10,69 @@ interface AcademicCalendarModalProps {
   onClose: () => void;
 }
 
+function parseEventStartDate(dateString: string): Date | null {
+  const raw = dateString.split("–")[0]?.trim() || dateString.trim();
+  const match = raw.match(/(\d{1,2})\s+([A-Za-z]+)(?:\s+(\d{4}))?/);
+
+  if (!match) return null;
+
+  const day = Number(match[1]);
+  const monthName = match[2];
+  const year = match[3] ? Number(match[3]) : new Date().getFullYear();
+  const month = new Date(`${monthName} 1, ${year}`).getMonth();
+
+  return new Date(year, month, day);
+}
+
 export function AcademicCalendarModal({
   isOpen,
   onClose,
 }: AcademicCalendarModalProps) {
   const [filterType, setFilterType] = useState<"ALL" | "holiday" | "exam" | "academic">("ALL");
+  const itemRefs = useRef<Record<number, HTMLDivElement | null>>({});
+
+  const orderedItems = useMemo(() => {
+    return [...ACADEMIC_CALENDAR].sort((a, b) => {
+      const aDate = parseEventStartDate(a.date);
+      const bDate = parseEventStartDate(b.date);
+      if (!aDate && !bDate) return 0;
+      if (!aDate) return 1;
+      if (!bDate) return -1;
+      return aDate.getTime() - bDate.getTime();
+    });
+  }, []);
+
+  const filtered = useMemo(() => {
+    return orderedItems.filter((item) => {
+      if (filterType === "ALL") return true;
+      return item.type === filterType;
+    });
+  }, [filterType, orderedItems]);
+
+  useEffect(() => {
+    if (!isOpen || filtered.length === 0) return;
+
+    const now = new Date();
+    let targetIndex = filtered.findIndex((item) => {
+      const startDate = parseEventStartDate(item.date);
+      return startDate && startDate.getTime() >= now.getTime();
+    });
+
+    if (targetIndex === -1) {
+      targetIndex = filtered.length - 1;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      itemRefs.current[targetIndex]?.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+      });
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, [isOpen, filtered]);
 
   if (!isOpen) return null;
-
-  const filtered = ACADEMIC_CALENDAR.filter((item) => {
-    if (filterType === "ALL") return true;
-    return item.type === filterType;
-  });
 
   const getTypeBadge = (type: AcademicEvent["type"]) => {
     switch (type) {
@@ -135,7 +186,10 @@ export function AcademicCalendarModal({
         <div className="p-4 overflow-y-auto space-y-2.5 flex-1">
           {filtered.map((item, idx) => (
             <div
-              key={idx}
+              key={`${item.date}-${item.title}-${idx}`}
+              ref={(node) => {
+                itemRefs.current[idx] = node;
+              }}
               className="p-4 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 hover:bg-slate-100/60 dark:hover:bg-slate-900/60 transition-colors flex items-start justify-between gap-3"
             >
               <div className="space-y-1">
