@@ -19,7 +19,14 @@ import {
 interface CountRow {
   count: number;
 }
-type Row = { [key: string]: string | null; count: number };
+interface BatchRow { batch: string | null; count: number; }
+interface MajorRow { major_or_section: string | null; count: number; }
+interface RoleRow { role: string | null; count: number; }
+interface DeviceRow { device_type: string | null; count: number; }
+interface BrowserRow { browser: string | null; count: number; }
+interface ReferrerRow { referrer: string | null; count: number; }
+interface DailyRow { day: string; count: number; }
+interface HourlyRow { hour: string; count: number; }
 interface VisitorsRow {
   ip_address: string | null;
   name: string | null;
@@ -53,14 +60,14 @@ interface Stats {
   returningVisitors: number;
   today: number;
   daysActive: number;
-  byBatch: Row[];
-  byMajor: Row[];
-  byRole: Row[];
-  byDevice: Row[];
-  byBrowser: Row[];
-  byReferrer: Row[];
-  daily: Row[];
-  hourly: Row[];
+  byBatch: BatchRow[];
+  byMajor: MajorRow[];
+  byRole: RoleRow[];
+  byDevice: DeviceRow[];
+  byBrowser: BrowserRow[];
+  byReferrer: ReferrerRow[];
+  daily: DailyRow[];
+  hourly: HourlyRow[];
   visitors: VisitorsRow[];
   recent: RecentRow[];
 }
