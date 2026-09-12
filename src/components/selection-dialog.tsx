@@ -389,7 +389,7 @@ export function SelectionDialog({
                         case "BBA-13":
                           return "Second Year";
                         case "BBA-14":
-                          return "First Year";
+                          return "Second Year";
                         case "BBA-15":
                           return "First Year";
                         default:
