@@ -67,15 +67,19 @@ export function PwaInstallBanner() {
       className="fixed bottom-4 left-4 right-4 max-w-md mx-auto z-40 p-3.5 rounded-2xl bg-zinc-950/95 border border-cyan-500/40 shadow-2xl backdrop-blur-xl animate-in slide-in-from-bottom duration-300"
     >
       <div className="flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shrink-0">
-            <Smartphone className="w-5 h-5" />
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-white/10 p-1 flex items-center justify-center shrink-0">
+            <img
+              src="/logo.png"
+              alt="AIBA Sync"
+              className="w-full h-full object-contain drop-shadow-sm"
+            />
           </div>
           <div>
             <h4 className="text-xs font-bold text-white tracking-tight">
-              অফলাইনে দ্রুত দেখতে অ্যাপ নামান
+              AIBA Sync অ্যাপ ইনস্টল করুন
             </h4>
-            <p className="text-[11px] text-zinc-400">
+            <p className="text-xs font-medium text-slate-300">
               {isIos
                 ? "Safari-তে Share (⎋) চেপে 'Add to Home Screen' দিন"
                 : "ইন্টারনেট ছাড়াও ক্যাম্পাসে এক ক্লিকে রুটিন দেখুন"}

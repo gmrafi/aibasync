@@ -23,13 +23,18 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "AIBA Radar // Routine & Room Finder",
+  title: "AIBA Sync // Routine & Room Radar",
   description:
     "Zero-friction, blazing-fast campus class routine and empty room radar for Army Institute of Business Administration (AIBA), Sylhet. Fall 2026.",
   manifest: "/manifest.json",
   icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
+    icon: [
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   authors: [
     {
@@ -39,7 +44,7 @@ export const metadata: Metadata = {
   ],
   creator: "Md. Golam Mubasshir Rafi",
   openGraph: {
-    title: "AIBA Radar // Routine & Room Finder",
+    title: "AIBA Sync // Routine & Room Radar",
     description: "Instant class countdowns, empty room finder & offline routine for AIBA Sylhet students.",
     type: "website",
   },

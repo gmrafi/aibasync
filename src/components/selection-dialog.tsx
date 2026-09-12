@@ -168,15 +168,13 @@ export function SelectionDialog({
 
         {/* Scrollable Content Body */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
-          {/* Field 1: Student Full Name (Mandatory) */}
+          {/* Field 1: Student Full Name */}
           <div>
-            <label className="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
-              <span>
-                শিক্ষার্থীর পূর্ণ নাম <span className="text-rose-500 font-semibold">* (বাধ্যতামূলক)</span>
-              </span>
+            <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
+              <span>শিক্ষার্থীর নাম</span>
               {nameError && (
-                <span className="text-rose-600 dark:text-rose-400 font-sans text-[11px] font-semibold animate-pulse">
-                  পূর্ণ নাম প্রদান করা আবশ্যক
+                <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
+                  অনুগ্রহ করে নামটি লিখুন
                 </span>
               )}
             </label>
@@ -195,7 +193,7 @@ export function SelectionDialog({
                   }
                 }}
                 placeholder="যেমন: Md. Golam Mubasshir Rafi"
-                className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-all ${
+                className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-all ${
                   nameError
                     ? "border-rose-500 ring-2 ring-rose-500/20"
                     : "border-slate-200 dark:border-slate-800 focus:border-sky-500"
@@ -203,8 +201,8 @@ export function SelectionDialog({
               />
             </div>
             {nameError && (
-              <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1 font-mono">
-                দয়া করে আপনার সম্পূর্ণ নাম লিখুন যাতে রুটিন ও স্ট্যাটাস কার্ডে নির্ভুল নাম সংরক্ষিত থাকে।
+              <p className="text-xs font-medium text-rose-500 dark:text-rose-400 mt-1">
+                আপনার নাম প্রদান করলে রুটিন কার্ড ও লাইভ কাউন্টডাউনে আপনার নাম প্রদর্শিত হবে।
               </p>
             )}
           </div>
@@ -418,8 +416,8 @@ export function SelectionDialog({
             <ChevronRight className="w-4 h-4" />
           </button>
 
-          <p className="text-[11px] font-mono text-center text-slate-500 dark:text-slate-400 mt-2.5">
-            পাসওয়ার্ড বা রেজিস্ট্রেশনের প্রয়োজন নেই • ব্রাউজারে সংরক্ষিত থাকবে
+          <p className="text-xs font-semibold text-center text-slate-600 dark:text-slate-300 mt-2.5">
+            পাসওয়ার্ড বা রেজিস্ট্রেশনের প্রয়োজন নেই • ডিভাইসে সংরক্ষিত থাকবে
           </p>
         </div>
       </div>

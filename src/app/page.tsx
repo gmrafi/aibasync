@@ -226,14 +226,14 @@ export default function HomePage() {
               <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
                 {preferences.batch}
               </h2>
-              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 text-sky-800 dark:text-sky-300">
+              <span className="text-xs font-mono font-bold px-2.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 text-sky-800 dark:text-sky-300">
                 {preferences.majorOrSection}{minorDisplay}
               </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+              <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
                 Fall 2026
               </span>
             </div>
-            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 mt-1">
               {viewMode === "TODAY"
                 ? `আজকের সূচি (${currentDayName}) • ${status.todayClasses.length}টি ক্লাস নির্ধারিত`
                 : "রবিবার থেকে বৃহস্পতিবার পর্যন্ত পূর্ণাঙ্গ সাপ্তাহিক ক্লাস শিডিউল"}
@@ -245,26 +245,26 @@ export default function HomePage() {
             <button
               type="button"
               onClick={() => setViewMode("TODAY")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 viewMode === "TODAY"
-                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 font-bold shadow-xs"
+                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
               }`}
             >
-              <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+              <Clock className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               <span>আজকের রুটিন</span>
             </button>
 
             <button
               type="button"
               onClick={() => setViewMode("WEEK")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 viewMode === "WEEK"
-                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 font-bold shadow-xs"
+                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
               }`}
             >
-              <Layers className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+              <Layers className="w-4 h-4 text-sky-600 dark:text-sky-400" />
               <span>সাপ্তাহিক ভিউ</span>
             </button>
           </div>

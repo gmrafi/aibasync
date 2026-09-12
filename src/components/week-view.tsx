@@ -120,40 +120,42 @@ export function WeekView({
               </div>
 
               {daySlots.length === 0 ? (
-                <p className="text-xs font-mono text-slate-400 dark:text-slate-500 italic py-2">
-                  এই দিনে কোনো ক্লাস নির্ধারিত নেই।
+                <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 py-3 text-center bg-slate-50 dark:bg-slate-950/40 rounded-2xl border border-slate-200/60 dark:border-slate-800/60">
+                  এই দিনে কোনো ক্লাস নির্ধারিত নেই
                 </p>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {daySlots.map((slot) => {
                     const faculty = getFacultyInfo(slot.instructor);
                     return (
                       <div
                         key={slot.id}
-                        className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/70 border border-slate-200/80 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
+                        className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800/90 hover:border-slate-300 dark:hover:border-slate-700 transition-all flex flex-col justify-between"
                       >
-                        <div className="flex items-center justify-between text-[11px] font-mono text-slate-500 dark:text-slate-400 mb-1.5">
-                          <span className="px-2 py-0.5 rounded-md bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 font-semibold">
-                            Period {slot.period}
-                          </span>
-                          <span className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-                            <Clock className="w-3 h-3 text-sky-600 dark:text-sky-400" />
-                            {minutesToTime12(slot.startTime)}
-                          </span>
+                        <div>
+                          <div className="flex items-center justify-between text-xs font-bold mb-2">
+                            <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100">
+                              Period {slot.period}
+                            </span>
+                            <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300">
+                              <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
+                              {minutesToTime12(slot.startTime)} – {minutesToTime12(slot.endTime)}
+                            </span>
+                          </div>
+
+                          <h4 className="text-base font-bold text-slate-900 dark:text-white leading-snug my-2">
+                            {slot.courseTitle}
+                          </h4>
+
+                          {(isSlotMinor(slot, batch, minor) || slot.isMinor) && (
+                            <span className="inline-block px-2.5 py-0.5 rounded-md text-xs font-bold bg-indigo-100 dark:bg-indigo-500/20 text-indigo-800 dark:text-indigo-200 border border-indigo-300 dark:border-indigo-500/30 mb-2">
+                              মাইনর: {minor && minor !== "None" ? minor : "Minor"}
+                            </span>
+                          )}
                         </div>
 
-                        <h4 className="text-sm font-semibold text-slate-900 dark:text-white line-clamp-2 my-1.5">
-                          {slot.courseTitle}
-                        </h4>
-
-                        {(isSlotMinor(slot, batch, minor) || slot.isMinor) && (
-                          <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 mb-2">
-                            মাইনর: {minor && minor !== "None" ? minor : "Minor"}
-                          </span>
-                        )}
-
-                        <div className="flex items-center justify-between mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-800/60 text-xs font-mono">
-                          <span className="flex items-center gap-1 text-sky-700 dark:text-sky-300 font-bold">
+                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200/70 dark:border-slate-800/80 text-xs">
+                          <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-sky-50 dark:bg-sky-950 text-sky-800 dark:text-sky-200 font-bold border border-sky-200 dark:border-sky-800">
                             <MapPin className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                             রুম {slot.room}
                           </span>
@@ -161,12 +163,12 @@ export function WeekView({
                           <button
                             type="button"
                             onClick={() => onSelectFaculty(faculty)}
-                            className="flex items-center gap-1 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white transition-colors cursor-pointer"
+                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-semibold border border-slate-200 dark:border-slate-800 hover:border-violet-400 transition-colors cursor-pointer"
                             title="শিক্ষকের তথ্য দেখুন"
                           >
                             <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
                             <span>{slot.instructor}</span>
-                            <Info className="w-2.5 h-2.5 text-slate-400" />
+                            <Info className="w-3 h-3 text-slate-400" />
                           </button>
                         </div>
                       </div>
