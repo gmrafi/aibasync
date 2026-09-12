@@ -1,10 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Noto_Sans_Bengali, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const notoBengali = Noto_Sans_Bengali({
+  subsets: ["bengali"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-noto-bengali",
 });
 
 const geistMono = Geist_Mono({
@@ -51,9 +53,9 @@ export default function RootLayout({
   return (
     <html
       lang="bn"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
+      className={`${notoBengali.variable} ${notoBengali.className} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#09090b] text-[#f4f4f5]">
+      <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>
     </html>
