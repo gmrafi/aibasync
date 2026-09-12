@@ -155,7 +155,7 @@ export function TodayTimeline({
             <h4 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight my-2 flex items-center gap-2 flex-wrap">
               <span>{classInPeriod.courseTitle}</span>
               {role === "teacher" && (
-                <span className="px-2.5 py-0.5 rounded-md text-xs font-mono font-bold bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900">
+                <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900">
                   {classInPeriod.batch} {classInPeriod.majorOrSection}
                 </span>
               )}

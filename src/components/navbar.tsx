@@ -82,7 +82,7 @@ export function Navbar({
                 {teacherCode && (
                   <>
                     <span className="text-slate-400 dark:text-slate-500">•</span>
-                    <span className="font-mono text-slate-700 dark:text-slate-300">{teacherCode}</span>
+                    <span className="font-bold text-slate-700 dark:text-slate-300">{teacherCode}</span>
                   </>
                 )}
                 <span className="text-slate-400 dark:text-slate-500">•</span>
@@ -92,7 +92,7 @@ export function Navbar({
               </>
             ) : (
               <>
-                <span className="font-mono text-sky-700 dark:text-sky-300 font-bold">{batch}</span>
+                <span className="text-sky-700 dark:text-sky-300 font-bold">{batch}</span>
                 <span className="text-slate-400 dark:text-slate-500">•</span>
                 <span className="text-slate-700 dark:text-slate-300 font-medium">{majorOrSection}{minorTag}</span>
               </>

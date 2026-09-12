@@ -188,7 +188,7 @@ export function LiveStatusCard({
             </span>
 
             {role === "teacher" && (
-              <span className="px-2.5 py-1 rounded-xl bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 font-mono font-bold text-xs">
+              <span className="px-2.5 py-1 rounded-xl bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 font-bold text-xs">
                 {cls.batch} {cls.majorOrSection}
               </span>
             )}
@@ -284,7 +284,7 @@ export function LiveStatusCard({
             </span>
 
             {role === "teacher" && (
-              <span className="px-2.5 py-1 rounded-xl bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 font-mono font-bold text-xs">
+              <span className="px-2.5 py-1 rounded-xl bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900 font-bold text-xs">
                 {next.batch} {next.majorOrSection}
               </span>
             )}

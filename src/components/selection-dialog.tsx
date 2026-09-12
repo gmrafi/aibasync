@@ -5,7 +5,7 @@ import { ClassSlot, UserRole } from "@/lib/types";
 import { BBA11_MAJORS, BBA11_MINORS } from "@/data/routine";
 import { FACULTY_LIST } from "@/data/faculty";
 import { savePreferences } from "@/lib/storage";
-import { Check, ChevronRight, GraduationCap, User, X, BookOpen, Layers } from "lucide-react";
+import { Check, ChevronRight, GraduationCap, User, X, BookOpen, Layers, AlertCircle, Info } from "lucide-react";
 
 interface SelectionDialogProps {
   isOpen: boolean;
@@ -358,9 +358,7 @@ export function SelectionDialog({
               {/* Field 1: Student Full Name (Optional - Never blocks) */}
               <div>
                 <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
-                  <span>
-                    শিক্ষার্থীর নাম <span className="text-slate-400 dark:text-slate-500 font-normal">(ঐচ্ছিক)</span>
-                  </span>
+                  <span>শিক্ষার্থীর নাম</span>
                 </label>
                 <div className="relative">
                   <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -411,7 +409,7 @@ export function SelectionDialog({
                 <div className="space-y-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800 animate-in fade-in">
                   {/* Major Selection */}
                   <div>
-                    <label className="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 block mb-2 flex items-center justify-between">
+                    <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-2 flex items-center justify-between">
                       <span className="flex items-center gap-1.5">
                         <BookOpen className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                         <span>২. মেজর নির্বাচন করুন (Major Discipline)</span>
@@ -421,8 +419,9 @@ export function SelectionDialog({
                           * নির্বাচন আবশ্যক
                         </span>
                       ) : (
-                        <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
-                          ✓ নির্বাচিত: {selectedMajor}
+                        <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">
+                          <Check className="w-3 h-3" />
+                          <span>নির্বাচিত: {selectedMajor}</span>
                         </span>
                       )}
                     </label>
@@ -456,7 +455,7 @@ export function SelectionDialog({
                   {/* Minor Selection: Immediately revealed when Major is selected */}
                   {selectedMajor ? (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-200 pt-2 border-t border-slate-200 dark:border-slate-800">
-                      <label className="text-xs font-mono font-semibold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
+                      <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
                         <span className="flex items-center gap-1.5">
                           <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
                           <span>৩. মাইনর কোর্স নির্বাচন করুন (Minor Course)</span>
@@ -466,8 +465,9 @@ export function SelectionDialog({
                             * নির্বাচন আবশ্যক
                           </span>
                         ) : (
-                          <span className="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold">
-                            ✓ নির্বাচিত
+                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400 font-bold">
+                            <Check className="w-3 h-3" />
+                            <span>নির্বাচিত</span>
                           </span>
                         )}
                       </label>
@@ -499,7 +499,7 @@ export function SelectionDialog({
                             >
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-2">
-                                  <span className="px-1.5 py-0.5 rounded-md font-mono text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                                  <span className="px-1.5 py-0.5 rounded-md text-[10px] font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
                                     {m.code}
                                   </span>
                                   <span className="text-xs font-bold text-slate-900 dark:text-white truncate">
@@ -551,22 +551,24 @@ export function SelectionDialog({
                     </div>
                   ) : (
                     <div className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/40 text-[11px] font-semibold text-amber-800 dark:text-amber-300 flex items-center gap-2">
-                      <span>👉 উপরে প্রথমে আপনার মেজর নির্বাচন করুন, এরপর মাইনর অপশনগুলো উন্মুক্ত হবে।</span>
+                      <Info className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+                      <span>প্রথমে উপরে আপনার মেজর নির্বাচন করুন, এরপর মাইনর অপশনগুলো উন্মুক্ত হবে।</span>
                     </div>
                   )}
 
                   {/* Validation Error Notice if any */}
                   {bba11Error && (
-                    <p className="text-xs font-bold text-rose-600 dark:text-rose-400 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 animate-pulse">
-                      ⚠️ {bba11Error}
-                    </p>
+                    <div className="text-xs font-bold text-rose-600 dark:text-rose-400 p-2.5 rounded-xl bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800/40 flex items-center gap-2 animate-pulse">
+                      <AlertCircle className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+                      <span>{bba11Error}</span>
+                    </div>
                   )}
 
                   {/* Live Combination Preview Badge */}
                   {selectedMajor && selectedMinor && (
                     <div className="p-2.5 rounded-xl bg-sky-100/60 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/30 text-[11px] text-sky-900 dark:text-sky-200 flex items-center gap-2">
                       <span className="font-bold">সারাংশ:</span>
-                      <span className="font-mono font-bold">{selectedBatch}</span>
+                      <span className="font-bold">{selectedBatch}</span>
                       <span>•</span>
                       <span className="font-bold">{selectedMajorObj?.name || selectedMajor}</span>
                       {selectedMinor !== "None" && selectedMinorObj && (
@@ -581,7 +583,7 @@ export function SelectionDialog({
               ) : (
                 /* Field 3 Alternative: Non-BBA-11 Section selection */
                 <div className="mb-6 animate-in fade-in">
-                  <label className="text-xs font-mono font-medium text-slate-700 dark:text-slate-300 block mb-2">
+                  <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">
                     ২. সেকশন নির্বাচন
                   </label>
                   <div className="grid grid-cols-3 gap-2">

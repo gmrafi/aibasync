@@ -27,25 +27,25 @@ export function AcademicCalendarModal({
     switch (type) {
       case "holiday":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-rose-50 dark:bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-rose-50 dark:bg-rose-500/15 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-500/30">
             ছুটি (Holiday)
           </span>
         );
       case "exam":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-amber-50 dark:bg-amber-500/15 text-amber-800 dark:text-amber-300 border border-amber-200 dark:border-amber-500/30">
             পরীক্ষা (Exam)
           </span>
         );
       case "academic":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30">
             একাডেমিক
           </span>
         );
       case "event":
         return (
-          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-violet-50 dark:bg-violet-500/15 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-500/30">
+          <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-violet-50 dark:bg-violet-500/15 text-violet-700 dark:text-violet-300 border border-violet-200 dark:border-violet-500/30">
             ইভেন্ট
           </span>
         );
@@ -88,7 +88,7 @@ export function AcademicCalendarModal({
           <button
             type="button"
             onClick={() => setFilterType("ALL")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
               filterType === "ALL"
                 ? "bg-sky-600 text-white font-bold shadow-sm"
                 : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -99,7 +99,7 @@ export function AcademicCalendarModal({
           <button
             type="button"
             onClick={() => setFilterType("holiday")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
               filterType === "holiday"
                 ? "bg-rose-600 text-white font-bold shadow-sm"
                 : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -110,7 +110,7 @@ export function AcademicCalendarModal({
           <button
             type="button"
             onClick={() => setFilterType("exam")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
               filterType === "exam"
                 ? "bg-amber-600 text-white font-bold shadow-sm"
                 : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -121,7 +121,7 @@ export function AcademicCalendarModal({
           <button
             type="button"
             onClick={() => setFilterType("academic")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-all cursor-pointer ${
               filterType === "academic"
                 ? "bg-sky-600 text-white font-bold shadow-sm"
                 : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -140,7 +140,7 @@ export function AcademicCalendarModal({
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-sky-600 dark:text-sky-400">
+                  <span className="text-xs font-bold text-sky-600 dark:text-sky-400">
                     {item.date}
                   </span>
                   {getTypeBadge(item.type)}
@@ -149,7 +149,7 @@ export function AcademicCalendarModal({
                   {item.title}
                 </h4>
                 {item.note && (
-                  <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400 italic">
+                  <p className="text-xs text-slate-500 dark:text-slate-400 italic">
                     *{item.note}
                   </p>
                 )}

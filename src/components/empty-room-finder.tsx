@@ -73,7 +73,7 @@ export function EmptyRoomFinder({
                 <h3 className="text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                   উপলব্ধ ক্লাসরুম নিরীক্ষণ
                 </h3>
-                <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30">
+                <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/30">
                   {freeRoomsCount}টি রুম বর্তমানে ফাঁকা
                 </span>
               </div>
@@ -112,7 +112,7 @@ export function EmptyRoomFinder({
               <button
                 type="button"
                 onClick={() => setFloorFilter("ALL")}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   floorFilter === "ALL"
                     ? "bg-violet-600 text-white font-bold shadow-sm"
                     : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -123,7 +123,7 @@ export function EmptyRoomFinder({
               <button
                 type="button"
                 onClick={() => setFloorFilter("2")}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   floorFilter === "2"
                     ? "bg-violet-600 text-white font-bold shadow-sm"
                     : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -134,7 +134,7 @@ export function EmptyRoomFinder({
               <button
                 type="button"
                 onClick={() => setFloorFilter("3")}
-                className={`px-3.5 py-2 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+                className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all cursor-pointer ${
                   floorFilter === "3"
                     ? "bg-violet-600 text-white font-bold shadow-sm"
                     : "bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -182,7 +182,7 @@ export function EmptyRoomFinder({
         {/* Room List */}
         <div className="p-4 overflow-y-auto space-y-2.5 flex-1">
           {filtered.length === 0 ? (
-            <div className="text-center py-12 text-slate-400 dark:text-slate-500 text-xs font-mono">
+            <div className="text-center py-12 text-slate-400 dark:text-slate-500 text-xs font-medium">
               কোনো ক্লাসরুম পাওয়া যায়নি।
             </div>
           ) : (
@@ -198,7 +198,7 @@ export function EmptyRoomFinder({
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3.5">
                     <div
-                      className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center font-mono font-bold text-sm ${
+                      className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center font-bold text-sm ${
                         room.isFree
                           ? "bg-emerald-100 dark:bg-emerald-500/15 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-500/40"
                           : "bg-rose-100 dark:bg-rose-500/15 text-rose-800 dark:text-rose-300 border border-rose-300 dark:border-rose-500/40"
@@ -210,16 +210,16 @@ export function EmptyRoomFinder({
 
                     <div>
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                        <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
                           {room.floor}
                         </span>
                         {room.isFree ? (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400">
                             <CheckCircle2 className="w-3.5 h-3.5" />
                             বর্তমানে ব্যবহারযোগ্য
                           </span>
                         ) : (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-rose-700 dark:text-rose-400">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 dark:text-rose-400">
                             <XCircle className="w-3.5 h-3.5" />
                             ক্লাস চলমান
                           </span>
@@ -227,7 +227,7 @@ export function EmptyRoomFinder({
                       </div>
 
                       {room.isFree ? (
-                        <div className="mt-1 text-xs font-mono text-slate-700 dark:text-slate-300">
+                        <div className="mt-1 text-xs font-medium text-slate-700 dark:text-slate-300">
                           {room.freeUntil === "সারা দিন" ? (
                             <span className="text-emerald-700 dark:text-emerald-300 font-semibold flex items-center gap-1">
                               <DoorOpen className="w-3.5 h-3.5" />
@@ -245,7 +245,7 @@ export function EmptyRoomFinder({
                           )}
                         </div>
                       ) : (
-                        <div className="mt-1 text-xs font-mono text-slate-600 dark:text-slate-400">
+                        <div className="mt-1 text-xs text-slate-600 dark:text-slate-400">
                           <span className="font-medium text-slate-900 dark:text-slate-200">
                             {room.currentClass?.courseTitle}
                           </span>{" "}
@@ -256,7 +256,7 @@ export function EmptyRoomFinder({
                   </div>
 
                   {room.isFree && (
-                    <div className="hidden sm:flex items-center gap-1 text-xs font-mono px-3 py-1.5 rounded-xl bg-emerald-100/70 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20">
+                    <div className="hidden sm:flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl bg-emerald-100/70 dark:bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-500/20">
                       <DoorOpen className="w-3.5 h-3.5" />
                       <span>উপলব্ধ</span>
                     </div>

@@ -225,7 +225,7 @@ export function WeekView({
               key={b}
               type="button"
               onClick={() => setTeacherFilter(b)}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-mono font-black transition-all shrink-0 cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                 teacherFilter === b
                   ? "bg-sky-600 text-white shadow-xs"
                   : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
@@ -252,7 +252,7 @@ export function WeekView({
                   <span className="text-[11px] sm:text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
                     বার
                   </span>
-                  <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 font-mono">
+                  <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
                     Day
                   </span>
                 </div>
@@ -262,21 +262,21 @@ export function WeekView({
                   <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                     পিরিয়ড ১
                   </div>
-                  <div className="text-[10px] sm:text-[11px] font-mono font-black text-sky-700 dark:text-sky-300">
+                  <div className="text-[11px] font-bold text-sky-700 dark:text-sky-300">
                     09:30 - 11:00 AM
                   </div>
                 </div>
 
-                {/* Column 3: Short Break (Tea Break) */}
+                {/* Column 3: Short Break */}
                 <div
                   className="p-1 border-r border-amber-200/70 dark:border-amber-800/40 bg-amber-100/50 dark:bg-amber-950/40 flex flex-col items-center justify-center text-center"
-                  title="চা বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
+                  title="বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
                 >
                   <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 mb-0.5" />
                   <span className="text-[9px] font-black text-amber-950 dark:text-amber-200 leading-tight">
                     বিরতি
                   </span>
-                  <span className="text-[8px] font-mono font-bold text-amber-700 dark:text-amber-400 leading-none mt-0.5">
+                  <span className="text-[9px] font-bold text-amber-700 dark:text-amber-400 leading-none mt-0.5">
                     11:00
                   </span>
                 </div>
@@ -286,7 +286,7 @@ export function WeekView({
                   <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                     পিরিয়ড ২
                   </div>
-                  <div className="text-[10px] sm:text-[11px] font-mono font-black text-sky-700 dark:text-sky-300">
+                  <div className="text-[11px] font-bold text-sky-700 dark:text-sky-300">
                     11:30 AM - 01:00 PM
                   </div>
                 </div>
@@ -300,7 +300,7 @@ export function WeekView({
                   <span className="text-[9px] font-black text-sky-950 dark:text-sky-200 leading-tight">
                     মধ্যাহ্ন
                   </span>
-                  <span className="text-[8px] font-mono font-bold text-sky-700 dark:text-sky-400 leading-none mt-0.5">
+                  <span className="text-[9px] font-bold text-sky-700 dark:text-sky-400 leading-none mt-0.5">
                     01:00
                   </span>
                 </div>
@@ -310,7 +310,7 @@ export function WeekView({
                   <div className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">
                     পিরিয়ড ৩
                   </div>
-                  <div className="text-[10px] sm:text-[11px] font-mono font-black text-sky-700 dark:text-sky-300">
+                  <div className="text-[11px] font-bold text-sky-700 dark:text-sky-300">
                     01:30 - 03:00 PM
                   </div>
                 </div>
@@ -349,7 +349,7 @@ export function WeekView({
                           />
                         )}
                       </div>
-                      <span className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400">
+                      <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
                         {day.key.slice(0, 3)}
                       </span>
                       {isToday && (
@@ -381,17 +381,17 @@ export function WeekView({
                     {dayIdx === 2 ? (
                       <div
                         className="p-1 border-r border-amber-200/60 dark:border-amber-800/40 bg-amber-100/70 dark:bg-amber-900/35 flex flex-col items-center justify-center text-center shadow-2xs"
-                        title="চা বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
+                        title="বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)"
                       >
                         <Coffee className="w-3.5 h-3.5 text-amber-700 dark:text-amber-300 mb-1 shrink-0" />
                         <span className="[writing-mode:vertical-lr] text-[9px] font-black text-amber-950 dark:text-amber-100 tracking-wider rotate-180 select-none">
-                          চা বিরতি • 11:00-11:30
+                          বিরতি • 11:00-11:30
                         </span>
                       </div>
                     ) : (
                       <div
                         className="border-r border-amber-200/40 dark:border-amber-800/30 bg-amber-50/20 dark:bg-amber-950/10 flex items-center justify-center"
-                        title="চা বিরতি • 11:00 AM - 11:30 AM"
+                        title="বিরতি • 11:00 AM - 11:30 AM"
                       >
                         <div className="w-0.5 h-10 bg-amber-300/60 dark:bg-amber-700/40 rounded-full" />
                       </div>
@@ -548,7 +548,7 @@ export function WeekView({
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-sky-600 dark:text-sky-400" />
                       <h3 className="text-base font-black text-slate-900 dark:text-white">{day.label}</h3>
-                      <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
+                      <span className="text-xs font-bold text-slate-500 dark:text-slate-400">
                         ({day.key})
                       </span>
                     </div>
@@ -590,7 +590,7 @@ export function WeekView({
 
                               <div className="flex items-center gap-1.5 flex-wrap mt-1">
                                 {role === "teacher" && (
-                                  <span className="px-2 py-0.5 rounded-md text-xs font-mono font-black bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900">
+                                  <span className="px-2 py-0.5 rounded-md text-xs font-black bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900">
                                     {slot.batch} {slot.majorOrSection}
                                   </span>
                                 )}
@@ -653,7 +653,7 @@ function TimetableSlotCard({
       <div>
         {/* Top Badges */}
         <div className="flex items-center justify-between gap-1 mb-1">
-          <span className={`px-1.5 py-0.5 rounded-md font-mono text-[10px] sm:text-[11px] font-black border ${theme.badge}`}>
+          <span className={`px-1.5 py-0.5 rounded-md text-[10px] sm:text-[11px] font-black border ${theme.badge}`}>
             {showBatch ? `${slot.batch}` : slot.majorOrSection || "Class"}
           </span>
           <span className="flex items-center gap-0.5 text-[10px] sm:text-[11px] font-black text-slate-900 dark:text-slate-100 bg-white/90 dark:bg-slate-900/90 px-1.5 py-0.5 rounded-md border border-slate-200 dark:border-slate-800 shadow-2xs shrink-0">
