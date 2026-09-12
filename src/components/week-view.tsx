@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ClassSlot, DayOfWeek, FacultyMember, UserRole } from "@/lib/types";
 import { minutesToTime12, isSlotMatchingView } from "@/lib/time-utils";
 import { getFacultyInfo } from "@/data/faculty";
@@ -402,12 +402,14 @@ export function WeekView({
   const [layoutMode, setLayoutMode] = useState<"GRID" | "DAY">("GRID");
   const [selectedDay, setSelectedDay] = useState<DayOfWeek | "ALL">("ALL");
   const [teacherFilter, setTeacherFilter] = useState<string>(
-    role === "teacher"
-      ? batch === "ALL_BATCHES"
-        ? "ALL_BATCHES"
-        : "MY_CLASSES"
-      : batch
+    role === "teacher" ? "MY_CLASSES" : batch
   );
+
+  useEffect(() => {
+    if (role === "teacher") {
+      setTeacherFilter((current) => (current === "ALL_BATCHES" || current === "MY_CLASSES" ? "MY_CLASSES" : "MY_CLASSES"));
+    }
+  }, [role]);
 
   // Available batches for teachers to quick-switch
   const allBatches = useMemo(() => {
@@ -418,7 +420,7 @@ export function WeekView({
 
   // Active slots according to user selection
   const activeSlots = useMemo(() => {
-    const effectiveBatch = role === "teacher" ? teacherFilter : batch;
+    const effectiveBatch = role === "teacher" ? (teacherFilter || "MY_CLASSES") : batch;
     return routineData.filter((s) =>
       isSlotMatchingView(s, effectiveBatch, majorOrSection, minor, role, teacherCode)
     );
@@ -888,10 +890,10 @@ export function WeekView({
                                 type="button"
                                 onClick={() => onSelectFaculty(faculty)}
                                 className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-800 hover:border-violet-400 transition-colors cursor-pointer"
-                                title="শিক্ষকের প্রোফাইল দেখুন"
+                                title={`শিক্ষকের প্রোফাইল: ${faculty.fullName}`}
                               >
                                 <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-                                <span>{slot.instructor}</span>
+                                <span>{faculty.fullName}</span>
                               </button>
                             </div>
                           </div>
@@ -953,7 +955,7 @@ function TimetableSlotCard({
           title={`${faculty.fullName} (${faculty.designation})`}
         >
           <User className="w-3 h-3 text-violet-600 dark:text-violet-400 shrink-0" />
-          <span className="truncate max-w-[95px] sm:max-w-[125px]">{slot.instructor}</span>
+          <span className="truncate max-w-[95px] sm:max-w-[125px]">{faculty.fullName}</span>
         </button>
 
         {showBatch && slot.majorOrSection && (

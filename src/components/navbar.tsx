@@ -2,6 +2,7 @@
 
 import { Building2, CalendarDays, ChevronDown, Download, Moon, Sun } from "lucide-react";
 import { INSTITUTION_INFO } from "@/data/routine";
+import { getFacultyInfo } from "@/data/faculty";
 
 interface NavbarProps {
   role?: "student" | "teacher";
@@ -38,6 +39,7 @@ export function Navbar({
 }: NavbarProps) {
   const isBba11 = batch === "BBA-11";
   const minorTag = isBba11 && minor && minor !== "None" ? ` + ${minor.replace("-M", "")}` : "";
+  const teacherDisplayName = role === "teacher" && teacherCode ? getFacultyInfo(teacherCode).fullName : "";
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-emerald-200/80 dark:border-emerald-900/80 bg-gradient-to-r from-white via-emerald-50/60 to-sky-50/70 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900/90 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl transition-colors">
@@ -73,14 +75,14 @@ export function Navbar({
             <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-500/20" />
             {role === "teacher" ? (
               <>
-                <span className="font-bold text-emerald-700 dark:text-emerald-300">শিক্ষক</span>
-                {teacherCode && (
+                {teacherDisplayName ? (
                   <>
+                    <span className="font-bold text-emerald-700 dark:text-emerald-300">{teacherDisplayName}</span>
                     <span className="text-slate-400 dark:text-slate-500">•</span>
-                    <span className="font-bold text-slate-700 dark:text-slate-300">{teacherCode}</span>
                   </>
+                ) : (
+                  <span className="font-bold text-emerald-700 dark:text-emerald-300">শিক্ষক</span>
                 )}
-                <span className="text-slate-400 dark:text-slate-500">•</span>
                 <span className="text-slate-600 dark:text-slate-400">
                   {batch === "MY_CLASSES" ? "আমার ক্লাস" : batch === "ALL_BATCHES" ? "মাস্টার রুটিন" : batch}
                 </span>

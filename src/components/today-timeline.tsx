@@ -192,10 +192,10 @@ export function TodayTimeline({
                 type="button"
                 onClick={() => onSelectFaculty(faculty)}
                 className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-950 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold border border-slate-200 dark:border-slate-800 hover:border-violet-400 transition-colors cursor-pointer"
-                title="শিক্ষকের বিস্তারিত দেখতে ক্লিক করুন"
+                title={`শিক্ষকের বিস্তারিত: ${faculty.fullName}`}
               >
                 <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-                <span>{classInPeriod.instructor}</span>
+                <span>{faculty.fullName}</span>
                 <Info className="w-3.5 h-3.5 text-slate-400" />
               </button>
             </div>

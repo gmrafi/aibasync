@@ -76,7 +76,9 @@ export function LiveStatusCard({
     batch,
     majorOrSection,
     displayTime,
-    minor
+    minor,
+    role,
+    teacherCode
   );
 
   const copyRoomNumber = (room: string) => {

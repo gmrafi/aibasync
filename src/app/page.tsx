@@ -23,6 +23,7 @@ import { AcademicCalendarModal } from "@/components/academic-calendar-modal";
 import { ExportCardModal } from "@/components/export-card-modal";
 import { FacultyModal } from "@/components/faculty-modal";
 import { PwaInstallBanner } from "@/components/pwa-install-banner";
+import { getFacultyInfo } from "@/data/faculty";
 import {
   Clock,
   Layers,
@@ -107,9 +108,11 @@ export default function HomePage() {
     : new Date("2024-01-01T09:00:00");
   const currentDayName = getDayName(effectiveTime);
 
+  const effectiveTeacherBatch = preferences.role === "teacher" ? "MY_CLASSES" : preferences.batch;
+
   const status = getActiveAndUpcomingClass(
     ROUTINE_DATA,
-    preferences.batch,
+    effectiveTeacherBatch,
     preferences.majorOrSection,
     effectiveTime,
     preferences.minor,
@@ -172,6 +175,9 @@ export default function HomePage() {
   const minorDisplay = isBba11 && preferences.minor && preferences.minor !== "None"
     ? ` + Minor: ${preferences.minor.replace("-M", "")}`
     : "";
+  const teacherDisplayName = preferences.role === "teacher" && preferences.teacherCode
+    ? getFacultyInfo(preferences.teacherCode).fullName
+    : "Faculty Profile";
 
   const nextClasses = status.todayClasses
     .filter((slot) => timeToMinutes(slot.startTime) > effectiveTime.getHours() * 60 + effectiveTime.getMinutes())
@@ -314,7 +320,7 @@ export default function HomePage() {
               </h2>
               {preferences.role === "teacher" ? (
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-500/15 border border-emerald-200 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300">
-                  {preferences.teacherCode ? `${preferences.teacherCode} Faculty` : "Faculty Profile"}
+                  {teacherDisplayName}
                 </span>
               ) : (
                 <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-500/15 border border-blue-200 dark:border-blue-500/30 text-blue-800 dark:text-blue-300">

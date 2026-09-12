@@ -34,17 +34,17 @@ export function FacultyModal({ faculty, onClose }: FacultyModalProps) {
             <User className="w-6 h-6" />
           </div>
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="px-2.5 py-0.5 rounded-md text-xs font-bold bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-200 border border-sky-300 dark:border-sky-500/30">
+            <h3 className="text-base font-bold text-slate-900 dark:text-white leading-snug">
+              {faculty.fullName}
+            </h3>
+            <p className="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-1">
+              {faculty.designation}
+            </p>
+            <div className="mt-1.5 flex items-center gap-1.5">
+              <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-100 dark:bg-sky-500/20 text-sky-800 dark:text-sky-200 border border-sky-300 dark:border-sky-500/30">
                 {faculty.code}
               </span>
             </div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white mt-1 leading-snug">
-              {faculty.fullName}
-            </h3>
-            <p className="text-xs text-sky-600 dark:text-sky-400 font-semibold mt-0.5">
-              {faculty.designation}
-            </p>
           </div>
         </div>
 

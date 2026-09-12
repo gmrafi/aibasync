@@ -6,7 +6,7 @@ export const DEFAULT_PREFERENCES: UserPreferences = {
   role: "student",
   studentName: "",
   teacherCode: "",
-  batch: "BBA-14",
+  batch: "BBA-11",
   majorOrSection: "Charlie",
   minor: "None",
   theme: "light",
@@ -25,11 +25,12 @@ export function getStoredPreferences(): UserPreferences {
       const legacy = localStorage.getItem("aiba_radar_user_pref_v2") || localStorage.getItem("classr_user_pref_v1");
       if (legacy) {
         const p = JSON.parse(legacy);
+        const role = p.role === "teacher" ? "teacher" : "student";
         return {
-          role: p.role || "student",
+          role,
           studentName: p.studentName || "",
           teacherCode: p.teacherCode || "",
-          batch: p.batch || DEFAULT_PREFERENCES.batch,
+          batch: role === "teacher" ? "MY_CLASSES" : p.batch || DEFAULT_PREFERENCES.batch,
           majorOrSection: p.majorOrSection || DEFAULT_PREFERENCES.majorOrSection,
           minor: p.minor || "None",
           theme: p.theme || "light",
@@ -39,11 +40,12 @@ export function getStoredPreferences(): UserPreferences {
       return DEFAULT_PREFERENCES;
     }
     const parsed = JSON.parse(item);
+    const role = parsed.role === "teacher" ? "teacher" : "student";
     return {
-      role: parsed.role === "teacher" ? "teacher" : "student",
+      role,
       studentName: parsed.studentName || "",
       teacherCode: parsed.teacherCode || "",
-      batch: parsed.batch || DEFAULT_PREFERENCES.batch,
+      batch: role === "teacher" ? "MY_CLASSES" : parsed.batch || DEFAULT_PREFERENCES.batch,
       majorOrSection: parsed.majorOrSection || DEFAULT_PREFERENCES.majorOrSection,
       minor: parsed.minor || "None",
       theme: parsed.theme === "dark" ? "dark" : "light",
@@ -64,6 +66,8 @@ export function savePreferences(prefs: Partial<UserPreferences>): UserPreference
     const updated: UserPreferences = {
       ...current,
       ...prefs,
+      role: prefs.role === "teacher" ? "teacher" : prefs.role || current.role,
+      batch: prefs.role === "teacher" ? "MY_CLASSES" : prefs.batch || current.batch,
       hasOnboarded: true,
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));

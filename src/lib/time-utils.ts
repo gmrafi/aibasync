@@ -147,6 +147,13 @@ export function isSlotMatchingView(
   teacherCode?: string
 ): boolean {
   if (role === "teacher") {
+    if (teacherCode) {
+      if (batch === "ALL_BATCHES") {
+        return true;
+      }
+      return slot.instructor === teacherCode;
+    }
+
     if (batch === "MY_CLASSES" || (!batch && teacherCode)) {
       return slot.instructor === teacherCode;
     }

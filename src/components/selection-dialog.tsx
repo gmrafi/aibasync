@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ClassSlot, UserRole } from "@/lib/types";
 import { BBA11_MAJORS, BBA11_MINORS } from "@/data/routine";
 import { FACULTY_LIST } from "@/data/faculty";
@@ -44,18 +44,55 @@ export function SelectionDialog({
   const [name, setName] = useState(currentName);
   const [teacherError, setTeacherError] = useState(false);
   const [bba11Error, setBba11Error] = useState<string>("");
-
   const safeData = routineData || [];
   const availableBatches = useMemo(() => {
     const set = new Set<string>();
     safeData.forEach((slot) => set.add(slot.batch));
     return Array.from(set).sort();
   }, [safeData]);
+  const defaultStudentBatch = "BBA-11";
+  const syncTeacherIdentity = (nextRole: UserRole, nextTeacherCode?: string) => {
+    if (nextRole === "teacher") {
+      const selectedFaculty = FACULTY_LIST.find((f) => f.code === (nextTeacherCode || teacherCode));
+      if (selectedFaculty) {
+        setName(selectedFaculty.fullName);
+      } else if (currentName) {
+        setName(currentName);
+      }
+      setSelectedBatch("MY_CLASSES");
+    }
+  };
+  const formatFacultyLabel = (faculty: { fullName: string; designation: string; code: string }) =>
+    `${faculty.fullName} — ${faculty.designation} — ${faculty.code}`;
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    if (currentRole === "teacher") {
+      setRole("teacher");
+      setTeacherCode(currentTeacherCode || teacherCode || "");
+      setSelectedBatch("MY_CLASSES");
+      const faculty = FACULTY_LIST.find((f) => f.code === (currentTeacherCode || teacherCode));
+      if (faculty) {
+        setName(faculty.fullName);
+      } else if (currentName) {
+        setName(currentName);
+      }
+      return;
+    }
+
+    setRole("student");
+    setSelectedBatch(
+      currentBatch && availableBatches.includes(currentBatch)
+        ? currentBatch
+        : defaultStudentBatch
+    );
+  }, [isOpen, currentRole, currentTeacherCode, currentBatch, availableBatches, defaultStudentBatch]);
 
   const [selectedBatch, setSelectedBatch] = useState(
-    currentBatch && availableBatches.includes(currentBatch)
+    currentRole === "teacher" ? "MY_CLASSES" : currentBatch && availableBatches.includes(currentBatch)
       ? currentBatch
-      : availableBatches[availableBatches.length - 2] || availableBatches[0] || "BBA-14"
+      : defaultStudentBatch
   );
 
   const isBba11 = selectedBatch === "BBA-11";
@@ -97,6 +134,26 @@ export function SelectionDialog({
   );
 
   if (!isOpen) return null;
+
+  const handleRoleChange = (nextRole: UserRole) => {
+    setRole(nextRole);
+    if (nextRole === "teacher") {
+      const selectedFaculty = FACULTY_LIST.find((f) => f.code === teacherCode) || FACULTY_LIST[0];
+      if (selectedFaculty) {
+        setTeacherCode(selectedFaculty.code);
+        setName(selectedFaculty.fullName);
+        setTeacherError(false);
+      }
+      setSelectedBatch("MY_CLASSES");
+      return;
+    }
+
+    setSelectedBatch(
+      currentBatch && availableBatches.includes(currentBatch)
+        ? currentBatch
+        : defaultStudentBatch
+    );
+  };
 
   const handleBatchSelect = (batchName: string) => {
     setSelectedBatch(batchName);
@@ -226,9 +283,9 @@ export function SelectionDialog({
               <button
                 type="button"
                 onClick={() => {
-                  setRole("student");
+                  handleRoleChange("student");
                   if (selectedBatch === "MY_CLASSES" || selectedBatch === "ALL_BATCHES") {
-                    setSelectedBatch("BBA-14");
+                    setSelectedBatch(defaultStudentBatch);
                   }
                 }}
                 className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
@@ -244,13 +301,7 @@ export function SelectionDialog({
               <button
                 type="button"
                 onClick={() => {
-                  setRole("teacher");
-                  if (!teacherCode && FACULTY_LIST.length > 0) {
-                    setTeacherCode(FACULTY_LIST[0].code);
-                    setName(FACULTY_LIST[0].fullName);
-                    setTeacherError(false);
-                  }
-                  setSelectedBatch("MY_CLASSES");
+                  handleRoleChange("teacher");
                 }}
                 className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   role === "teacher"
@@ -281,6 +332,7 @@ export function SelectionDialog({
                   onChange={(e) => {
                     const code = e.target.value;
                     setTeacherCode(code);
+                    setSelectedBatch("MY_CLASSES");
                     const faculty = FACULTY_LIST.find((f) => f.code === code);
                     if (faculty) {
                       setName(faculty.fullName);
@@ -292,7 +344,7 @@ export function SelectionDialog({
                   <option value="">-- শিক্ষক নির্বাচন করুন --</option>
                   {FACULTY_LIST.map((f) => (
                     <option key={f.code} value={f.code}>
-                      {f.fullName} ({f.code}) | {f.designation}
+                      {formatFacultyLabel(f)}
                     </option>
                   ))}
                 </select>
@@ -332,7 +384,7 @@ export function SelectionDialog({
                       <span>আমার ক্লাস সূচি</span>
                       {selectedBatch === "MY_CLASSES" && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />}
                     </div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">সবগুলো ব্যাচে নিজের ক্লাস</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">শুধু নিজের ক্লাস</div>
                   </button>
                   <button
                     type="button"
@@ -347,7 +399,7 @@ export function SelectionDialog({
                       <span>মাস্টার রুটিন</span>
                       {selectedBatch === "ALL_BATCHES" && <Check className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />}
                     </div>
-                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">বিশ্ববিদ্যালয়ের সকল ব্যাচ</div>
+                    <div className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5">সব ব্যাচের পূর্ণ রুটিন</div>
                   </button>
                 </div>
               </div>
