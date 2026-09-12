@@ -42,31 +42,26 @@ export function Navbar({
   return (
     <header className="sticky top-0 z-40 w-full border-b border-emerald-200/80 dark:border-emerald-900/80 bg-white/90 dark:bg-slate-950/85 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl transition-colors">
       <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-        {/* Left: Brand Logo & Name (AIBA Sync) */}
         <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-          <div className="relative flex items-center justify-center shrink-0">
+          <div className="relative flex items-center justify-center shrink-0 rounded-2xl bg-emerald-50/80 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-800 p-1.5 shadow-sm">
             <img
               src="/logo.png"
               alt="AIBA Sylhet Crest"
-              className="w-11 h-11 sm:w-12 sm:h-12 object-contain transition-transform hover:scale-105"
+              className="w-10 h-10 sm:w-11 sm:h-11 object-contain transition-transform hover:scale-105"
             />
           </div>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-black text-base sm:text-lg tracking-[-0.02em] text-slate-900 dark:text-white">
+              <span className="font-black text-base sm:text-lg tracking-[-0.03em] text-slate-900 dark:text-white">
                 AIBA Sync
               </span>
             </div>
-            <p className="text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-slate-300 mt-0.5 tracking-wide">
+            <p className="text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-slate-300 mt-0.5 tracking-[0.08em] uppercase">
               {currentDayStr} • {currentTimeStr}
-            </p>
-            <p className="text-[9px] sm:text-[10px] font-bold uppercase tracking-[0.14em] text-slate-500 dark:text-slate-400">
-              {INSTITUTION_INFO.shortName}
             </p>
           </div>
         </div>
 
-        {/* Center/Right: Selection Pill & Actions */}
         <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
           {/* Quick Batch/Section/Minor Chip */}
           <button

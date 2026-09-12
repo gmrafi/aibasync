@@ -435,75 +435,72 @@ export function WeekView({
 
   return (
     <div className="space-y-3.5">
-      {/* Top Header & View Mode Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xs">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 p-3.5 sm:p-4 rounded-3xl bg-white dark:bg-slate-900 border border-emerald-200/80 dark:border-emerald-800/80 shadow-[0_12px_30px_rgba(22,101,52,0.08)]">
         <div>
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400">
+            <span className="p-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700/40">
               <Calendar className="w-4 h-4" />
             </span>
             <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white">
-              Weekly View
+              সাপ্তাহিক রুটিন
             </h3>
           </div>
         </div>
 
-        {/* View Switcher: Full Week Grid vs Day List */}
         <div className="flex items-center p-1 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 self-start sm:self-center shadow-xs">
           <button
             type="button"
             onClick={() => setLayoutMode("GRID")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
               layoutMode === "GRID"
-                ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-xs"
+                ? "bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <LayoutGrid className="w-3.5 h-3.5" />
-            <span>Grid</span>
+            <span>গ্রিড</span>
           </button>
           <button
             type="button"
             onClick={() => setLayoutMode("DAY")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
               layoutMode === "DAY"
-                ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-xs"
+                ? "bg-white dark:bg-slate-800 text-emerald-700 dark:text-emerald-300 shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
             }`}
           >
             <ListFilter className="w-3.5 h-3.5" />
-            <span>Day</span>
+            <span>দিন</span>
           </button>
         </div>
       </div>
 
-      {/* Teacher Specific Quick Batch Switcher Bar */}
       {role === "teacher" && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar p-1.5 rounded-2xl bg-slate-100/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
           <span className="text-xs font-black text-slate-600 dark:text-slate-300 px-2 shrink-0">
-            Routine Filter:
+            ফিল্টার:
           </span>
           <button
             type="button"
             onClick={() => setTeacherFilter("MY_CLASSES")}
             className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer ${
               teacherFilter === "MY_CLASSES"
-                ? "bg-sky-600 text-white shadow-xs"
+                ? "bg-emerald-600 text-white shadow-xs"
                 : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
             }`}
           >
-            My Classes
+            আমার ক্লাস
           </button>
           <button
             type="button"
             onClick={() => setTeacherFilter("ALL_BATCHES")}
             className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer ${
               teacherFilter === "ALL_BATCHES"
-                ? "bg-sky-600 text-white shadow-xs"
+                ? "bg-emerald-600 text-white shadow-xs"
                 : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
             }`}
           >
-            Master Routine (All Batches)
+            মাস্টার রুটিন
           </button>
           {allBatches.map((b) => (
             <button
@@ -512,7 +509,7 @@ export function WeekView({
               onClick={() => setTeacherFilter(b)}
               className={`px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                 teacherFilter === b
-                  ? "bg-sky-600 text-white shadow-xs"
+                  ? "bg-emerald-600 text-white shadow-xs"
                   : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
               }`}
             >
@@ -527,7 +524,7 @@ export function WeekView({
       {/* DAYS AS ROWS (LEFT), ALL 3 PERIODS VISIBLE/PEEKING       */}
       {/* ========================================================= */}
       {layoutMode === "GRID" && (
-        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-md overflow-hidden transition-all">
+        <div className="rounded-[26px] border border-emerald-200/80 dark:border-emerald-800/80 bg-white dark:bg-slate-900 shadow-[0_18px_40px_rgba(22,101,52,0.12)] overflow-hidden transition-all">
           <div className="overflow-x-auto">
             <div className="min-w-[640px] sm:min-w-[720px]">
               {/* Table Column Headers */}
