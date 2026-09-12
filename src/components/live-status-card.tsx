@@ -30,6 +30,7 @@ interface LiveStatusCardProps {
   simulatedTime?: Date;
   onOpenEmptyRooms: () => void;
   onSelectFaculty: (faculty: FacultyMember) => void;
+  onSwitchToWeekView?: () => void;
 }
 
 export function LiveStatusCard({
@@ -41,6 +42,7 @@ export function LiveStatusCard({
   simulatedTime,
   onOpenEmptyRooms,
   onSelectFaculty,
+  onSwitchToWeekView,
 }: LiveStatusCardProps) {
   const [copiedRoom, setCopiedRoom] = useState<string | null>(null);
   const [currentTime, setCurrentTime] = useState<Date>(simulatedTime || new Date());
@@ -87,35 +89,37 @@ export function LiveStatusCard({
   // Case 1: Weekend (Friday / Saturday)
   if (status.isWeekend) {
     return (
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-lg p-6 sm:p-7 text-slate-900 dark:text-slate-100 transition-colors">
+      <div className="relative overflow-hidden rounded-3xl border border-indigo-200/80 dark:border-indigo-500/30 bg-white dark:bg-slate-900/90 shadow-lg p-5 sm:p-7 text-slate-900 dark:text-slate-100 transition-colors">
         <div className="absolute top-0 left-0 w-2 h-full bg-indigo-600 dark:bg-indigo-500" />
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5">
-          <div className="flex items-start gap-4">
-            <div className="p-3.5 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 mt-1 shadow-sm shrink-0">
-              <CalendarX className="w-6 h-6" />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="p-3 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 text-indigo-600 dark:text-indigo-400 mt-0.5 shadow-xs shrink-0">
+              <CalendarX className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
             <div>
-              <div className="flex items-center gap-2 mb-1.5">
+              <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs font-mono font-medium text-indigo-700 dark:text-indigo-300">
                   {getGreeting()}
                 </span>
               </div>
-              <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+              <h3 className="text-lg sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
                 আজ সাপ্তাহিক অবকাশকালীন ছুটি
               </h3>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
-                ক্যাম্পাসের নিয়মিত ক্লাস কার্যক্রম আগামী রবিবার পুনরায় শুরু হবে।
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                ক্যাম্পাসের নিয়মিত ক্লাস আগামী রবিবার পুনরায় শুরু হবে। আপনি নিচের বাটনে ক্লিক করে পুরো সপ্তাহের ক্লাস শিডিউল দেখতে পারেন।
               </p>
             </div>
           </div>
-          <button
-            type="button"
-            onClick={onOpenEmptyRooms}
-            className="self-start sm:self-center px-4 py-2.5 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700 transition-all flex items-center gap-2 cursor-pointer"
-          >
-            <Compass className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-            <span>সাপ্তাহিক রুটিন দেখুন</span>
-          </button>
+          {onSwitchToWeekView && (
+            <button
+              type="button"
+              onClick={onSwitchToWeekView}
+              className="self-start sm:self-center px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-bold text-white shadow-md shadow-indigo-600/20 transition-all flex items-center gap-2 cursor-pointer active:scale-98 shrink-0"
+            >
+              <Compass className="w-4 h-4 text-white" />
+              <span>সাপ্তাহিক রুটিন দেখুন</span>
+            </button>
+          )}
         </div>
       </div>
     );

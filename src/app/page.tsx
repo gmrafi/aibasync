@@ -57,6 +57,12 @@ export default function HomePage() {
       document.documentElement.classList.remove("dark");
     }
 
+    // Default to WEEK view on Friday & Saturday (Weekend)
+    const todayName = getDayName(new Date());
+    if (todayName === "Friday" || todayName === "Saturday") {
+      setViewMode("WEEK");
+    }
+
     // If first visit, show the academic selection dialog
     if (!stored.hasOnboarded) {
       setIsSelectorOpen(true);
@@ -195,51 +201,71 @@ export default function HomePage() {
             simulatedTime={isSimulationMode ? effectiveTime : undefined}
             onOpenEmptyRooms={() => setIsEmptyRoomsOpen(true)}
             onSelectFaculty={(fac) => setSelectedFaculty(fac)}
+            onSwitchToWeekView={() => setViewMode("WEEK")}
           />
         </section>
 
+        {/* Weekend Quick Switch Helper Banner */}
+        {status.isWeekend && viewMode === "TODAY" && (
+          <div className="p-3.5 sm:p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-500/10 border border-indigo-200 dark:border-indigo-500/30 flex items-center justify-between gap-3 text-xs text-indigo-950 dark:text-indigo-200 animate-in fade-in">
+            <span>আজকের ক্লাস নেই (সাপ্তাহিক ছুটি)। আগামী সপ্তাহের সম্পূর্ণ রুটিন দেখুন:</span>
+            <button
+              type="button"
+              onClick={() => setViewMode("WEEK")}
+              className="px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shrink-0 cursor-pointer shadow-xs active:scale-98"
+            >
+              সাপ্তাহিক রুটিন
+            </button>
+          </div>
+        )}
+
         {/* View Switcher & Header Bar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
-              {preferences.batch} ({preferences.majorOrSection}{minorDisplay}) রুটিন
-              <span className="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-sky-700 dark:text-sky-300">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+                {preferences.batch}
+              </h2>
+              <span className="text-xs font-mono font-semibold px-2.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 text-sky-800 dark:text-sky-300">
+                {preferences.majorOrSection}{minorDisplay}
+              </span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
                 Fall 2026
               </span>
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            </div>
+            <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               {viewMode === "TODAY"
-                ? `আজকের কার্যসূচি (${currentDayName}) • ${status.todayClasses.length}টি ক্লাস নির্ধারিত`
+                ? `আজকের সূচি (${currentDayName}) • ${status.todayClasses.length}টি ক্লাস নির্ধারিত`
                 : "রবিবার থেকে বৃহস্পতিবার পর্যন্ত পূর্ণাঙ্গ সাপ্তাহিক ক্লাস শিডিউল"}
             </p>
           </div>
 
           {/* Segmented View Switcher */}
-          <div className="flex items-center p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 self-start sm:self-center shadow-sm">
+          <div className="flex items-center p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 self-start sm:self-center shadow-xs">
             <button
               type="button"
               onClick={() => setViewMode("TODAY")}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
                 viewMode === "TODAY"
-                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 font-bold shadow-sm"
+                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 font-bold shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
               }`}
             >
               <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-              <span>Today View</span>
+              <span>আজকের রুটিন</span>
             </button>
 
             <button
               type="button"
               onClick={() => setViewMode("WEEK")}
-              className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-medium transition-all cursor-pointer ${
                 viewMode === "WEEK"
-                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 font-bold shadow-sm"
+                  ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 font-bold shadow-xs"
                   : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
               }`}
             >
               <Layers className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-              <span>Week View</span>
+              <span>সাপ্তাহিক ভিউ</span>
             </button>
           </div>
         </div>
@@ -419,21 +445,29 @@ export default function HomePage() {
       {/* Mobile Bottom Navigation Bar */}
       <nav
         aria-label="Mobile Navigation"
-        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-950/95 border-t border-slate-200 dark:border-slate-800 backdrop-blur-xl px-2 py-2 flex items-center justify-around text-[10px] font-mono text-slate-600 dark:text-slate-400"
+        className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 dark:bg-slate-950/95 border-t border-slate-200/80 dark:border-slate-800/80 backdrop-blur-xl px-2 py-2 flex items-center justify-around text-[10px] font-mono text-slate-600 dark:text-slate-400 shadow-lg"
       >
         <button
           type="button"
           onClick={() => setViewMode((prev) => (prev === "TODAY" ? "WEEK" : "TODAY"))}
-          className="flex flex-col items-center gap-1 p-1 hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer"
+          className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-all cursor-pointer ${
+            viewMode === "WEEK"
+              ? "text-sky-600 dark:text-sky-400 font-bold bg-sky-50 dark:bg-sky-950/50"
+              : "hover:text-sky-600 dark:hover:text-sky-400"
+          }`}
         >
-          <Clock className="w-5 h-5 text-sky-600 dark:text-sky-400" />
-          <span>{viewMode === "TODAY" ? "Week View" : "Today View"}</span>
+          {viewMode === "TODAY" ? (
+            <Layers className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+          ) : (
+            <Clock className="w-5 h-5 text-sky-600 dark:text-sky-400" />
+          )}
+          <span>{viewMode === "TODAY" ? "সাপ্তাহিক" : "আজকের"}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setIsEmptyRoomsOpen(true)}
-          className="flex flex-col items-center gap-1 p-1 hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer"
+          className="flex flex-col items-center gap-1 py-1 px-2 rounded-xl hover:text-violet-600 dark:hover:text-violet-400 cursor-pointer transition-all"
         >
           <Building2 className="w-5 h-5 text-violet-600 dark:text-violet-400" />
           <span>ফাঁকা রুম</span>
@@ -442,7 +476,7 @@ export default function HomePage() {
         <button
           type="button"
           onClick={() => setIsCalendarOpen(true)}
-          className="flex flex-col items-center gap-1 p-1 hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer"
+          className="flex flex-col items-center gap-1 py-1 px-2 rounded-xl hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer transition-all"
         >
           <CalendarDays className="w-5 h-5 text-sky-600 dark:text-sky-400" />
           <span>ক্যালেন্ডার</span>
@@ -451,7 +485,7 @@ export default function HomePage() {
         <button
           type="button"
           onClick={() => setIsSelectorOpen(true)}
-          className="flex flex-col items-center gap-1 p-1 hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer"
+          className="flex flex-col items-center gap-1 py-1 px-2 rounded-xl hover:text-sky-600 dark:hover:text-sky-400 cursor-pointer transition-all"
         >
           <GraduationCap className="w-5 h-5 text-sky-600 dark:text-sky-400" />
           <span>ব্যাচ বদল</span>
@@ -460,7 +494,7 @@ export default function HomePage() {
         <button
           type="button"
           onClick={() => setIsExportOpen(true)}
-          className="flex flex-col items-center gap-1 p-1 hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer"
+          className="flex flex-col items-center gap-1 py-1 px-2 rounded-xl hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer transition-all"
         >
           <Download className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
           <span>কার্ড</span>

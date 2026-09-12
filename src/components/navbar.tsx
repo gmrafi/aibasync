@@ -38,21 +38,25 @@ export function Navbar({
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800/80 bg-white/85 dark:bg-slate-950/80 backdrop-blur-xl transition-colors">
       <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between gap-2">
-        {/* Left: Brand Name (AIBA Sync) */}
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-sky-600 via-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md shadow-sky-600/20">
-            <span className="font-mono font-black text-sm tracking-tighter">AS</span>
+        {/* Left: Brand Logo & Name (AIBA Sync) */}
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-10 h-10 rounded-xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs flex items-center justify-center p-1 shrink-0">
+            <img
+              src="/logo.png"
+              alt="AIBA Sylhet"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-base tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="font-bold text-sm sm:text-base tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
                 AIBA Sync
               </span>
               <span className="hidden sm:inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30">
                 {INSTITUTION_INFO.shortName}
               </span>
             </div>
-            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400 leading-none mt-0.5">
+            <p className="text-[10px] sm:text-[11px] font-mono text-slate-500 dark:text-slate-400 leading-none mt-0.5">
               {currentDayStr} • {currentTimeStr}
             </p>
           </div>

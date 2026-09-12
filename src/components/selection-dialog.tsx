@@ -28,6 +28,7 @@ export function SelectionDialog({
   onSaved,
 }: SelectionDialogProps) {
   const [name, setName] = useState(currentName);
+  const [nameError, setNameError] = useState(false);
 
   const safeData = routineData || [];
   const availableBatches = useMemo(() => {
@@ -112,7 +113,16 @@ export function SelectionDialog({
     }
   };
 
+  const selectedMajorObj = BBA11_MAJORS.find((m) => m.code === selectedMajor);
+  const selectedMinorObj = BBA11_MINORS.find((m) => m.code === selectedMinor);
+
   const handleSave = () => {
+    if (!name || name.trim().length === 0) {
+      setNameError(true);
+      return;
+    }
+    setNameError(false);
+
     const finalMajorOrSection = isBba11 ? selectedMajor : selectedSection;
     const finalMinor = isBba11 ? selectedMinor : "None";
 
@@ -125,9 +135,6 @@ export function SelectionDialog({
     onSaved(name.trim(), selectedBatch, finalMajorOrSection, finalMinor);
     onClose();
   };
-
-  const selectedMajorObj = BBA11_MAJORS.find((m) => m.code === selectedMajor);
-  const selectedMinorObj = BBA11_MINORS.find((m) => m.code === selectedMinor);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-950/60 dark:bg-slate-950/80 backdrop-blur-xl animate-in fade-in duration-200 overflow-y-auto">
@@ -161,21 +168,45 @@ export function SelectionDialog({
 
         {/* Scrollable Content Body */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
-          {/* Field 1: Student Name */}
+          {/* Field 1: Student Full Name (Mandatory) */}
           <div>
-            <label className="text-xs font-mono font-medium text-slate-700 dark:text-slate-300 block mb-1.5">
-              শিক্ষার্থীর নাম (ঐচ্ছিক — ব্যক্তিগত গ্রিটিংয়ের জন্য)
+            <label className="text-xs font-mono font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
+              <span>
+                শিক্ষার্থীর পূর্ণ নাম <span className="text-rose-500 font-semibold">* (বাধ্যতামূলক)</span>
+              </span>
+              {nameError && (
+                <span className="text-rose-600 dark:text-rose-400 font-sans text-[11px] font-semibold animate-pulse">
+                  পূর্ণ নাম প্রদান করা আবশ্যক
+                </span>
+              )}
             </label>
             <div className="relative">
-              <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <User className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
+                nameError ? "text-rose-500" : "text-slate-400"
+              }`} />
               <input
                 type="text"
+                required
                 value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="যেমন: Mubasshir / Rafi"
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-colors"
+                onChange={(e) => {
+                  setName(e.target.value);
+                  if (e.target.value.trim().length > 0) {
+                    setNameError(false);
+                  }
+                }}
+                placeholder="যেমন: Md. Golam Mubasshir Rafi"
+                className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border text-sm text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-all ${
+                  nameError
+                    ? "border-rose-500 ring-2 ring-rose-500/20"
+                    : "border-slate-200 dark:border-slate-800 focus:border-sky-500"
+                }`}
               />
             </div>
+            {nameError && (
+              <p className="text-[11px] text-rose-500 dark:text-rose-400 mt-1 font-mono">
+                দয়া করে আপনার সম্পূর্ণ নাম লিখুন যাতে রুটিন ও স্ট্যাটাস কার্ডে নির্ভুল নাম সংরক্ষিত থাকে।
+              </p>
+            )}
           </div>
 
           {/* Field 2: Batch Selection */}

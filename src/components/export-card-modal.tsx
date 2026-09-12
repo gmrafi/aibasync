@@ -97,8 +97,12 @@ export function ExportCardModal({
             {/* Header of exported card */}
             <div className="flex items-center justify-between border-b border-slate-200 pb-3.5 mb-4">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-700 flex items-center justify-center text-white shadow-sm font-mono font-bold text-xs">
-                  AS
+                <div className="w-10 h-10 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1 shrink-0">
+                  <img
+                    src="/logo.png"
+                    alt="AIBA Sylhet"
+                    className="w-full h-full object-contain"
+                  />
                 </div>
                 <div>
                   <div className="font-bold text-sm tracking-tight text-slate-900 flex items-center gap-1.5">
