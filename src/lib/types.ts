@@ -30,11 +30,20 @@ export interface BatchInfo {
   minors?: string[];
 }
 
+export type MinorDiscipline = "MIS" | "HRM" | "SCM" | "MKT" | "FIN" | "ACC" | "None";
+
+export interface MinorCourseInfo {
+  code: "MIS" | "HRM" | "SCM" | "MKT" | "FIN" | "ACC";
+  disciplineName: string;
+  courseTitle: string;
+  shortDescription?: string;
+}
+
 export interface UserPreferences {
   studentName?: string;
   batch: string;
   majorOrSection: string;
-  minor?: string; // e.g. "MIS-M" or "HRM-M" for BBA-11
+  minor?: string; // e.g. "MIS", "HRM", "SCM", "MKT", "FIN", "ACC", or "None"
   theme?: "light" | "dark";
   hasOnboarded: boolean;
 }

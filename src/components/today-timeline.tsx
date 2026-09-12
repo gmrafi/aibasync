@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ClassSlot, FacultyMember } from "@/lib/types";
-import { minutesToTime12, timeToMinutes } from "@/lib/time-utils";
+import { minutesToTime12, timeToMinutes, isSlotMinor } from "@/lib/time-utils";
 import { TIME_PERIODS } from "@/data/routine";
 import { getFacultyInfo } from "@/data/faculty";
 import { Clock, MapPin, User, Check, Coffee, Copy, Info, BookOpen } from "lucide-react";
@@ -12,6 +12,8 @@ interface TodayTimelineProps {
   currentTime: Date;
   currentDayName: string;
   onSelectFaculty: (faculty: FacultyMember) => void;
+  batch?: string;
+  minor?: string;
 }
 
 export function TodayTimeline({
@@ -19,6 +21,8 @@ export function TodayTimeline({
   currentTime,
   currentDayName,
   onSelectFaculty,
+  batch,
+  minor,
 }: TodayTimelineProps) {
   const [copiedRoom, setCopiedRoom] = useState<string | null>(null);
   const currentMinutes = currentTime.getHours() * 60 + currentTime.getMinutes();
@@ -149,9 +153,9 @@ export function TodayTimeline({
                   Club Activity
                 </span>
               )}
-              {classInPeriod.isMinor && (
+              {(isSlotMinor(classInPeriod, batch || "", minor) || classInPeriod.isMinor) && (
                 <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-semibold bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
-                  Minor Course
+                  মাইনর: {minor && minor !== "None" ? minor : "Minor"}
                 </span>
               )}
             </h4>

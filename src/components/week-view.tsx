@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ClassSlot, DayOfWeek, FacultyMember } from "@/lib/types";
-import { minutesToTime12 } from "@/lib/time-utils";
+import { minutesToTime12, isSlotMatchingStudent, isSlotMinor } from "@/lib/time-utils";
 import { getFacultyInfo } from "@/data/faculty";
 import { Clock, MapPin, User, Calendar, Info } from "lucide-react";
 
@@ -35,12 +35,9 @@ export function WeekView({
     WEEK_DAYS.some((d) => d.key === currentRealDay) ? currentRealDay : "ALL"
   );
 
-  const batchSlots = routineData.filter((s) => {
-    if (s.batch !== batch) return false;
-    if (s.majorOrSection === majorOrSection) return true;
-    if (minor && minor !== "None" && s.majorOrSection === minor) return true;
-    return false;
-  });
+  const batchSlots = routineData.filter((s) =>
+    isSlotMatchingStudent(s, batch, majorOrSection, minor)
+  );
 
   const daysToDisplay =
     selectedDay === "ALL"
@@ -149,9 +146,9 @@ export function WeekView({
                           {slot.courseTitle}
                         </h4>
 
-                        {slot.isMinor && (
+                        {(isSlotMinor(slot, batch, minor) || slot.isMinor) && (
                           <span className="inline-block px-2 py-0.5 rounded text-[10px] font-mono bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 mb-2">
-                            Minor Course
+                            মাইনর: {minor && minor !== "None" ? minor : "Minor"}
                           </span>
                         )}
 

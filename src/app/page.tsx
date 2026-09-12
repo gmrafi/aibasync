@@ -24,6 +24,8 @@ import {
   GraduationCap,
   FlaskConical,
   BookOpen,
+  ExternalLink,
+  Globe,
 } from "lucide-react";
 
 export default function HomePage() {
@@ -250,6 +252,8 @@ export default function HomePage() {
               currentTime={effectiveTime}
               currentDayName={currentDayName}
               onSelectFaculty={(fac) => setSelectedFaculty(fac)}
+              batch={preferences.batch}
+              minor={preferences.minor}
             />
           ) : (
             <WeekView
@@ -318,26 +322,96 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Footer info with Exact Author Credit */}
-        <footer className="pt-6 border-t border-slate-200 dark:border-slate-800/80 text-center text-xs font-mono text-slate-500 dark:text-slate-400 space-y-2">
-          <p>
-            {INSTITUTION_INFO.name} • {INSTITUTION_INFO.subTitle}
-          </p>
-          <p className="text-[11px] text-slate-400 dark:text-slate-500">
-            {INSTITUTION_INFO.appName} • Zero Backend • Client Powered
-          </p>
-          <div className="pt-2">
-            <p className="text-xs text-slate-700 dark:text-slate-300">
-              Designed and Developed by{" "}
+        {/* Upgraded Interactive Footer */}
+        <footer className="mt-10 rounded-3xl bg-white/80 dark:bg-slate-900/70 border border-slate-200 dark:border-slate-800 p-6 sm:p-7 shadow-xs backdrop-blur-md space-y-5">
+          {/* Top Section: Institutional & Quick Shortcuts */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800/80">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="font-bold text-sm text-slate-900 dark:text-white">
+                  {INSTITUTION_INFO.name}
+                </span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30">
+                  {INSTITUTION_INFO.shortName}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-mono">
+                {INSTITUTION_INFO.subTitle} • {INSTITUTION_INFO.term}
+              </p>
+            </div>
+
+            {/* Quick Action Pills */}
+            <div className="flex flex-wrap items-center gap-2 text-xs font-mono">
+              <button
+                type="button"
+                onClick={() => setIsSelectorOpen(true)}
+                className="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-sky-50 hover:text-sky-700 dark:hover:bg-sky-500/10 dark:hover:text-sky-300 transition-colors cursor-pointer"
+              >
+                ব্যাচ বদল
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEmptyRoomsOpen(true)}
+                className="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-violet-50 hover:text-violet-700 dark:hover:bg-violet-500/10 dark:hover:text-violet-300 transition-colors cursor-pointer"
+              >
+                ফাঁকা রুম
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsCalendarOpen(true)}
+                className="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-sky-50 hover:text-sky-700 dark:hover:bg-sky-500/10 dark:hover:text-sky-300 transition-colors cursor-pointer"
+              >
+                ক্যালেন্ডার
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsExportOpen(true)}
+                className="px-2.5 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-50 hover:text-emerald-700 dark:hover:bg-emerald-500/10 dark:hover:text-emerald-300 transition-colors cursor-pointer"
+              >
+                কার্ড ডাউনলোড
+              </button>
+            </div>
+          </div>
+
+          {/* Bottom Section: Author Attribution & Links */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-slate-500 dark:text-slate-400">
+                Designed and Developed by
+              </span>
               <a
                 href="https://www.gmrafi.com.bd/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sky-600 dark:text-sky-400 hover:text-sky-500 font-semibold underline underline-offset-4 decoration-sky-500/40 hover:decoration-sky-400 transition-all"
+                className="group font-bold text-sky-600 dark:text-sky-400 hover:text-sky-500 inline-flex items-center gap-1 underline underline-offset-4 decoration-sky-500/40 hover:decoration-sky-400 transition-all"
               >
-                Md. Golam Mubasshir Rafi
+                <span>Md. Golam Mubasshir Rafi</span>
+                <ExternalLink className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
-            </p>
+            </div>
+
+            <div className="flex items-center gap-3 font-mono text-[11px] text-slate-500 dark:text-slate-400">
+              <a
+                href="https://www.gmrafi.com.bd/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>gmrafi.com.bd</span>
+              </a>
+              <span>•</span>
+              <a
+                href="https://github.com/gmrafi/aibasync"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+              >
+                GitHub Repo
+              </a>
+              <span>•</span>
+              <span>Zero Backend PWA</span>
+            </div>
           </div>
         </footer>
       </main>

@@ -64,14 +64,14 @@ export function Navbar({
           <button
             type="button"
             onClick={onOpenSelector}
-            className="group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500/60 transition-all text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer shadow-sm"
+            className="group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900/90 border border-slate-200 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500 hover:bg-white dark:hover:bg-slate-800 transition-all text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer shadow-xs active:scale-98"
             title="ব্যাচ অথবা মেজর/মাইনর পরিবর্তন করুন"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-500/20" />
             <span className="font-mono text-sky-700 dark:text-sky-300 font-bold">{batch}</span>
             <span className="text-slate-400 dark:text-slate-500">•</span>
-            <span className="text-slate-700 dark:text-slate-300">{majorOrSection}{minorTag}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors" />
+            <span className="text-slate-700 dark:text-slate-300 font-medium">{majorOrSection}{minorTag}</span>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-transform group-hover:translate-y-0.5" />
           </button>
 
           {/* Theme Toggle (Light / Dark) */}

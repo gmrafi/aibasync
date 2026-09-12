@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { ClassSlot, DayOfWeek } from "@/lib/types";
 import { INSTITUTION_INFO } from "@/data/routine";
-import { minutesToTime12 } from "@/lib/time-utils";
+import { minutesToTime12, isSlotMatchingStudent, isSlotMinor } from "@/lib/time-utils";
 import { Download, Check, X, Loader2 } from "lucide-react";
 import { toPng } from "html-to-image";
 
@@ -33,12 +33,9 @@ export function ExportCardModal({
   if (!isOpen) return null;
 
   const isBba11 = batch === "BBA-11";
-  const batchSlots = routineData.filter((s) => {
-    if (s.batch !== batch) return false;
-    if (s.majorOrSection === majorOrSection) return true;
-    if (minor && minor !== "None" && s.majorOrSection === minor) return true;
-    return false;
-  });
+  const batchSlots = routineData.filter((s) =>
+    isSlotMatchingStudent(s, batch, majorOrSection, minor)
+  );
 
   const handleDownloadImage = async () => {
     if (!cardRef.current) return;
@@ -152,9 +149,9 @@ export function ExportCardModal({
                               <span className="text-slate-900 font-medium">
                                 {slot.courseTitle}
                               </span>
-                              {slot.isMinor && (
+                              {(isSlotMinor(slot, batch, minor) || slot.isMinor) && (
                                 <span className="ml-1 text-[9px] text-indigo-700 font-bold">
-                                  [Minor]
+                                  [{minor && minor !== "None" ? minor : "Minor"}]
                                 </span>
                               )}
                             </div>

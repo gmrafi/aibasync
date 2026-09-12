@@ -68,6 +68,57 @@ export interface ClassStatusResult {
   todayClasses: ClassSlot[];
 }
 
+export const MINOR_COURSE_TITLES: Record<string, string> = {
+  MIS: "Management of Innovation and Technology",
+  HRM: "Conflict Management and Negotiation",
+  SCM: "Procurement Management",
+  MKT: "Consumer Behavior",
+  FIN: "International Financial Management",
+  ACC: "Advanced Accounting -I",
+};
+
+export function isSlotMatchingStudent(
+  slot: ClassSlot,
+  batch: string,
+  majorOrSection: string,
+  minor?: string
+): boolean {
+  if (slot.batch !== batch) return false;
+
+  if (batch !== "BBA-11") {
+    return slot.majorOrSection === majorOrSection || slot.majorOrSection === "Common";
+  }
+
+  // BBA-11 Logic:
+  // 1. Matches student's Major
+  if (slot.majorOrSection === majorOrSection) {
+    return true;
+  }
+
+  // 2. Matches student's Minor
+  if (minor && minor !== "None" && MINOR_COURSE_TITLES[minor]) {
+    const targetTitle = MINOR_COURSE_TITLES[minor].toLowerCase();
+    const slotTitle = slot.courseTitle.toLowerCase();
+    if (slotTitle.includes(targetTitle) || targetTitle.includes(slotTitle)) {
+      return true;
+    }
+  }
+
+  // 3. Common slots
+  if (slot.majorOrSection === "Common") {
+    return true;
+  }
+
+  return false;
+}
+
+export function isSlotMinor(slot: ClassSlot, batch: string, minor?: string): boolean {
+  if (batch !== "BBA-11" || !minor || minor === "None" || !MINOR_COURSE_TITLES[minor]) return false;
+  const targetTitle = MINOR_COURSE_TITLES[minor].toLowerCase();
+  const slotTitle = slot.courseTitle.toLowerCase();
+  return slotTitle.includes(targetTitle) || targetTitle.includes(slotTitle);
+}
+
 export function getActiveAndUpcomingClass(
   slots: ClassSlot[],
   batch: string,
@@ -93,12 +144,7 @@ export function getActiveAndUpcomingClass(
   }
 
   const todayClasses = slots
-    .filter((s) => {
-      if (s.batch !== batch || s.day !== currentDay) return false;
-      if (s.majorOrSection === majorOrSection) return true;
-      if (minor && minor !== "None" && s.majorOrSection === minor) return true;
-      return false;
-    })
+    .filter((s) => s.day === currentDay && isSlotMatchingStudent(s, batch, majorOrSection, minor))
     .sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
 
   if (todayClasses.length === 0) {
