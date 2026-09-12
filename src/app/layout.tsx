@@ -81,6 +81,18 @@ export default function RootLayout({
             `,
           }}
         />
+        {/* Google Analytics 4 (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-X9YDHXPHFB" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-X9YDHXPHFB');
+            `,
+          }}
+        />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}

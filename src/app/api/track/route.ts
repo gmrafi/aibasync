@@ -17,6 +17,16 @@ function detectDevice(userAgent: string): string {
   return "desktop";
 }
 
+function detectBrowser(userAgent: string): string {
+  const u = userAgent.toLowerCase();
+  if (u.includes("edg/")) return "Edge";
+  if (u.includes("opr/") || u.includes("opera")) return "Opera";
+  if (u.includes("chrome")) return "Chrome";
+  if (u.includes("firefox")) return "Firefox";
+  if (u.includes("safari")) return "Safari";
+  return "অন্যান্য";
+}
+
 export async function POST(request: Request) {
   try {
     const body = (await request.json().catch(() => ({}))) as Record<
@@ -24,17 +34,24 @@ export async function POST(request: Request) {
       unknown
     >;
 
-    // Real client IP comes from x-forwarded-for on Vercel.
+    // Client IP comes from Vercel's proxy headers; geo comes from Vercel's own
+    // geolocation headers (no third-party API involved).
     const forwarded = request.headers.get("x-forwarded-for");
     const rawIp =
       forwarded?.split(",")[0]?.trim() ||
       request.headers.get("x-real-ip") ||
-      "unknown";
+      null;
+    const country = safeText(request.headers.get("x-vercel-ip-country"), 10);
+    const region = safeText(
+      request.headers.get("x-vercel-ip-country-region"),
+      100
+    );
+    const city = safeText(request.headers.get("x-vercel-ip-city"), 150);
 
     const salt = process.env.TRACKING_SALT || "aibasync-default-salt";
-    const ipHash = createHash("sha256")
-      .update(rawIp + salt)
-      .digest("hex");
+    const ipHash = rawIp
+      ? createHash("sha256").update(rawIp + salt).digest("hex")
+      : null;
 
     const userAgent = request.headers.get("user-agent") || "";
     const referrer = safeText(request.headers.get("referer"), 500);
@@ -47,9 +64,14 @@ export async function POST(request: Request) {
       minor: safeText(body.minor, 100),
       role: safeText(body.role, 50),
       teacherCode: safeText(body.teacherCode, 50),
+      ipAddress: rawIp,
+      country,
+      region,
+      city,
       ipHash,
       userAgent: userAgent.slice(0, 500) || null,
       deviceType: detectDevice(userAgent),
+      browser: detectBrowser(userAgent),
       referrer,
     });
 
