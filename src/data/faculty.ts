@@ -3,10 +3,11 @@ import { FacultyMember } from "@/lib/types";
 export const FACULTY_DIRECTORY: Record<string, FacultyMember> = {
   "CDG": {
     code: "CDG",
-    fullName: "Col. / Dr. Chowdhury (CDG)",
-    designation: "Professor & Senior Faculty",
+    fullName: "Chinmoy Das Gupta",
+    designation: "Assistant Professor",
     department: "Finance & Banking",
     roomNumber: "টিচিং লাউঞ্জ",
+    profileUrl: "https://aibasylhet.edu.bd/my-profile-view/6788d9844d073d10650e1e54",
   },
   "DMNI": {
     code: "DMNI",
