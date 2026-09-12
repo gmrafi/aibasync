@@ -94,7 +94,7 @@ export function TodayTimeline({
                 <span className="font-semibold text-slate-600 dark:text-slate-400">({periodInfo.label})</span>
               </div>
               <span className="font-semibold text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-slate-800/60 px-2.5 py-1 rounded-lg">
-                ফাঁকা স্লট
+                ক্লাস নেই
               </span>
             </div>
           );

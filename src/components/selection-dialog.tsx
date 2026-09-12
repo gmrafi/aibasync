@@ -370,9 +370,6 @@ export function SelectionDialog({
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500 transition-all"
                   />
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-                  নাম খালি রাখলেও সরাসরি রুটিনে প্রবেশ করা যাবে।
-                </p>
               </div>
 
               {/* Field 2: Batch Selection */}

@@ -362,8 +362,8 @@ export function WeekView({
                     {/* Period 1 Cell */}
                     <div className="p-1.5 sm:p-2 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-1.5 justify-center">
                       {p1Slots.length === 0 ? (
-                        <div className="h-full min-h-[85px] rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-[11px] font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
-                          <span>ফাঁকা</span>
+                        <div className="h-full min-h-[85px] rounded-xl border border-dashed border-slate-200 dark:border-slate-800/80 flex flex-col items-center justify-center text-xs font-semibold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                          <span>ক্লাস নেই</span>
                         </div>
                       ) : (
                         p1Slots.map((s) => (
@@ -400,8 +400,8 @@ export function WeekView({
                     {/* Period 2 Cell */}
                     <div className="p-1.5 sm:p-2 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-1.5 justify-center">
                       {p2Slots.length === 0 ? (
-                        <div className="h-full min-h-[85px] rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-[11px] font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
-                          <span>ফাঁকা</span>
+                        <div className="h-full min-h-[85px] rounded-xl border border-dashed border-slate-200 dark:border-slate-800/80 flex flex-col items-center justify-center text-xs font-semibold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                          <span>ক্লাস নেই</span>
                         </div>
                       ) : (
                         p2Slots.map((s) => (
@@ -438,8 +438,8 @@ export function WeekView({
                     {/* Period 3 Cell */}
                     <div className="p-1.5 sm:p-2 flex flex-col gap-1.5 justify-center">
                       {p3Slots.length === 0 ? (
-                        <div className="h-full min-h-[85px] rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-[11px] font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
-                          <span>ফাঁকা</span>
+                        <div className="h-full min-h-[85px] rounded-xl border border-dashed border-slate-200 dark:border-slate-800/80 flex flex-col items-center justify-center text-xs font-semibold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                          <span>ক্লাস নেই</span>
                         </div>
                       ) : (
                         p3Slots.map((s) => (

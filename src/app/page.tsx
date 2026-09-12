@@ -448,7 +448,7 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1 text-xs">
             <div className="flex items-center gap-2 font-medium">
               <span className="text-slate-500 dark:text-slate-400">
-                পরিকল্পনা ও রূপায়ণে
+                Designed and Developed by
               </span>
               <a
                 href="https://www.gmrafi.com.bd/"

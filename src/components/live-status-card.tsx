@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ClassSlot, FacultyMember, UserRole } from "@/lib/types";
 import {
   formatMinutesBengali,
+  formatSecondsBengali,
   getActiveAndUpcomingClass,
   minutesToTime12,
 } from "@/lib/time-utils";
@@ -60,7 +61,7 @@ export function LiveStatusCard({
     }
     const interval = setInterval(() => {
       setCurrentTime(new Date());
-    }, 10000);
+    }, 1000);
     return () => clearInterval(interval);
   }, [simulatedTime]);
 
@@ -169,7 +170,7 @@ export function LiveStatusCard({
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-800 dark:text-slate-200 self-start sm:self-auto">
             <Clock className="w-4 h-4 text-rose-600 dark:text-rose-400" />
             <span>
-              শেষ হতে বাকি: <strong className="text-slate-900 dark:text-white font-bold">{formatMinutesBengali(status.minutesLeftInCurrent || 0)}</strong>
+              শেষ হতে বাকি: <strong className="text-slate-900 dark:text-white font-bold">{formatSecondsBengali(status.secondsLeftInCurrent || 0)}</strong>
             </span>
           </div>
         </div>
@@ -267,7 +268,7 @@ export function LiveStatusCard({
           <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sky-50 dark:bg-sky-500/10 border border-sky-200 dark:border-sky-500/30 text-xs font-semibold text-sky-800 dark:text-sky-200 self-start sm:self-auto">
             <Clock className="w-4 h-4 text-sky-600 dark:text-sky-400" />
             <span>
-              শুরু হতে বাকি: <strong className="text-slate-900 dark:text-white font-bold">{formatMinutesBengali(status.minutesToNext || 0)}</strong>
+              শুরু হতে বাকি: <strong className="text-slate-900 dark:text-white font-bold">{formatSecondsBengali(status.secondsToNext || 0)}</strong>
             </span>
           </div>
         </div>

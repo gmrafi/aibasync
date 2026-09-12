@@ -57,11 +57,37 @@ export function formatMinutesBengali(totalMinutes: number): string {
   }
 }
 
+export function formatSecondsBengali(totalSeconds: number): string {
+  if (totalSeconds <= 0) return "০ সেকেন্ড";
+  const hours = Math.floor(totalSeconds / 3600);
+  const remainder = totalSeconds % 3600;
+  const minutes = Math.floor(remainder / 60);
+  const seconds = remainder % 60;
+
+  const toBengaliNumber = (num: number) => {
+    const bengaliDigits = ["০", "১", "২", "৩", "৪", "৫", "৬", "৭", "৮", "৯"];
+    return num
+      .toString()
+      .split("")
+      .map((d) => bengaliDigits[parseInt(d, 10)] ?? d)
+      .join("");
+  };
+
+  const parts: string[] = [];
+  if (hours > 0) parts.push(`${toBengaliNumber(hours)} ঘণ্টা`);
+  if (minutes > 0 || hours > 0) parts.push(`${toBengaliNumber(minutes)} মিনিট`);
+  parts.push(`${toBengaliNumber(seconds)} সেকেন্ড`);
+
+  return parts.join(" ");
+}
+
 export interface ClassStatusResult {
   currentClass: ClassSlot | null;
   nextClass: ClassSlot | null;
   minutesLeftInCurrent: number | null;
   minutesToNext: number | null;
+  secondsLeftInCurrent: number | null;
+  secondsToNext: number | null;
   progressPercent: number;
   isWeekend: boolean;
   allDoneForToday: boolean;
@@ -158,6 +184,8 @@ export function getActiveAndUpcomingClass(
       nextClass: null,
       minutesLeftInCurrent: null,
       minutesToNext: null,
+      secondsLeftInCurrent: null,
+      secondsToNext: null,
       progressPercent: 0,
       isWeekend: true,
       allDoneForToday: false,
@@ -175,6 +203,8 @@ export function getActiveAndUpcomingClass(
       nextClass: null,
       minutesLeftInCurrent: null,
       minutesToNext: null,
+      secondsLeftInCurrent: null,
+      secondsToNext: null,
       progressPercent: 0,
       isWeekend: false,
       allDoneForToday: true,
@@ -182,25 +212,31 @@ export function getActiveAndUpcomingClass(
     };
   }
 
+  const currentTotalSeconds = now.getHours() * 3600 + now.getMinutes() * 60 + now.getSeconds();
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
   let currentClass: ClassSlot | null = null;
   let nextClass: ClassSlot | null = null;
   let minutesLeftInCurrent: number | null = null;
   let minutesToNext: number | null = null;
+  let secondsLeftInCurrent: number | null = null;
+  let secondsToNext: number | null = null;
   let progressPercent = 0;
 
   for (const cls of todayClasses) {
     const startM = timeToMinutes(cls.startTime);
     const endM = timeToMinutes(cls.endTime);
+    const startSec = startM * 60;
+    const endSec = endM * 60;
 
-    if (currentMinutes >= startM && currentMinutes < endM) {
+    if (currentTotalSeconds >= startSec && currentTotalSeconds < endSec) {
       currentClass = cls;
-      minutesLeftInCurrent = endM - currentMinutes;
-      const totalDuration = endM - startM;
+      secondsLeftInCurrent = endSec - currentTotalSeconds;
+      minutesLeftInCurrent = Math.ceil(secondsLeftInCurrent / 60);
+      const totalDurationSec = endSec - startSec;
       progressPercent = Math.min(
         100,
-        Math.max(0, Math.round(((currentMinutes - startM) / totalDuration) * 100))
+        Math.max(0, Math.round(((currentTotalSeconds - startSec) / totalDurationSec) * 100))
       );
       break;
     }
@@ -209,9 +245,11 @@ export function getActiveAndUpcomingClass(
   // Find next upcoming class
   for (const cls of todayClasses) {
     const startM = timeToMinutes(cls.startTime);
-    if (startM > currentMinutes) {
+    const startSec = startM * 60;
+    if (startSec > currentTotalSeconds) {
       nextClass = cls;
-      minutesToNext = startM - currentMinutes;
+      secondsToNext = startSec - currentTotalSeconds;
+      minutesToNext = Math.ceil(secondsToNext / 60);
       break;
     }
   }
@@ -225,6 +263,8 @@ export function getActiveAndUpcomingClass(
     nextClass,
     minutesLeftInCurrent,
     minutesToNext,
+    secondsLeftInCurrent,
+    secondsToNext,
     progressPercent,
     isWeekend: false,
     allDoneForToday,
