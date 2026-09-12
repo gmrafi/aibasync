@@ -1,32 +1,46 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ClassSlot } from "@/lib/types";
+import { ClassSlot, UserRole } from "@/lib/types";
 import { BBA11_MAJORS, BBA11_MINORS } from "@/data/routine";
+import { FACULTY_LIST } from "@/data/faculty";
 import { savePreferences } from "@/lib/storage";
 import { Check, ChevronRight, GraduationCap, User, X, BookOpen, Layers } from "lucide-react";
 
 interface SelectionDialogProps {
   isOpen: boolean;
   onClose: () => void;
+  currentRole?: UserRole;
   currentName?: string;
+  currentTeacherCode?: string;
   currentBatch: string;
   currentMajorOrSection: string;
   currentMinor?: string;
   routineData: ClassSlot[];
-  onSaved: (name: string, batch: string, majorOrSection: string, minor: string) => void;
+  onSaved: (
+    name: string,
+    batch: string,
+    majorOrSection: string,
+    minor: string,
+    role?: UserRole,
+    teacherCode?: string
+  ) => void;
 }
 
 export function SelectionDialog({
   isOpen,
   onClose,
+  currentRole = "student",
   currentName = "",
+  currentTeacherCode = "",
   currentBatch,
   currentMajorOrSection,
   currentMinor = "None",
   routineData,
   onSaved,
 }: SelectionDialogProps) {
+  const [role, setRole] = useState<UserRole>(currentRole);
+  const [teacherCode, setTeacherCode] = useState(currentTeacherCode);
   const [name, setName] = useState(currentName);
   const [nameError, setNameError] = useState(false);
 
@@ -123,16 +137,20 @@ export function SelectionDialog({
     }
     setNameError(false);
 
-    const finalMajorOrSection = isBba11 ? selectedMajor : selectedSection;
-    const finalMinor = isBba11 ? selectedMinor : "None";
+    const finalMajorOrSection = role === "teacher"
+      ? (isBba11 ? "FIN" : (availableSections[0] || "Alpha"))
+      : (isBba11 ? selectedMajor : selectedSection);
+    const finalMinor = role === "teacher" ? "None" : (isBba11 ? selectedMinor : "None");
 
     savePreferences({
+      role,
       studentName: name.trim(),
+      teacherCode: role === "teacher" ? teacherCode : undefined,
       batch: selectedBatch,
       majorOrSection: finalMajorOrSection,
       minor: finalMinor,
     });
-    onSaved(name.trim(), selectedBatch, finalMajorOrSection, finalMinor);
+    onSaved(name.trim(), selectedBatch, finalMajorOrSection, finalMinor, role, teacherCode);
     onClose();
   };
 
@@ -151,90 +169,215 @@ export function SelectionDialog({
           <X className="w-4 h-4" />
         </button>
 
-        {/* Modal Header */}
+        {/* Modal Header with Official University Logo */}
         <div className="p-5 sm:p-6 pb-3 border-b border-slate-100 dark:border-slate-800/80 flex items-center gap-3.5 shrink-0">
-          <div className="w-11 h-11 rounded-2xl bg-sky-50 dark:bg-sky-500/15 border border-sky-200 dark:border-sky-500/30 flex items-center justify-center text-sky-600 dark:text-sky-400 shadow-xs">
-            <GraduationCap className="w-5 h-5" />
+          <div className="w-12 h-12 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-center justify-center p-1 shrink-0 shadow-xs">
+            <img
+              src="/logo.png"
+              alt="AIBA Sylhet Crest"
+              className="w-full h-full object-contain"
+            />
           </div>
           <div>
-            <span className="text-[10px] font-mono font-bold tracking-wider text-sky-600 dark:text-sky-400 uppercase">
+            <span className="text-xs font-bold tracking-wider text-sky-600 dark:text-sky-400 uppercase">
               AIBA Sync • একাডেমিক প্রোফাইল
             </span>
             <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 dark:text-white">
-              ব্যাচ ও পাঠ্যক্রম নির্বাচন
+              {role === "teacher" ? "শিক্ষক প্রোফাইল নির্বাচন" : "ব্যাচ ও পাঠ্যক্রম নির্বাচন"}
             </h2>
           </div>
         </div>
 
         {/* Scrollable Content Body */}
         <div className="p-5 sm:p-6 overflow-y-auto space-y-5">
-          {/* Field 1: Student Full Name */}
+          {/* Role Selection Switcher */}
           <div>
-            <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
-              <span>শিক্ষার্থীর নাম</span>
-              {nameError && (
-                <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
-                  অনুগ্রহ করে নামটি লিখুন
-                </span>
-              )}
+            <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-1.5">
+              আপনি কি শিক্ষার্থী নাকি শিক্ষক?
             </label>
-            <div className="relative">
-              <User className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
-                nameError ? "text-rose-500" : "text-slate-400"
-              }`} />
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => {
-                  setName(e.target.value);
-                  if (e.target.value.trim().length > 0) {
+            <div className="grid grid-cols-2 p-1 rounded-2xl bg-slate-100 dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setRole("student")}
+                className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  role === "student"
+                    ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                }`}
+              >
+                <GraduationCap className="w-4 h-4" />
+                <span>শিক্ষার্থী (Student)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setRole("teacher");
+                  if (!teacherCode && FACULTY_LIST.length > 0) {
+                    setTeacherCode(FACULTY_LIST[0].code);
+                    setName(FACULTY_LIST[0].fullName);
                     setNameError(false);
                   }
                 }}
-                placeholder="যেমন: Md. Golam Mubasshir Rafi"
-                className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-all ${
-                  nameError
-                    ? "border-rose-500 ring-2 ring-rose-500/20"
-                    : "border-slate-200 dark:border-slate-800 focus:border-sky-500"
+                className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  role === "teacher"
+                    ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-sm"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
                 }`}
-              />
+              >
+                <User className="w-4 h-4" />
+                <span>শিক্ষক / ফ্যাকাল্টি (Teacher)</span>
+              </button>
             </div>
-            {nameError && (
-              <p className="text-xs font-medium text-rose-500 dark:text-rose-400 mt-1">
-                আপনার নাম প্রদান করলে রুটিন কার্ড ও লাইভ কাউন্টডাউনে আপনার নাম প্রদর্শিত হবে।
-              </p>
-            )}
           </div>
 
-          {/* Field 2: Batch Selection */}
-          <div>
-            <label className="text-xs font-mono font-medium text-slate-700 dark:text-slate-300 block mb-2">
-              ১. ব্যাচ নির্বাচন করুন
-            </label>
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
-              {availableBatches.map((b) => {
-                const isSelected = selectedBatch === b;
-                return (
-                  <button
-                    key={b}
-                    type="button"
-                    onClick={() => handleBatchSelect(b)}
-                    className={`py-2 px-2.5 rounded-xl border text-center transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-200 shadow-xs font-bold"
-                        : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
-                    }`}
-                  >
-                    <div className="text-xs font-mono">{b}</div>
-                    <div className="text-[9px] text-slate-400 dark:text-slate-500 truncate">
-                      {b === "BBA-11" ? "Senior" : "Regular"}
-                    </div>
-                  </button>
-                );
-              })}
+          {role === "teacher" ? (
+            /* TEACHER CONTROLS */
+            <div className="space-y-4 animate-in fade-in">
+              <div>
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
+                  <span>ফ্যাকাল্টি তালিকা থেকে আপনার নাম নির্বাচন করুন</span>
+                  {nameError && (
+                    <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
+                      অনুগ্রহ করে শিক্ষক নির্বাচন করুন
+                    </span>
+                  )}
+                </label>
+                <select
+                  value={teacherCode}
+                  onChange={(e) => {
+                    const code = e.target.value;
+                    setTeacherCode(code);
+                    const faculty = FACULTY_LIST.find((f) => f.code === code);
+                    if (faculty) {
+                      setName(faculty.fullName);
+                      setNameError(false);
+                    }
+                  }}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-semibold text-slate-900 dark:text-slate-100 focus:outline-none focus:border-sky-500 cursor-pointer"
+                >
+                  <option value="">-- শিক্ষক নির্বাচন করুন --</option>
+                  {FACULTY_LIST.map((f) => (
+                    <option key={f.code} value={f.code}>
+                      {f.fullName} ({f.code}) — {f.designation}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5">
+                  প্রদর্শিত নাম ও পদবি (প্রয়োজনে সম্পাদনা করতে পারেন)
+                </label>
+                <div className="relative">
+                  <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (e.target.value.trim().length > 0) setNameError(false);
+                    }}
+                    placeholder="যেমন: Chinmoy Das Gupta"
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 text-sm font-semibold text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:border-sky-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">
+                  প্রাথমিক ব্যাচ রুটিন নির্বাচন
+                </label>
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                  {availableBatches.map((b) => {
+                    const isSelected = selectedBatch === b;
+                    return (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => handleBatchSelect(b)}
+                        className={`py-2.5 px-3 rounded-xl border text-center transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-200 shadow-xs font-bold"
+                            : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="text-xs font-mono font-bold">{b}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
+          ) : (
+            /* STUDENT CONTROLS */
+            <>
+              {/* Field 1: Student Full Name */}
+              <div>
+                <label className="text-xs font-bold text-slate-800 dark:text-slate-200 block mb-1.5 flex items-center justify-between">
+                  <span>শিক্ষার্থীর নাম</span>
+                  {nameError && (
+                    <span className="text-rose-600 dark:text-rose-400 text-xs font-semibold animate-pulse">
+                      অনুগ্রহ করে নামটি লিখুন
+                    </span>
+                  )}
+                </label>
+                <div className="relative">
+                  <User className={`w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
+                    nameError ? "text-rose-500" : "text-slate-400"
+                  }`} />
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (e.target.value.trim().length > 0) {
+                        setNameError(false);
+                      }
+                    }}
+                    placeholder="যেমন: Md. Golam Mubasshir Rafi"
+                    className={`w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border text-sm font-medium text-slate-900 dark:text-slate-100 placeholder-slate-400 focus:outline-none transition-all ${
+                      nameError
+                        ? "border-rose-500 ring-2 ring-rose-500/20"
+                        : "border-slate-200 dark:border-slate-800 focus:border-sky-500"
+                    }`}
+                  />
+                </div>
+                {nameError && (
+                  <p className="text-xs font-medium text-rose-500 dark:text-rose-400 mt-1">
+                    আপনার নাম প্রদান করলে রুটিন কার্ড ও লাইভ কাউন্টডাউনে আপনার নাম প্রদর্শিত হবে।
+                  </p>
+                )}
+              </div>
+
+              {/* Field 2: Batch Selection */}
+              <div>
+                <label className="text-xs font-bold text-slate-700 dark:text-slate-300 block mb-2">
+                  ১. ব্যাচ নির্বাচন করুন
+                </label>
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+                  {availableBatches.map((b) => {
+                    const isSelected = selectedBatch === b;
+                    return (
+                      <button
+                        key={b}
+                        type="button"
+                        onClick={() => handleBatchSelect(b)}
+                        className={`py-2 px-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                          isSelected
+                            ? "bg-sky-50 dark:bg-sky-500/20 border-sky-500 text-sky-700 dark:text-sky-200 shadow-xs font-bold"
+                            : "bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="text-xs font-mono font-bold">{b}</div>
+                        <div className="text-[9px] text-slate-500 dark:text-slate-400 truncate">
+                          {b === "BBA-11" ? "Senior" : "Regular"}
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
           {/* Field 3: If BBA-11 -> Show Major & Minor Options */}
           {isBba11 ? (
@@ -403,6 +546,8 @@ export function SelectionDialog({
             </div>
           </div>
         )}
+            </>
+          )}
         </div>
 
         {/* Modal Sticky Footer */}

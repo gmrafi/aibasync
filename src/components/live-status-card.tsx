@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ClassSlot, FacultyMember } from "@/lib/types";
+import { ClassSlot, FacultyMember, UserRole } from "@/lib/types";
 import {
   formatMinutesBengali,
   getActiveAndUpcomingClass,
@@ -20,11 +20,14 @@ import {
   CalendarX,
   Building2,
   CalendarDays,
+  Sparkles,
 } from "lucide-react";
 
 interface LiveStatusCardProps {
   routineData: ClassSlot[];
+  role?: UserRole;
   studentName?: string;
+  teacherCode?: string;
   batch: string;
   majorOrSection: string;
   minor?: string;
@@ -36,7 +39,9 @@ interface LiveStatusCardProps {
 
 export function LiveStatusCard({
   routineData,
+  role = "student",
   studentName,
+  teacherCode,
   batch,
   majorOrSection,
   minor,
@@ -80,6 +85,15 @@ export function LiveStatusCard({
     if (hours < 12) timeGreeting = "শুভ সকাল";
     else if (hours < 17) timeGreeting = "শুভ অপরাহ্ন";
     else timeGreeting = "শুভ সন্ধ্যা";
+
+    if (role === "teacher") {
+      const teacher = teacherCode ? getFacultyInfo(teacherCode) : null;
+      const displayName = studentName || teacher?.fullName || teacherCode;
+      if (displayName) {
+        return `${timeGreeting}, ${displayName} স্যার/ম্যাম!`;
+      }
+      return `${timeGreeting}, সম্মানিত শিক্ষক!`;
+    }
 
     if (studentName && studentName.trim().length > 0) {
       return `${timeGreeting}, ${studentName.trim()}!`;

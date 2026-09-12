@@ -3,7 +3,9 @@ import { UserPreferences } from "./types";
 const STORAGE_KEY = "aiba_sync_user_pref_v3";
 
 export const DEFAULT_PREFERENCES: UserPreferences = {
+  role: "student",
   studentName: "",
+  teacherCode: "",
   batch: "BBA-14",
   majorOrSection: "Charlie",
   minor: "None",
@@ -24,7 +26,9 @@ export function getStoredPreferences(): UserPreferences {
       if (legacy) {
         const p = JSON.parse(legacy);
         return {
+          role: p.role || "student",
           studentName: p.studentName || "",
+          teacherCode: p.teacherCode || "",
           batch: p.batch || DEFAULT_PREFERENCES.batch,
           majorOrSection: p.majorOrSection || DEFAULT_PREFERENCES.majorOrSection,
           minor: p.minor || "None",
@@ -36,7 +40,9 @@ export function getStoredPreferences(): UserPreferences {
     }
     const parsed = JSON.parse(item);
     return {
+      role: parsed.role === "teacher" ? "teacher" : "student",
       studentName: parsed.studentName || "",
+      teacherCode: parsed.teacherCode || "",
       batch: parsed.batch || DEFAULT_PREFERENCES.batch,
       majorOrSection: parsed.majorOrSection || DEFAULT_PREFERENCES.majorOrSection,
       minor: parsed.minor || "None",

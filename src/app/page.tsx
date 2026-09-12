@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ROUTINE_DATA, INSTITUTION_INFO } from "@/data/routine";
 import { DEFAULT_PREFERENCES, getStoredPreferences, savePreferences } from "@/lib/storage";
 import { getActiveAndUpcomingClass, getDayName } from "@/lib/time-utils";
-import { DayOfWeek, FacultyMember, UserPreferences } from "@/lib/types";
+import { DayOfWeek, FacultyMember, UserPreferences, UserRole } from "@/lib/types";
 import { Navbar } from "@/components/navbar";
 import { LiveStatusCard } from "@/components/live-status-card";
 import { TodayTimeline } from "@/components/today-timeline";
@@ -104,9 +104,18 @@ export default function HomePage() {
     preferences.minor
   );
 
-  const handlePreferencesSaved = (name: string, batch: string, majorOrSection: string, minor: string) => {
+  const handlePreferencesSaved = (
+    name: string,
+    batch: string,
+    majorOrSection: string,
+    minor: string,
+    role?: UserRole,
+    teacherCode?: string
+  ) => {
     setPreferences((prev) => ({
       ...prev,
+      role: role || "student",
+      teacherCode: teacherCode || "",
       studentName: name,
       batch,
       majorOrSection,
@@ -149,6 +158,8 @@ export default function HomePage() {
     >
       {/* Top Navbar */}
       <Navbar
+        role={preferences.role}
+        teacherCode={preferences.teacherCode}
         studentName={preferences.studentName}
         batch={preferences.batch}
         majorOrSection={preferences.majorOrSection}
@@ -173,9 +184,7 @@ export default function HomePage() {
           <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/30 flex items-center justify-between text-xs font-mono text-amber-800 dark:text-amber-300 animate-in fade-in">
             <div className="flex items-center gap-2">
               <FlaskConical className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-              <span>
-                সিমুলেশন মোড কার্যকর: {currentDayName} {effectiveTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-              </span>
+              <span>সিমুলেশন মোড চালু আছে: {currentDayName}, {effectiveTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
             </div>
             <button
               type="button"
@@ -194,6 +203,8 @@ export default function HomePage() {
         <section aria-label="রিয়েল-টাইম ক্লাস স্ট্যাটাস">
           <LiveStatusCard
             routineData={ROUTINE_DATA}
+            role={preferences.role}
+            teacherCode={preferences.teacherCode}
             studentName={preferences.studentName}
             batch={preferences.batch}
             majorOrSection={preferences.majorOrSection}
@@ -505,6 +516,8 @@ export default function HomePage() {
       <SelectionDialog
         isOpen={isSelectorOpen}
         onClose={() => setIsSelectorOpen(false)}
+        currentRole={preferences.role}
+        currentTeacherCode={preferences.teacherCode}
         currentName={preferences.studentName}
         currentBatch={preferences.batch}
         currentMajorOrSection={preferences.majorOrSection}

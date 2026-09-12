@@ -39,8 +39,12 @@ export interface MinorCourseInfo {
   shortDescription?: string;
 }
 
+export type UserRole = "student" | "teacher";
+
 export interface UserPreferences {
+  role?: UserRole;
   studentName?: string;
+  teacherCode?: string;
   batch: string;
   majorOrSection: string;
   minor?: string; // e.g. "MIS", "HRM", "SCM", "MKT", "FIN", "ACC", or "None"
@@ -65,4 +69,5 @@ export interface FacultyMember {
   department: string;
   roomNumber: string;
   email?: string;
+  profileUrl?: string;
 }
