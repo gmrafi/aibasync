@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { ClassSlot, DayOfWeek, FacultyMember, UserRole } from "@/lib/types";
-import { minutesToTime12, isSlotMatchingView, isSlotMinor } from "@/lib/time-utils";
+import { minutesToTime12, isSlotMatchingView } from "@/lib/time-utils";
 import { getFacultyInfo } from "@/data/faculty";
 import {
   Clock,
@@ -10,12 +10,9 @@ import {
   User,
   Calendar,
   Coffee,
-  Sparkles,
+  Utensils,
   LayoutGrid,
   ListFilter,
-  Check,
-  Building2,
-  BookOpen,
 } from "lucide-react";
 
 interface WeekViewProps {
@@ -37,82 +34,76 @@ const WEEK_DAYS: { key: DayOfWeek; label: string; short: string }[] = [
   { key: "Thursday", label: "বৃহস্পতিবার", short: "বৃহঃ" },
 ];
 
-const PERIOD_DEFS = [
-  { period: 1, name: "পিরিয়ড ১", time: "09:30 AM - 11:00 AM" },
-  { period: 2, name: "পিরিয়ড ২", time: "11:30 AM - 01:00 PM" },
-  { period: 3, name: "পিরিয়ড ৩", time: "01:30 PM - 03:00 PM" },
-];
-
-// Rich, vibrant subject theme palette
+// Rich, vibrant subject theme palette with high contrast
 function getSubjectTheme(courseTitle: string, majorOrSection?: string) {
   const t = (courseTitle + " " + (majorOrSection || "")).toLowerCase();
   if (t.includes("acc") || t.includes("accounting") || t.includes("cost") || t.includes("audit")) {
     return {
-      border: "border-amber-400/60 dark:border-amber-500/50",
-      bg: "bg-amber-50/90 dark:bg-amber-950/40 hover:bg-amber-100/90 dark:hover:bg-amber-900/50",
-      text: "text-amber-950 dark:text-amber-100",
-      badge: "bg-amber-100 dark:bg-amber-500/20 text-amber-900 dark:text-amber-200 border-amber-300 dark:border-amber-500/30",
+      border: "border-amber-400 dark:border-amber-600/80",
+      bg: "bg-amber-50/95 dark:bg-amber-950/40 hover:bg-amber-100 dark:hover:bg-amber-900/50",
+      text: "text-amber-950 dark:text-amber-50",
+      badge: "bg-amber-100 dark:bg-amber-500/25 text-amber-950 dark:text-amber-100 border-amber-400 dark:border-amber-500/40",
       accent: "bg-amber-500",
-      chip: "text-amber-800 dark:text-amber-300",
+      chip: "text-amber-900 dark:text-amber-200",
     };
   }
   if (t.includes("fin") || t.includes("finance") || t.includes("bank") || t.includes("monetary")) {
     return {
-      border: "border-emerald-400/60 dark:border-emerald-500/50",
-      bg: "bg-emerald-50/90 dark:bg-emerald-950/40 hover:bg-emerald-100/90 dark:hover:bg-emerald-900/50",
-      text: "text-emerald-950 dark:text-emerald-100",
-      badge: "bg-emerald-100 dark:bg-emerald-500/20 text-emerald-900 dark:text-emerald-200 border-emerald-300 dark:border-emerald-500/30",
+      border: "border-emerald-400 dark:border-emerald-600/80",
+      bg: "bg-emerald-50/95 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50",
+      text: "text-emerald-950 dark:text-emerald-50",
+      badge: "bg-emerald-100 dark:bg-emerald-500/25 text-emerald-950 dark:text-emerald-100 border-emerald-400 dark:border-emerald-500/40",
       accent: "bg-emerald-500",
-      chip: "text-emerald-800 dark:text-emerald-300",
+      chip: "text-emerald-900 dark:text-emerald-200",
     };
   }
   if (t.includes("mkt") || t.includes("marketing") || t.includes("consumer") || t.includes("brand") || t.includes("promot")) {
     return {
-      border: "border-rose-400/60 dark:border-rose-500/50",
-      bg: "bg-rose-50/90 dark:bg-rose-950/40 hover:bg-rose-100/90 dark:hover:bg-rose-900/50",
-      text: "text-rose-950 dark:text-rose-100",
-      badge: "bg-rose-100 dark:bg-rose-500/20 text-rose-900 dark:text-rose-200 border-rose-300 dark:border-rose-500/30",
+      border: "border-rose-400 dark:border-rose-600/80",
+      bg: "bg-rose-50/95 dark:bg-rose-950/40 hover:bg-rose-100 dark:hover:bg-rose-900/50",
+      text: "text-rose-950 dark:text-rose-50",
+      badge: "bg-rose-100 dark:bg-rose-500/25 text-rose-950 dark:text-rose-100 border-rose-400 dark:border-rose-500/40",
       accent: "bg-rose-500",
-      chip: "text-rose-800 dark:text-rose-300",
+      chip: "text-rose-900 dark:text-rose-200",
     };
   }
   if (t.includes("mis") || t.includes("tech") || t.includes("computer") || t.includes("system") || t.includes("cse") || t.includes("data")) {
     return {
-      border: "border-cyan-400/60 dark:border-cyan-500/50",
-      bg: "bg-cyan-50/90 dark:bg-cyan-950/40 hover:bg-cyan-100/90 dark:hover:bg-cyan-900/50",
-      text: "text-cyan-950 dark:text-cyan-100",
-      badge: "bg-cyan-100 dark:bg-cyan-500/20 text-cyan-900 dark:text-cyan-200 border-cyan-300 dark:border-cyan-500/30",
+      border: "border-cyan-400 dark:border-cyan-600/80",
+      bg: "bg-cyan-50/95 dark:bg-cyan-950/40 hover:bg-cyan-100 dark:hover:bg-cyan-900/50",
+      text: "text-cyan-950 dark:text-cyan-50",
+      badge: "bg-cyan-100 dark:bg-cyan-500/25 text-cyan-950 dark:text-cyan-100 border-cyan-400 dark:border-cyan-500/40",
       accent: "bg-cyan-500",
-      chip: "text-cyan-800 dark:text-cyan-300",
+      chip: "text-cyan-900 dark:text-cyan-200",
     };
   }
   if (t.includes("scm") || t.includes("supply") || t.includes("operations") || t.includes("procurement") || t.includes("stat") || t.includes("math")) {
     return {
-      border: "border-orange-400/60 dark:border-orange-500/50",
-      bg: "bg-orange-50/90 dark:bg-orange-950/40 hover:bg-orange-100/90 dark:hover:bg-orange-900/50",
-      text: "text-orange-950 dark:text-orange-100",
-      badge: "bg-orange-100 dark:bg-orange-500/20 text-orange-900 dark:text-orange-200 border-orange-300 dark:border-orange-500/30",
+      border: "border-orange-400 dark:border-orange-600/80",
+      bg: "bg-orange-50/95 dark:bg-orange-950/40 hover:bg-orange-100 dark:hover:bg-orange-900/50",
+      text: "text-orange-950 dark:text-orange-50",
+      badge: "bg-orange-100 dark:bg-orange-500/25 text-orange-950 dark:text-orange-100 border-orange-400 dark:border-orange-500/40",
       accent: "bg-orange-500",
-      chip: "text-orange-800 dark:text-orange-300",
+      chip: "text-orange-900 dark:text-orange-200",
     };
   }
   if (t.includes("hrm") || t.includes("management") || t.includes("conflict") || t.includes("organization") || t.includes("behavior")) {
     return {
-      border: "border-indigo-400/60 dark:border-indigo-500/50",
-      bg: "bg-indigo-50/90 dark:bg-indigo-950/40 hover:bg-indigo-100/90 dark:hover:bg-indigo-900/50",
-      text: "text-indigo-950 dark:text-indigo-100",
-      badge: "bg-indigo-100 dark:bg-indigo-500/20 text-indigo-900 dark:text-indigo-200 border-indigo-300 dark:border-indigo-500/30",
+      border: "border-indigo-400 dark:border-indigo-600/80",
+      bg: "bg-indigo-50/95 dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/50",
+      text: "text-indigo-950 dark:text-indigo-50",
+      badge: "bg-indigo-100 dark:bg-indigo-500/25 text-indigo-950 dark:text-indigo-100 border-indigo-400 dark:border-indigo-500/40",
       accent: "bg-indigo-500",
-      chip: "text-indigo-800 dark:text-indigo-300",
+      chip: "text-indigo-900 dark:text-indigo-200",
     };
   }
   return {
-    border: "border-sky-400/60 dark:border-sky-500/50",
-    bg: "bg-sky-50/90 dark:bg-sky-950/40 hover:bg-sky-100/90 dark:hover:bg-sky-900/50",
-    text: "text-sky-950 dark:text-sky-100",
-    badge: "bg-sky-100 dark:bg-sky-500/20 text-sky-900 dark:text-sky-200 border-sky-300 dark:border-sky-500/30",
+    border: "border-sky-400 dark:border-sky-600/80",
+    bg: "bg-sky-50/95 dark:bg-sky-950/40 hover:bg-sky-100 dark:hover:bg-sky-900/50",
+    text: "text-sky-950 dark:text-sky-50",
+    badge: "bg-sky-100 dark:bg-sky-500/25 text-sky-950 dark:text-sky-100 border-sky-400 dark:border-sky-500/40",
     accent: "bg-sky-500",
-    chip: "text-sky-800 dark:text-sky-300",
+    chip: "text-sky-900 dark:text-sky-200",
   };
 }
 
@@ -156,15 +147,15 @@ export function WeekView({
             <span className="p-2 rounded-xl bg-sky-50 dark:bg-sky-500/15 text-sky-600 dark:text-sky-400">
               <Calendar className="w-4 h-4" />
             </span>
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            <h3 className="text-base font-black text-slate-900 dark:text-white">
               {layoutMode === "GRID" ? "সাপ্তাহিক রুটিন ম্যাট্রিক্স" : "সাপ্তাহিক ক্লাস তালিকা"}
             </h3>
-            <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+            <span className="px-2.5 py-0.5 rounded-full text-xs font-black bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200">
               মোট {activeSlots.length}টি ক্লাস
             </span>
           </div>
-          <p className="text-xs font-medium text-slate-500 dark:text-slate-400 mt-1">
-            রবিবার থেকে বৃহস্পতিবার পর্যন্ত পূর্ণাঙ্গ ক্লাস শিডিউল • এক নজরে সাপ্তাহিক ক্যালেন্ডার
+          <p className="text-xs font-bold text-slate-600 dark:text-slate-400 mt-1">
+            রবিবার থেকে বৃহস্পতিবার পূর্ণাঙ্গ ক্লাস সূচি • বামে দিন এবং উপরে পিরিয়ডভিত্তিক টাইমটেবিল
           </p>
         </div>
 
@@ -173,7 +164,7 @@ export function WeekView({
           <button
             type="button"
             onClick={() => setLayoutMode("GRID")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
               layoutMode === "GRID"
                 ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -185,7 +176,7 @@ export function WeekView({
           <button
             type="button"
             onClick={() => setLayoutMode("DAY")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-black transition-all cursor-pointer ${
               layoutMode === "DAY"
                 ? "bg-white dark:bg-slate-800 text-sky-700 dark:text-sky-300 shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
@@ -200,16 +191,16 @@ export function WeekView({
       {/* Teacher Specific Quick Batch Switcher Bar */}
       {role === "teacher" && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar p-1.5 rounded-2xl bg-slate-100/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800">
-          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 px-2 shrink-0">
+          <span className="text-xs font-black text-slate-600 dark:text-slate-300 px-2 shrink-0">
             রুটিন ফিল্টার:
           </span>
           <button
             type="button"
             onClick={() => setTeacherFilter("MY_CLASSES")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer ${
               teacherFilter === "MY_CLASSES"
                 ? "bg-sky-600 text-white shadow-xs"
-                : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
+                : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
             }`}
           >
             আমার ক্লাস সূচি
@@ -217,10 +208,10 @@ export function WeekView({
           <button
             type="button"
             onClick={() => setTeacherFilter("ALL_BATCHES")}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer ${
               teacherFilter === "ALL_BATCHES"
                 ? "bg-sky-600 text-white shadow-xs"
-                : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
+                : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
             }`}
           >
             মাস্টার রুটিন (সকল ব্যাচ)
@@ -230,10 +221,10 @@ export function WeekView({
               key={b}
               type="button"
               onClick={() => setTeacherFilter(b)}
-              className={`px-2.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer ${
+              className={`px-2.5 py-1.5 rounded-xl text-xs font-mono font-black transition-all shrink-0 cursor-pointer ${
                 teacherFilter === b
                   ? "bg-sky-600 text-white shadow-xs"
-                  : "bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
+                  : "bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800"
               }`}
             >
               {b}
@@ -244,71 +235,125 @@ export function WeekView({
 
       {/* ========================================================= */}
       {/* MODE 1: SINGLE-GLANCE WEEKLY TIMETABLE MATRIX (GRID)     */}
+      {/* DAYS AS ROWS (LEFT), PERIODS AS COLUMNS (TOP)            */}
       {/* ========================================================= */}
       {layoutMode === "GRID" && (
         <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-lg overflow-hidden transition-all">
           <div className="overflow-x-auto">
-            <div className="min-w-[840px]">
-              {/* Day Header Columns */}
-              <div className="grid grid-cols-6 border-b border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-950/80">
-                {/* Top-Left Axis Label */}
-                <div className="p-3 sm:p-4 border-r border-slate-200 dark:border-slate-800 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-400">
-                  <span>সময় ও পিরিয়ড</span>
+            <div className="min-w-[960px]">
+              {/* Table Column Headers: Days on Left, Periods on Top */}
+              <div className="grid grid-cols-[140px_minmax(210px,1fr)_86px_minmax(210px,1fr)_98px_minmax(210px,1fr)] border-b border-slate-200 dark:border-slate-800 bg-slate-100/90 dark:bg-slate-950">
+                {/* Column 1: Day Label (Sticky Left) */}
+                <div className="p-3.5 sm:p-4 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-20 bg-slate-100 dark:bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)]">
+                  <span className="text-xs font-black text-slate-800 dark:text-slate-200 uppercase tracking-wider">
+                    বার / দিন
+                  </span>
+                  <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 font-mono">
+                    Day / Time
+                  </span>
                 </div>
 
-                {/* 5 Day Column Headers */}
-                {WEEK_DAYS.map((day) => {
-                  const isToday = currentRealDay === day.key;
-                  return (
+                {/* Column 2: Period 1 */}
+                <div className="p-3 text-center border-r border-slate-200 dark:border-slate-800">
+                  <div className="text-sm font-black text-slate-900 dark:text-white">
+                    পিরিয়ড ১
+                  </div>
+                  <div className="text-xs font-mono font-black text-sky-700 dark:text-sky-300 mt-0.5">
+                    09:30 AM - 11:00 AM
+                  </div>
+                </div>
+
+                {/* Column 3: Short Break (Tea Break) */}
+                <div className="p-2 text-center border-r border-amber-200/70 dark:border-amber-800/40 bg-amber-100/40 dark:bg-amber-950/40 flex flex-col items-center justify-center">
+                  <Coffee className="w-4 h-4 text-amber-600 dark:text-amber-400 mb-0.5" />
+                  <span className="text-xs font-black text-amber-900 dark:text-amber-200">বিরতি</span>
+                  <span className="text-[10px] font-mono font-bold text-amber-800 dark:text-amber-300">
+                    11:00-11:30
+                  </span>
+                </div>
+
+                {/* Column 4: Period 2 */}
+                <div className="p-3 text-center border-r border-slate-200 dark:border-slate-800">
+                  <div className="text-sm font-black text-slate-900 dark:text-white">
+                    পিরিয়ড ২
+                  </div>
+                  <div className="text-xs font-mono font-black text-sky-700 dark:text-sky-300 mt-0.5">
+                    11:30 AM - 01:00 PM
+                  </div>
+                </div>
+
+                {/* Column 5: Lunch Break (NO prayer mention) */}
+                <div className="p-2 text-center border-r border-sky-200/70 dark:border-sky-800/40 bg-sky-100/40 dark:bg-sky-950/40 flex flex-col items-center justify-center">
+                  <Utensils className="w-4 h-4 text-sky-600 dark:text-sky-400 mb-0.5" />
+                  <span className="text-xs font-black text-sky-900 dark:text-sky-200">মধ্যাহ্ন বিরতি</span>
+                  <span className="text-[10px] font-mono font-bold text-sky-800 dark:text-sky-300">
+                    01:00-01:30
+                  </span>
+                </div>
+
+                {/* Column 6: Period 3 */}
+                <div className="p-3 text-center">
+                  <div className="text-sm font-black text-slate-900 dark:text-white">
+                    পিরিয়ড ৩
+                  </div>
+                  <div className="text-xs font-mono font-black text-sky-700 dark:text-sky-300 mt-0.5">
+                    01:30 PM - 03:00 PM
+                  </div>
+                </div>
+              </div>
+
+              {/* TIMETABLE ROWS (Days as Rows: Sunday to Thursday) */}
+              {WEEK_DAYS.map((day) => {
+                const isToday = currentRealDay === day.key;
+                const p1Slots = activeSlots.filter((s) => s.day === day.key && s.period === 1);
+                const p2Slots = activeSlots.filter((s) => s.day === day.key && s.period === 2);
+                const p3Slots = activeSlots.filter((s) => s.day === day.key && s.period === 3);
+
+                return (
+                  <div
+                    key={day.key}
+                    className={`grid grid-cols-[140px_minmax(210px,1fr)_86px_minmax(210px,1fr)_98px_minmax(210px,1fr)] border-b last:border-b-0 border-slate-200 dark:border-slate-800 min-h-[140px] transition-colors ${
+                      isToday ? "bg-sky-50/20 dark:bg-sky-500/5" : ""
+                    }`}
+                  >
+                    {/* Day Header Cell (Sticky Left) */}
                     <div
-                      key={day.key}
-                      className={`p-3 sm:p-3.5 text-center border-r last:border-r-0 border-slate-200 dark:border-slate-800 transition-colors ${
+                      className={`p-3 sm:p-4 border-r border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-center sticky left-0 z-10 transition-colors ${
                         isToday
-                          ? "bg-sky-100/60 dark:bg-sky-500/15 border-b-2 border-b-sky-500"
-                          : ""
+                          ? "bg-sky-100/95 dark:bg-slate-900 border-r-2 border-r-sky-500 shadow-[2px_0_8px_-2px_rgba(14,165,233,0.3)]"
+                          : "bg-slate-50/95 dark:bg-slate-950 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.06)]"
                       }`}
                     >
-                      <div className="flex items-center justify-center gap-1.5">
-                        <span className="text-sm font-bold text-slate-900 dark:text-white">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-base font-black text-slate-900 dark:text-white">
                           {day.label}
                         </span>
                         {isToday && (
-                          <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" title="আজকের দিন" />
+                          <span
+                            className="w-2.5 h-2.5 rounded-full bg-sky-500 animate-pulse"
+                            title="আজকের দিন"
+                          />
                         )}
                       </div>
-                      <div className="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">
+                      <span className="text-xs font-mono font-bold text-slate-600 dark:text-slate-400 mt-0.5">
                         {day.key}
-                      </div>
+                      </span>
+                      {isToday && (
+                        <span className="mt-2 px-2.5 py-0.5 rounded-full text-[11px] font-black bg-sky-600 text-white tracking-wide shadow-2xs">
+                          আজকের দিন
+                        </span>
+                      )}
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* TIMETABLE ROWS */}
-              {/* Period 1 */}
-              <div className="grid grid-cols-6 border-b border-slate-100 dark:border-slate-800/80 min-h-[140px]">
-                <div className="p-3 border-r border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 flex flex-col justify-center text-center">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">পিরিয়ড ১</span>
-                  <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">
-                    09:30 AM - 11:00 AM
-                  </span>
-                </div>
-                {WEEK_DAYS.map((day) => {
-                  const slots = activeSlots.filter((s) => s.day === day.key && s.period === 1);
-                  const isToday = currentRealDay === day.key;
-                  return (
-                    <div
-                      key={`p1-${day.key}`}
-                      className={`p-2 border-r last:border-r-0 border-slate-100 dark:border-slate-800/80 flex flex-col gap-2 ${
-                        isToday ? "bg-sky-50/20 dark:bg-sky-500/5" : ""
-                      }`}
-                    >
-                      {slots.length === 0 ? (
-                        <div className="h-full min-h-[110px] rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-center text-[11px] font-medium text-slate-400 dark:text-slate-600 bg-slate-50/30 dark:bg-slate-950/20">
-                          ফাঁকা
+                    {/* Period 1 Cell */}
+                    <div className="p-2.5 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-2 justify-center">
+                      {p1Slots.length === 0 ? (
+                        <div className="h-full min-h-[105px] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-xs font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                          <span>ফাঁকা</span>
+                          <span className="text-[11px] font-semibold opacity-60">ক্লাস নেই</span>
                         </div>
                       ) : (
-                        slots.map((s) => (
+                        p1Slots.map((s) => (
                           <TimetableSlotCard
                             key={s.id}
                             slot={s}
@@ -318,40 +363,23 @@ export function WeekView({
                         ))
                       )}
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* Short Break Ribbon */}
-              <div className="py-2 px-4 bg-amber-50/70 dark:bg-amber-950/20 border-b border-slate-200 dark:border-slate-800 text-center flex items-center justify-center gap-2 text-xs font-semibold text-amber-900 dark:text-amber-300">
-                <Coffee className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                <span>বিরতি • 11:00 AM - 11:30 AM (৩০ মিনিট)</span>
-              </div>
+                    {/* Short Break Column */}
+                    <div className="p-2 border-r border-amber-200/50 dark:border-amber-800/40 bg-amber-50/50 dark:bg-amber-950/20 flex flex-col items-center justify-center text-center">
+                      <Coffee className="w-4 h-4 text-amber-600/80 dark:text-amber-400/80 mb-1" />
+                      <span className="text-xs font-bold text-amber-900/80 dark:text-amber-300/80">বিরতি</span>
+                      <span className="text-[11px] font-mono font-bold text-amber-700/80 dark:text-amber-400/80">৩০ মি.</span>
+                    </div>
 
-              {/* Period 2 */}
-              <div className="grid grid-cols-6 border-b border-slate-100 dark:border-slate-800/80 min-h-[140px]">
-                <div className="p-3 border-r border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 flex flex-col justify-center text-center">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">পিরিয়ড ২</span>
-                  <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">
-                    11:30 AM - 01:00 PM
-                  </span>
-                </div>
-                {WEEK_DAYS.map((day) => {
-                  const slots = activeSlots.filter((s) => s.day === day.key && s.period === 2);
-                  const isToday = currentRealDay === day.key;
-                  return (
-                    <div
-                      key={`p2-${day.key}`}
-                      className={`p-2 border-r last:border-r-0 border-slate-100 dark:border-slate-800/80 flex flex-col gap-2 ${
-                        isToday ? "bg-sky-50/20 dark:bg-sky-500/5" : ""
-                      }`}
-                    >
-                      {slots.length === 0 ? (
-                        <div className="h-full min-h-[110px] rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-center text-[11px] font-medium text-slate-400 dark:text-slate-600 bg-slate-50/30 dark:bg-slate-950/20">
-                          ফাঁকা
+                    {/* Period 2 Cell */}
+                    <div className="p-2.5 border-r border-slate-200 dark:border-slate-800 flex flex-col gap-2 justify-center">
+                      {p2Slots.length === 0 ? (
+                        <div className="h-full min-h-[105px] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-xs font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                          <span>ফাঁকা</span>
+                          <span className="text-[11px] font-semibold opacity-60">ক্লাস নেই</span>
                         </div>
                       ) : (
-                        slots.map((s) => (
+                        p2Slots.map((s) => (
                           <TimetableSlotCard
                             key={s.id}
                             slot={s}
@@ -361,40 +389,27 @@ export function WeekView({
                         ))
                       )}
                     </div>
-                  );
-                })}
-              </div>
 
-              {/* Lunch & Prayer Break Banner */}
-              <div className="py-2.5 px-4 bg-slate-100/80 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800 text-center flex items-center justify-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
-                <Coffee className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                <span>লাঞ্চ ও নামাজের বিরতি • 01:00 PM - 01:30 PM (৩০ মিনিট)</span>
-              </div>
+                    {/* Lunch Break Column */}
+                    <div className="p-2 border-r border-sky-200/50 dark:border-sky-800/40 bg-sky-50/50 dark:bg-sky-950/20 flex flex-col items-center justify-center text-center">
+                      <Utensils className="w-4 h-4 text-sky-600/80 dark:text-sky-400/80 mb-1" />
+                      <span className="text-xs font-bold text-sky-900/80 dark:text-sky-300/80 leading-tight">
+                        মধ্যাহ্ন বিরতি
+                      </span>
+                      <span className="text-[11px] font-mono font-bold text-sky-700/80 dark:text-sky-400/80 mt-0.5">
+                        ৩০ মি.
+                      </span>
+                    </div>
 
-              {/* Period 3 */}
-              <div className="grid grid-cols-6 min-h-[140px]">
-                <div className="p-3 border-r border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/40 flex flex-col justify-center text-center">
-                  <span className="text-xs font-bold text-slate-900 dark:text-white">পিরিয়ড ৩</span>
-                  <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 mt-0.5">
-                    01:30 PM - 03:00 PM
-                  </span>
-                </div>
-                {WEEK_DAYS.map((day) => {
-                  const slots = activeSlots.filter((s) => s.day === day.key && s.period === 3);
-                  const isToday = currentRealDay === day.key;
-                  return (
-                    <div
-                      key={`p3-${day.key}`}
-                      className={`p-2 border-r last:border-r-0 border-slate-100 dark:border-slate-800/80 flex flex-col gap-2 ${
-                        isToday ? "bg-sky-50/20 dark:bg-sky-500/5" : ""
-                      }`}
-                    >
-                      {slots.length === 0 ? (
-                        <div className="h-full min-h-[110px] rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 flex items-center justify-center text-[11px] font-medium text-slate-400 dark:text-slate-600 bg-slate-50/30 dark:bg-slate-950/20">
-                          ফাঁকা
+                    {/* Period 3 Cell */}
+                    <div className="p-2.5 flex flex-col gap-2 justify-center">
+                      {p3Slots.length === 0 ? (
+                        <div className="h-full min-h-[105px] rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800 flex flex-col items-center justify-center text-xs font-bold text-slate-400 dark:text-slate-600 bg-slate-50/40 dark:bg-slate-950/20">
+                          <span>ফাঁকা</span>
+                          <span className="text-[11px] font-semibold opacity-60">ক্লাস নেই</span>
                         </div>
                       ) : (
-                        slots.map((s) => (
+                        p3Slots.map((s) => (
                           <TimetableSlotCard
                             key={s.id}
                             slot={s}
@@ -404,33 +419,33 @@ export function WeekView({
                         ))
                       )}
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
           {/* Color Coding Legend */}
-          <div className="p-3.5 sm:p-4 bg-slate-50/80 dark:bg-slate-950/60 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-600 dark:text-slate-400">
-            <span className="text-slate-800 dark:text-slate-200 font-bold">বিষয়ভিত্তিক কালার কোড:</span>
+          <div className="p-3.5 sm:p-4 bg-slate-50/90 dark:bg-slate-950/70 border-t border-slate-200 dark:border-slate-800 flex flex-wrap items-center justify-center gap-4 text-xs font-bold text-slate-700 dark:text-slate-300">
+            <span className="text-slate-900 dark:text-white font-black">বিষয়ভিত্তিক কালার কোড:</span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+              <span className="w-3 h-3 rounded-full bg-emerald-500" />
               <span>ফিন্যান্স (Finance)</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+              <span className="w-3 h-3 rounded-full bg-amber-500" />
               <span>অ্যাকাউন্টিং (Accounting)</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-indigo-500" />
+              <span className="w-3 h-3 rounded-full bg-indigo-500" />
               <span>ম্যানেজমেন্ট / HRM</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+              <span className="w-3 h-3 rounded-full bg-rose-500" />
               <span>মার্কেটিং (Marketing)</span>
             </span>
             <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-cyan-500" />
+              <span className="w-3 h-3 rounded-full bg-cyan-500" />
               <span>এমআইএস / টেকনোলজি</span>
             </span>
           </div>
@@ -447,10 +462,10 @@ export function WeekView({
             <button
               type="button"
               onClick={() => setSelectedDay("ALL")}
-              className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all shrink-0 cursor-pointer ${
+              className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all shrink-0 cursor-pointer ${
                 selectedDay === "ALL"
-                  ? "bg-sky-600 text-white font-bold shadow-md shadow-sky-600/20"
-                  : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                  ? "bg-sky-600 text-white shadow-md shadow-sky-600/20"
+                  : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
               }`}
             >
               সব দিন
@@ -464,16 +479,16 @@ export function WeekView({
                   key={day.key}
                   type="button"
                   onClick={() => setSelectedDay(day.key)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-medium transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-black transition-all shrink-0 flex items-center gap-1.5 cursor-pointer ${
                     isSelected
-                      ? "bg-sky-600 text-white font-bold shadow-md shadow-sky-600/20"
+                      ? "bg-sky-600 text-white shadow-md shadow-sky-600/20"
                       : isToday
-                      ? "bg-white dark:bg-slate-900 border border-sky-400 dark:border-sky-500/50 text-sky-700 dark:text-sky-300 font-semibold"
-                      : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                      ? "bg-white dark:bg-slate-900 border-2 border-sky-500 text-sky-700 dark:text-sky-300 font-black"
+                      : "bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100"
                   }`}
                 >
                   <span>{day.short}</span>
-                  {isToday && <span className="w-1.5 h-1.5 rounded-full bg-sky-500 animate-pulse" />}
+                  {isToday && <span className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />}
                 </button>
               );
             })}
@@ -492,27 +507,27 @@ export function WeekView({
                   key={day.key}
                   className={`rounded-3xl border p-5 sm:p-6 transition-all ${
                     isToday
-                      ? "bg-white dark:bg-slate-900/90 border-slate-300 dark:border-slate-700 shadow-md"
-                      : "bg-white/80 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800"
+                      ? "bg-white dark:bg-slate-900 border-2 border-sky-400 dark:border-sky-500 shadow-md"
+                      : "bg-white dark:bg-slate-900/60 border-slate-200 dark:border-slate-800"
                   }`}
                 >
                   <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-100 dark:border-slate-800">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-sky-600 dark:text-sky-400" />
-                      <h3 className="text-base font-bold text-slate-900 dark:text-white">{day.label}</h3>
-                      <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
+                      <h3 className="text-base font-black text-slate-900 dark:text-white">{day.label}</h3>
+                      <span className="text-xs font-mono font-bold text-slate-500 dark:text-slate-400">
                         ({day.key})
                       </span>
                     </div>
                     {isToday && (
-                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30">
+                      <span className="px-3 py-1 rounded-full text-xs font-black bg-sky-50 dark:bg-sky-500/15 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30">
                         আজকের কার্যসূচি
                       </span>
                     )}
                   </div>
 
                   {daySlots.length === 0 ? (
-                    <p className="text-xs font-semibold text-slate-500 dark:text-slate-400 py-4 text-center bg-slate-50 dark:bg-slate-950/40 rounded-2xl border border-slate-200/60 dark:border-slate-800/60">
+                    <p className="text-xs font-bold text-slate-500 dark:text-slate-400 py-4 text-center bg-slate-50 dark:bg-slate-950/40 rounded-2xl border border-slate-200/60 dark:border-slate-800/60">
                       এই দিনে কোনো ক্লাস নির্ধারিত নেই
                     </p>
                   ) : (
@@ -523,39 +538,39 @@ export function WeekView({
                         return (
                           <div
                             key={slot.id}
-                            className={`p-4 rounded-2xl border transition-all flex flex-col justify-between shadow-xs ${theme.bg} ${theme.border}`}
+                            className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between shadow-xs ${theme.bg} ${theme.border}`}
                           >
                             <div>
-                              <div className="flex items-center justify-between text-xs font-bold mb-2">
-                                <span className={`px-2 py-0.5 rounded-lg border font-bold text-[11px] ${theme.badge}`}>
+                              <div className="flex items-center justify-between text-xs font-black mb-2">
+                                <span className={`px-2.5 py-0.5 rounded-lg border font-black text-xs ${theme.badge}`}>
                                   পিরিয়ড {slot.period}
                                 </span>
-                                <span className="flex items-center gap-1 text-slate-700 dark:text-slate-300 font-semibold text-[11px]">
+                                <span className="flex items-center gap-1.5 text-slate-800 dark:text-slate-200 font-bold text-xs">
                                   <Clock className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                                   {minutesToTime12(slot.startTime)} - {minutesToTime12(slot.endTime)}
                                 </span>
                               </div>
 
-                              <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug my-1.5">
+                              <h4 className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-snug my-2">
                                 {slot.courseTitle}
                               </h4>
 
                               <div className="flex items-center gap-1.5 flex-wrap mt-1">
                                 {role === "teacher" && (
-                                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900">
+                                  <span className="px-2 py-0.5 rounded-md text-xs font-mono font-black bg-slate-800 text-white dark:bg-slate-200 dark:text-slate-900">
                                     {slot.batch} {slot.majorOrSection}
                                   </span>
                                 )}
                                 {slot.majorOrSection && slot.majorOrSection !== "Common" && role !== "teacher" && (
-                                  <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${theme.badge}`}>
+                                  <span className={`px-2 py-0.5 rounded-md text-xs font-bold border ${theme.badge}`}>
                                     {slot.majorOrSection}
                                   </span>
                                 )}
                               </div>
                             </div>
 
-                            <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-200/60 dark:border-slate-800/80 text-xs">
-                              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-bold border border-slate-200 dark:border-slate-800 shadow-2xs">
+                            <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-300/60 dark:border-slate-800 text-xs">
+                              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-800 shadow-2xs">
                                 <MapPin className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                                 রুম {slot.room}
                               </span>
@@ -563,7 +578,7 @@ export function WeekView({
                               <button
                                 type="button"
                                 onClick={() => onSelectFaculty(faculty)}
-                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 font-bold border border-slate-200 dark:border-slate-800 hover:border-violet-400 transition-colors cursor-pointer"
+                                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white dark:bg-slate-900 text-slate-900 dark:text-white font-black border border-slate-200 dark:border-slate-800 hover:border-violet-400 transition-colors cursor-pointer"
                                 title="শিক্ষকের প্রোফাইল দেখুন"
                               >
                                 <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
@@ -585,7 +600,7 @@ export function WeekView({
   );
 }
 
-// Compact, high-aesthetic class card for the weekly grid cell
+// Compact, high-aesthetic, high-contrast class card for the weekly grid cell
 function TimetableSlotCard({
   slot,
   showBatch,
@@ -600,40 +615,40 @@ function TimetableSlotCard({
 
   return (
     <div
-      className={`p-2.5 rounded-2xl border transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between group ${theme.bg} ${theme.border}`}
+      className={`p-3 rounded-2xl border-2 transition-all duration-200 shadow-xs hover:shadow-md flex flex-col justify-between group ${theme.bg} ${theme.border}`}
     >
       <div>
         {/* Top Badges */}
-        <div className="flex items-center justify-between gap-1 mb-1.5">
-          <span className={`px-1.5 py-0.5 rounded-md font-mono text-[10px] font-bold border ${theme.badge}`}>
+        <div className="flex items-center justify-between gap-1.5 mb-1.5">
+          <span className={`px-2 py-0.5 rounded-lg font-mono text-xs font-black border ${theme.badge}`}>
             {showBatch ? `${slot.batch}` : slot.majorOrSection || "Class"}
           </span>
-          <span className="flex items-center gap-1 text-[10px] font-bold text-slate-700 dark:text-slate-300">
-            <MapPin className="w-3 h-3 text-sky-600 dark:text-sky-400 shrink-0" />
-            <span>{slot.room}</span>
+          <span className="flex items-center gap-1 text-xs font-black text-slate-900 dark:text-slate-100 bg-white/90 dark:bg-slate-900/90 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs">
+            <MapPin className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+            <span>রুম {slot.room}</span>
           </span>
         </div>
 
-        {/* Course Title */}
-        <h5 className="text-xs font-bold text-slate-900 dark:text-white leading-snug line-clamp-2 mb-1 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
+        {/* Course Title: BOLD, CLEAR, HIGH CONTRAST */}
+        <h5 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-snug line-clamp-2 my-1 group-hover:text-sky-600 dark:group-hover:text-sky-400 transition-colors">
           {slot.courseTitle}
         </h5>
       </div>
 
       {/* Footer: Instructor & Batch */}
-      <div className="flex items-center justify-between gap-1 pt-1.5 mt-1 border-t border-slate-200/50 dark:border-slate-800/60">
+      <div className="flex items-center justify-between gap-1 pt-2 mt-1 border-t border-slate-300/60 dark:border-slate-800">
         <button
           type="button"
           onClick={() => onSelectFaculty(faculty)}
-          className="inline-flex items-center gap-1 text-[10px] font-bold text-violet-700 dark:text-violet-300 hover:underline cursor-pointer"
+          className="inline-flex items-center gap-1.5 text-xs font-black text-violet-700 dark:text-violet-300 hover:text-violet-900 dark:hover:text-violet-100 hover:underline cursor-pointer"
           title={`${faculty.fullName} (${faculty.designation})`}
         >
-          <User className="w-2.5 h-2.5 text-violet-600 dark:text-violet-400" />
-          <span>{slot.instructor}</span>
+          <User className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400 shrink-0" />
+          <span className="truncate max-w-[125px]">{slot.instructor}</span>
         </button>
 
         {showBatch && slot.majorOrSection && (
-          <span className="text-[9px] font-bold text-slate-500 dark:text-slate-400 truncate">
+          <span className="text-xs font-black text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded-md bg-slate-200/70 dark:bg-slate-800 truncate">
             {slot.majorOrSection}
           </span>
         )}
@@ -641,4 +656,3 @@ function TimetableSlotCard({
     </div>
   );
 }
-
