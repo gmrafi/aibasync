@@ -58,8 +58,30 @@ export default function RootLayout({
   return (
     <html
       lang="bn"
+      suppressHydrationWarning
       className={`${notoBengali.variable} ${notoBengali.className} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const stored = localStorage.getItem('aiba_sync_user_pref_v3');
+                if (stored) {
+                  const p = JSON.parse(stored);
+                  if (p.theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         {children}
       </body>

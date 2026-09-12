@@ -136,7 +136,6 @@ export const ROUTINE_DATA: ClassSlot[] = [
   // ==========================
   // BBA-11
   { id: "sun-11-fin-2", batch: "BBA-11", majorOrSection: "FIN", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Corporate Finance", instructor: "CDG", room: "207" },
-  { id: "sun-11-fin-3", batch: "BBA-11", majorOrSection: "FIN", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "207", isClub: true },
   
   { id: "sun-11-acc-1", batch: "BBA-11", majorOrSection: "ACC", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Taxation", instructor: "DMNI", room: "311" },
   { id: "sun-11-acc-3", batch: "BBA-11", majorOrSection: "ACC", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Advanced Accounting -I", instructor: "N. M. A", room: "311", isMinor: true },
@@ -147,51 +146,40 @@ export const ROUTINE_DATA: ClassSlot[] = [
 
   { id: "sun-11-scm-1", batch: "BBA-11", majorOrSection: "SCM", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Strategic Supply Chain Management", instructor: "MT", room: "205" },
   { id: "sun-11-scm-2", batch: "BBA-11", majorOrSection: "SCM", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Production Planning & Control", instructor: "MIH", room: "205" },
-  { id: "sun-11-scm-3", batch: "BBA-11", majorOrSection: "SCM", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "205", isClub: true },
 
   // BBA-12
   { id: "sun-12-a-1", batch: "BBA-12", majorOrSection: "Alpha", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Human Resources Management", instructor: "STMH", room: "202" },
   { id: "sun-12-a-2", batch: "BBA-12", majorOrSection: "Alpha", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Management Information System", instructor: "SW", room: "202" },
-  { id: "sun-12-a-3", batch: "BBA-12", majorOrSection: "Alpha", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "202", isClub: true },
 
   { id: "sun-12-b-1", batch: "BBA-12", majorOrSection: "Bravo", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Business Statistics", instructor: "MAI", room: "203" },
   { id: "sun-12-b-2", batch: "BBA-12", majorOrSection: "Bravo", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Human Resources Management", instructor: "STMH", room: "203" },
-  { id: "sun-12-b-3", batch: "BBA-12", majorOrSection: "Bravo", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "203", isClub: true },
 
   // BBA-13
   { id: "sun-13-a-1", batch: "BBA-13", majorOrSection: "Alpha", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Microeconomics", instructor: "ANR", room: "306" },
   { id: "sun-13-a-2", batch: "BBA-13", majorOrSection: "Alpha", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Fundamentals of Marketing", instructor: "DMNI", room: "306" },
-  { id: "sun-13-a-3", batch: "BBA-13", majorOrSection: "Alpha", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "306", isClub: true },
 
   { id: "sun-13-b-1", batch: "BBA-13", majorOrSection: "Bravo", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "E-Business Management", instructor: "LF", room: "308" },
   { id: "sun-13-b-2", batch: "BBA-13", majorOrSection: "Bravo", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Mathematics", instructor: "MAI", room: "308" },
-  { id: "sun-13-b-3", batch: "BBA-13", majorOrSection: "Bravo", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "308", isClub: true },
 
   { id: "sun-13-c-1", batch: "BBA-13", majorOrSection: "Charlie", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Fundamentals of Marketing", instructor: "AA", room: "310" },
   { id: "sun-13-c-2", batch: "BBA-13", majorOrSection: "Charlie", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Mathematics", instructor: "MT", room: "310" },
-  { id: "sun-13-c-3", batch: "BBA-13", majorOrSection: "Charlie", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "310", isClub: true },
 
   // BBA-14
   { id: "sun-14-a-1", batch: "BBA-14", majorOrSection: "Alpha", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Environmental Studies", instructor: "MMU", room: "303" },
   { id: "sun-14-a-2", batch: "BBA-14", majorOrSection: "Alpha", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Communication for Business Leaders", instructor: "MEU", room: "303" },
-  { id: "sun-14-a-3", batch: "BBA-14", majorOrSection: "Alpha", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "303", isClub: true },
 
   { id: "sun-14-b-1", batch: "BBA-14", majorOrSection: "Bravo", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Business Leadership", instructor: "STA", room: "304" },
   { id: "sun-14-b-2", batch: "BBA-14", majorOrSection: "Bravo", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Environmental Studies", instructor: "MMU", room: "304" },
-  { id: "sun-14-b-3", batch: "BBA-14", majorOrSection: "Bravo", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "304", isClub: true },
 
   { id: "sun-14-c-1", batch: "BBA-14", majorOrSection: "Charlie", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Accounting", instructor: "N. M. A", room: "305" },
   { id: "sun-14-c-2", batch: "BBA-14", majorOrSection: "Charlie", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Leadership", instructor: "STA", room: "305" },
-  { id: "sun-14-c-3", batch: "BBA-14", majorOrSection: "Charlie", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "305", isClub: true },
 
   // BBA-15
   { id: "sun-15-a-1", batch: "BBA-15", majorOrSection: "Alpha", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Computer and Its Application in Business", instructor: "SW", room: "301" },
   { id: "sun-15-a-2", batch: "BBA-15", majorOrSection: "Alpha", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Functional English", instructor: "KF", room: "301" },
-  { id: "sun-15-a-3", batch: "BBA-15", majorOrSection: "Alpha", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "301", isClub: true },
 
   { id: "sun-15-b-1", batch: "BBA-15", majorOrSection: "Bravo", day: "Sunday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Presentation Skill Development", instructor: "MIH", room: "302" },
   { id: "sun-15-b-2", batch: "BBA-15", majorOrSection: "Bravo", day: "Sunday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Fundamentals of Management", instructor: "LF", room: "302" },
-  { id: "sun-15-b-3", batch: "BBA-15", majorOrSection: "Bravo", day: "Sunday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "302", isClub: true },
 
   // ==========================
   // MONDAY
@@ -202,53 +190,41 @@ export const ROUTINE_DATA: ClassSlot[] = [
   { id: "mon-11-mkt-2", batch: "BBA-11", majorOrSection: "MKT", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Brand Management", instructor: "GMST", room: "312" },
   { id: "mon-11-scm-2", batch: "BBA-11", majorOrSection: "SCM", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Logistics Management", instructor: "MT", room: "205" },
   { id: "mon-11-mis-1", batch: "BBA-11", majorOrSection: "MIS", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Management of Innovation and Technology", instructor: "DMMR", room: "201", isMinor: true },
-  { id: "mon-11-mis-3", batch: "BBA-11", majorOrSection: "MIS", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "201", isClub: true },
   { id: "mon-11-hrm-1", batch: "BBA-11", majorOrSection: "HRM", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Conflict Management and Negotiation", instructor: "AFMS", room: "307", isMinor: true },
-  { id: "mon-11-hrm-3", batch: "BBA-11", majorOrSection: "HRM", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "307", isClub: true },
 
   // BBA-12
   { id: "mon-12-a-1", batch: "BBA-12", majorOrSection: "Alpha", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Entrepreneurship", instructor: "GMST", room: "202" },
   { id: "mon-12-a-2", batch: "BBA-12", majorOrSection: "Alpha", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Macroeconomics", instructor: "ANR", room: "202" },
-  { id: "mon-12-a-3", batch: "BBA-12", majorOrSection: "Alpha", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "202", isClub: true },
 
   { id: "mon-12-b-1", batch: "BBA-12", majorOrSection: "Bravo", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Macroeconomics", instructor: "ANR", room: "203" },
   { id: "mon-12-b-2", batch: "BBA-12", majorOrSection: "Bravo", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Management Information System", instructor: "SW", room: "203" },
-  { id: "mon-12-b-3", batch: "BBA-12", majorOrSection: "Bravo", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "203", isClub: true },
 
   // BBA-13
   { id: "mon-13-a-1", batch: "BBA-13", majorOrSection: "Alpha", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "E-Business Management", instructor: "LF", room: "306" },
   { id: "mon-13-a-2", batch: "BBA-13", majorOrSection: "Alpha", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Mathematics", instructor: "MAI", room: "306" },
-  { id: "mon-13-a-3", batch: "BBA-13", majorOrSection: "Alpha", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "306", isClub: true },
 
   { id: "mon-13-b-1", batch: "BBA-13", majorOrSection: "Bravo", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Microeconomics", instructor: "DMNIA", room: "308" },
   { id: "mon-13-b-2", batch: "BBA-13", majorOrSection: "Bravo", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Principles of Finance", instructor: "CDG", room: "308" },
-  { id: "mon-13-b-3", batch: "BBA-13", majorOrSection: "Bravo", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "308", isClub: true },
 
   { id: "mon-13-c-1", batch: "BBA-13", majorOrSection: "Charlie", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Finance", instructor: "MIH", room: "310" },
   { id: "mon-13-c-2", batch: "BBA-13", majorOrSection: "Charlie", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "E-Business Management", instructor: "DMMR", room: "310" },
-  { id: "mon-13-c-3", batch: "BBA-13", majorOrSection: "Charlie", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "310", isClub: true },
 
   // BBA-14
   { id: "mon-14-a-1", batch: "BBA-14", majorOrSection: "Alpha", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Accounting", instructor: "N. M. A", room: "303" },
   { id: "mon-14-a-2", batch: "BBA-14", majorOrSection: "Alpha", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Leadership", instructor: "MAA", room: "303" },
-  { id: "mon-14-a-3", batch: "BBA-14", majorOrSection: "Alpha", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "303", isClub: true },
 
   { id: "mon-14-b-1", batch: "BBA-14", majorOrSection: "Bravo", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Communicative English", instructor: "KF", room: "304" },
   { id: "mon-14-b-2", batch: "BBA-14", majorOrSection: "Bravo", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Principles of Accounting", instructor: "N. M. A", room: "304" },
-  { id: "mon-14-b-3", batch: "BBA-14", majorOrSection: "Bravo", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "304", isClub: true },
 
   { id: "mon-14-c-1", batch: "BBA-14", majorOrSection: "Charlie", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Environmental Studies", instructor: "MT", room: "305" },
   { id: "mon-14-c-2", batch: "BBA-14", majorOrSection: "Charlie", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Communicative English", instructor: "KF", room: "305" },
-  { id: "mon-14-c-3", batch: "BBA-14", majorOrSection: "Charlie", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "305", isClub: true },
 
   // BBA-15
   { id: "mon-15-a-1", batch: "BBA-15", majorOrSection: "Alpha", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Bangladesh & International Studies", instructor: "MAH", room: "301" },
   { id: "mon-15-a-2", batch: "BBA-15", majorOrSection: "Alpha", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Fundamentals of Management", instructor: "LF", room: "301" },
-  { id: "mon-15-a-3", batch: "BBA-15", majorOrSection: "Alpha", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "301", isClub: true },
 
   { id: "mon-15-b-1", batch: "BBA-15", majorOrSection: "Bravo", day: "Monday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Computer and Its Application in Business", instructor: "SW", room: "302" },
   { id: "mon-15-b-2", batch: "BBA-15", majorOrSection: "Bravo", day: "Monday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Bangladesh & International Studies", instructor: "MAH", room: "302" },
-  { id: "mon-15-b-3", batch: "BBA-15", majorOrSection: "Bravo", day: "Monday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "302", isClub: true },
 
   // ==========================
   // TUESDAY
@@ -256,14 +232,12 @@ export const ROUTINE_DATA: ClassSlot[] = [
   // BBA-11
   { id: "tue-11-fin-1", batch: "BBA-11", majorOrSection: "FIN", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Bank Fund Management", instructor: "DMAFC", room: "207" },
   { id: "tue-11-fin-2", batch: "BBA-11", majorOrSection: "FIN", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Financial Institutions & Markets", instructor: "DMAFC", room: "207" },
-  { id: "tue-11-fin-3", batch: "BBA-11", majorOrSection: "FIN", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "207", isClub: true },
 
   { id: "tue-11-acc-1", batch: "BBA-11", majorOrSection: "ACC", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Cost Accounting", instructor: "AA", room: "311" },
   { id: "tue-11-acc-3", batch: "BBA-11", majorOrSection: "ACC", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Advanced Accounting -I", instructor: "N. M. A", room: "311", isMinor: true },
 
   { id: "tue-11-mkt-1", batch: "BBA-11", majorOrSection: "MKT", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Marketing Research", instructor: "DMI", room: "312" },
   { id: "tue-11-mkt-2", batch: "BBA-11", majorOrSection: "MKT", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Strategic Marketing", instructor: "DMI", room: "312" },
-  { id: "tue-11-mkt-3", batch: "BBA-11", majorOrSection: "MKT", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "312", isClub: true },
 
   { id: "tue-11-scm-1", batch: "BBA-11", majorOrSection: "SCM", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Production Planning & Control", instructor: "MIH", room: "205" },
   { id: "tue-11-scm-3", batch: "BBA-11", majorOrSection: "SCM", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Procurement Management", instructor: "MIH", room: "205", isMinor: true },
@@ -271,46 +245,36 @@ export const ROUTINE_DATA: ClassSlot[] = [
   // BBA-12
   { id: "tue-12-a-1", batch: "BBA-12", majorOrSection: "Alpha", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Human Resources Management", instructor: "STMH", room: "202" },
   { id: "tue-12-a-2", batch: "BBA-12", majorOrSection: "Alpha", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Macroeconomics", instructor: "ANR", room: "202" },
-  { id: "tue-12-a-3", batch: "BBA-12", majorOrSection: "Alpha", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "202", isClub: true },
 
   { id: "tue-12-b-1", batch: "BBA-12", majorOrSection: "Bravo", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Management Information System", instructor: "SW", room: "203" },
   { id: "tue-12-b-2", batch: "BBA-12", majorOrSection: "Bravo", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Human Resources Management", instructor: "STMH", room: "203" },
-  { id: "tue-12-b-3", batch: "BBA-12", majorOrSection: "Bravo", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "203", isClub: true },
 
   // BBA-13
   { id: "tue-13-a-1", batch: "BBA-13", majorOrSection: "Alpha", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "E-Business Management", instructor: "LF", room: "306" },
   { id: "tue-13-a-2", batch: "BBA-13", majorOrSection: "Alpha", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Mathematics", instructor: "MAI", room: "306" },
-  { id: "tue-13-a-3", batch: "BBA-13", majorOrSection: "Alpha", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "306", isClub: true },
 
   { id: "tue-13-b-1", batch: "BBA-13", majorOrSection: "Bravo", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Finance", instructor: "CDG", room: "308" },
   { id: "tue-13-b-2", batch: "BBA-13", majorOrSection: "Bravo", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "E-Business Management", instructor: "LF", room: "308" },
-  { id: "tue-13-b-3", batch: "BBA-13", majorOrSection: "Bravo", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "308", isClub: true },
 
   { id: "tue-13-c-1", batch: "BBA-13", majorOrSection: "Charlie", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Microeconomics", instructor: "ANR", room: "310" },
   { id: "tue-13-c-2", batch: "BBA-13", majorOrSection: "Charlie", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Fundamentals of Marketing", instructor: "AA", room: "310" },
-  { id: "tue-13-c-3", batch: "BBA-13", majorOrSection: "Charlie", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "310", isClub: true },
 
   // BBA-14
   { id: "tue-14-a-1", batch: "BBA-14", majorOrSection: "Alpha", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Environmental Studies", instructor: "MMU", room: "303" },
   { id: "tue-14-a-2", batch: "BBA-14", majorOrSection: "Alpha", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Communicative English", instructor: "KF", room: "303" },
-  { id: "tue-14-a-3", batch: "BBA-14", majorOrSection: "Alpha", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "303", isClub: true },
 
   { id: "tue-14-b-1", batch: "BBA-14", majorOrSection: "Bravo", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Communication for Business Leaders", instructor: "AS", room: "304" },
   { id: "tue-14-b-2", batch: "BBA-14", majorOrSection: "Bravo", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Environmental Studies", instructor: "MMU", room: "304" },
-  { id: "tue-14-b-3", batch: "BBA-14", majorOrSection: "Bravo", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "304", isClub: true },
 
   { id: "tue-14-c-1", batch: "BBA-14", majorOrSection: "Charlie", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Accounting", instructor: "N. M. A", room: "305" },
   { id: "tue-14-c-2", batch: "BBA-14", majorOrSection: "Charlie", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Communication for Business Leaders", instructor: "AS", room: "305" },
-  { id: "tue-14-c-3", batch: "BBA-14", majorOrSection: "Charlie", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "305", isClub: true },
 
   // BBA-15
   { id: "tue-15-a-1", batch: "BBA-15", majorOrSection: "Alpha", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Functional English", instructor: "KF", room: "301" },
   { id: "tue-15-a-2", batch: "BBA-15", majorOrSection: "Alpha", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Presentation Skill Development", instructor: "MAA", room: "301" },
-  { id: "tue-15-a-3", batch: "BBA-15", majorOrSection: "Alpha", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "301", isClub: true },
 
   { id: "tue-15-b-1", batch: "BBA-15", majorOrSection: "Bravo", day: "Tuesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Functional English", instructor: "MRM", room: "302" },
   { id: "tue-15-b-2", batch: "BBA-15", majorOrSection: "Bravo", day: "Tuesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Computer and Its Application in Business", instructor: "SW", room: "302" },
-  { id: "tue-15-b-3", batch: "BBA-15", majorOrSection: "Bravo", day: "Tuesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "302", isClub: true },
 
   // ==========================
   // WEDNESDAY
@@ -320,61 +284,48 @@ export const ROUTINE_DATA: ClassSlot[] = [
   { id: "wed-11-fin-3", batch: "BBA-11", majorOrSection: "FIN", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "International Financial Management", instructor: "MAA", room: "207", isMinor: true },
 
   { id: "wed-11-acc-2", batch: "BBA-11", majorOrSection: "ACC", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Auditing", instructor: "AA", room: "311" },
-  { id: "wed-11-acc-3", batch: "BBA-11", majorOrSection: "ACC", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "311", isClub: true },
 
   { id: "wed-11-mkt-2", batch: "BBA-11", majorOrSection: "MKT", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Brand Management", instructor: "GMST", room: "312" },
   { id: "wed-11-mkt-3", batch: "BBA-11", majorOrSection: "MKT", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Consumer Behavior", instructor: "MEU", room: "312", isMinor: true },
 
   { id: "wed-11-scm-1", batch: "BBA-11", majorOrSection: "SCM", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Procurement Management", instructor: "MIH", room: "205", isMinor: true },
   { id: "wed-11-scm-2", batch: "BBA-11", majorOrSection: "SCM", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Logistics Management", instructor: "MT", room: "205" },
-  { id: "wed-11-scm-3", batch: "BBA-11", majorOrSection: "SCM", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "205", isClub: true },
 
   { id: "wed-11-hrm-1", batch: "BBA-11", majorOrSection: "HRM", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Conflict Management and Negotiation", instructor: "AFMS", room: "201", isMinor: true },
-  { id: "wed-11-hrm-3", batch: "BBA-11", majorOrSection: "HRM", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "201", isClub: true },
 
   // BBA-12
   { id: "wed-12-a-1", batch: "BBA-12", majorOrSection: "Alpha", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Business Statistics", instructor: "MAI", room: "202" },
   { id: "wed-12-a-2", batch: "BBA-12", majorOrSection: "Alpha", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Management Information System", instructor: "SW", room: "202" },
-  { id: "wed-12-a-3", batch: "BBA-12", majorOrSection: "Alpha", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "202", isClub: true },
 
   { id: "wed-12-b-1", batch: "BBA-12", majorOrSection: "Bravo", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Entrepreneurship", instructor: "GMST", room: "203" },
   { id: "wed-12-b-2", batch: "BBA-12", majorOrSection: "Bravo", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Statistics", instructor: "MAI", room: "203" },
-  { id: "wed-12-b-3", batch: "BBA-12", majorOrSection: "Bravo", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "203", isClub: true },
 
   // BBA-13
   { id: "wed-13-a-1", batch: "BBA-13", majorOrSection: "Alpha", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Finance", instructor: "CDG", room: "306" },
   { id: "wed-13-a-2", batch: "BBA-13", majorOrSection: "Alpha", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Microeconomics", instructor: "ANR", room: "306" },
-  { id: "wed-13-a-3", batch: "BBA-13", majorOrSection: "Alpha", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "306", isClub: true },
 
   { id: "wed-13-b-1", batch: "BBA-13", majorOrSection: "Bravo", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Fundamentals of Marketing", instructor: "AA", room: "308" },
   { id: "wed-13-b-2", batch: "BBA-13", majorOrSection: "Bravo", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Microeconomics", instructor: "DMNIA", room: "308" },
-  { id: "wed-13-b-3", batch: "BBA-13", majorOrSection: "Bravo", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "308", isClub: true },
 
   { id: "wed-13-c-1", batch: "BBA-13", majorOrSection: "Charlie", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Business Mathematics", instructor: "MT", room: "310" },
   { id: "wed-13-c-2", batch: "BBA-13", majorOrSection: "Charlie", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Principles of Finance", instructor: "MIH", room: "310" },
-  { id: "wed-13-c-3", batch: "BBA-13", majorOrSection: "Charlie", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "310", isClub: true },
 
   // BBA-14
   { id: "wed-14-a-1", batch: "BBA-14", majorOrSection: "Alpha", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Business Leadership", instructor: "MAA", room: "303" },
   { id: "wed-14-a-2", batch: "BBA-14", majorOrSection: "Alpha", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Communication for Business Leaders", instructor: "MEU", room: "303" },
-  { id: "wed-14-a-3", batch: "BBA-14", majorOrSection: "Alpha", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "303", isClub: true },
 
   { id: "wed-14-b-1", batch: "BBA-14", majorOrSection: "Bravo", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Business Leadership", instructor: "STA", room: "304" },
   { id: "wed-14-b-2", batch: "BBA-14", majorOrSection: "Bravo", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Principles of Accounting", instructor: "N. M. A", room: "304" },
-  { id: "wed-14-b-3", batch: "BBA-14", majorOrSection: "Bravo", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "304", isClub: true },
 
   { id: "wed-14-c-1", batch: "BBA-14", majorOrSection: "Charlie", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Communicative English", instructor: "KF", room: "305" },
   { id: "wed-14-c-2", batch: "BBA-14", majorOrSection: "Charlie", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Leadership", instructor: "STA", room: "305" },
-  { id: "wed-14-c-3", batch: "BBA-14", majorOrSection: "Charlie", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "305", isClub: true },
 
   // BBA-15
   { id: "wed-15-a-1", batch: "BBA-15", majorOrSection: "Alpha", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Computer and Its Application in Business", instructor: "SW", room: "301" },
   { id: "wed-15-a-2", batch: "BBA-15", majorOrSection: "Alpha", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Fundamentals of Management", instructor: "LF", room: "301" },
-  { id: "wed-15-a-3", batch: "BBA-15", majorOrSection: "Alpha", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "301", isClub: true },
 
   { id: "wed-15-b-1", batch: "BBA-15", majorOrSection: "Bravo", day: "Wednesday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Fundamentals of Management", instructor: "LF", room: "302" },
   { id: "wed-15-b-2", batch: "BBA-15", majorOrSection: "Bravo", day: "Wednesday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Functional English", instructor: "MRM", room: "302" },
-  { id: "wed-15-b-3", batch: "BBA-15", majorOrSection: "Bravo", day: "Wednesday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "302", isClub: true },
 
   // ==========================
   // THURSDAY
@@ -392,44 +343,34 @@ export const ROUTINE_DATA: ClassSlot[] = [
   // BBA-12
   { id: "thu-12-a-1", batch: "BBA-12", majorOrSection: "Alpha", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Business Statistics", instructor: "MAI", room: "202" },
   { id: "thu-12-a-2", batch: "BBA-12", majorOrSection: "Alpha", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Entrepreneurship", instructor: "GMST", room: "202" },
-  { id: "thu-12-a-3", batch: "BBA-12", majorOrSection: "Alpha", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "202", isClub: true },
 
   { id: "thu-12-b-1", batch: "BBA-12", majorOrSection: "Bravo", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Entrepreneurship", instructor: "GMST", room: "203" },
   { id: "thu-12-b-2", batch: "BBA-12", majorOrSection: "Bravo", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Macroeconomics", instructor: "ANR", room: "203" },
-  { id: "thu-12-b-3", batch: "BBA-12", majorOrSection: "Bravo", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "203", isClub: true },
 
   // BBA-13
   { id: "thu-13-a-1", batch: "BBA-13", majorOrSection: "Alpha", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Finance", instructor: "CDG", room: "306" },
   { id: "thu-13-a-2", batch: "BBA-13", majorOrSection: "Alpha", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Fundamentals of Marketing", instructor: "DMNI", room: "306" },
-  { id: "thu-13-a-3", batch: "BBA-13", majorOrSection: "Alpha", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "306", isClub: true },
 
   { id: "thu-13-b-1", batch: "BBA-13", majorOrSection: "Bravo", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Fundamentals of Marketing", instructor: "AA", room: "308" },
   { id: "thu-13-b-2", batch: "BBA-13", majorOrSection: "Bravo", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Business Mathematics", instructor: "MAI", room: "308" },
-  { id: "thu-13-b-3", batch: "BBA-13", majorOrSection: "Bravo", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "308", isClub: true },
 
   { id: "thu-13-c-1", batch: "BBA-13", majorOrSection: "Charlie", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Microeconomics", instructor: "ANR", room: "310" },
   { id: "thu-13-c-2", batch: "BBA-13", majorOrSection: "Charlie", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "E-Business Management", instructor: "DMMR", room: "310" },
-  { id: "thu-13-c-3", batch: "BBA-13", majorOrSection: "Charlie", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "310", isClub: true },
 
   // BBA-14
   { id: "thu-14-a-1", batch: "BBA-14", majorOrSection: "Alpha", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Principles of Accounting", instructor: "N. M. A", room: "303" },
   { id: "thu-14-a-2", batch: "BBA-14", majorOrSection: "Alpha", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Communicative English", instructor: "KF", room: "303" },
-  { id: "thu-14-a-3", batch: "BBA-14", majorOrSection: "Alpha", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "303", isClub: true },
 
   { id: "thu-14-b-1", batch: "BBA-14", majorOrSection: "Bravo", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Communicative English", instructor: "KF", room: "304" },
   { id: "thu-14-b-2", batch: "BBA-14", majorOrSection: "Bravo", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Communication for Business Leaders", instructor: "AS", room: "304" },
-  { id: "thu-14-b-3", batch: "BBA-14", majorOrSection: "Bravo", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "304", isClub: true },
 
   { id: "thu-14-c-1", batch: "BBA-14", majorOrSection: "Charlie", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Communication for Business Leaders", instructor: "AS", room: "305" },
   { id: "thu-14-c-2", batch: "BBA-14", majorOrSection: "Charlie", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Environmental Studies", instructor: "MT", room: "305" },
-  { id: "thu-14-c-3", batch: "BBA-14", majorOrSection: "Charlie", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "305", isClub: true },
 
   // BBA-15
   { id: "thu-15-a-1", batch: "BBA-15", majorOrSection: "Alpha", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Bangladesh & International Studies", instructor: "MAH", room: "301" },
   { id: "thu-15-a-2", batch: "BBA-15", majorOrSection: "Alpha", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Presentation Skill Development", instructor: "MAA", room: "301" },
-  { id: "thu-15-a-3", batch: "BBA-15", majorOrSection: "Alpha", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "301", isClub: true },
 
   { id: "thu-15-b-1", batch: "BBA-15", majorOrSection: "Bravo", day: "Thursday", period: 1, startTime: "09:30", endTime: "11:00", courseTitle: "Presentation Skill Development", instructor: "MIH", room: "302" },
   { id: "thu-15-b-2", batch: "BBA-15", majorOrSection: "Bravo", day: "Thursday", period: 2, startTime: "11:30", endTime: "13:00", courseTitle: "Bangladesh & International Studies", instructor: "MAH", room: "302" },
-  { id: "thu-15-b-3", batch: "BBA-15", majorOrSection: "Bravo", day: "Thursday", period: 3, startTime: "13:30", endTime: "15:00", courseTitle: "Club Activities", instructor: "Club Coordinators", room: "302", isClub: true },
 ];
