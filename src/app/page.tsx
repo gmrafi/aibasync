@@ -378,81 +378,68 @@ export default function HomePage() {
         </section>
 
         {/* Institutional Footer */}
-        <footer className="border-t border-border/80 py-7 sm:py-9">
-          {/* Top Section: Institutional & Quick Shortcuts */}
-          <div className="flex flex-col gap-5 border-b border-border/70 pb-6 md:flex-row md:items-center md:justify-between">
-            <div className="flex items-center gap-3.5">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-1.5">
-                <Image
-                  src="/logo.png"
-                  alt="AIBA Sylhet Logo"
-                  width={40}
-                  height={40}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-base text-slate-900 dark:text-white tracking-tight">
-                    {INSTITUTION_INFO.name}
-                  </span>
-                  <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs font-semibold text-primary">
-                    {INSTITUTION_INFO.shortName}
-                  </span>
+        <footer className="border-t border-border/80 py-8 sm:py-10">
+          <div className="grid gap-7 sm:grid-cols-[1fr_auto] sm:items-end">
+            <div className="relative pl-4 before:absolute before:left-0 before:top-1 before:h-12 before:w-1 before:rounded-full before:bg-primary">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-1.5">
+                  <Image
+                    src="/logo.png"
+                    alt="AIBA Sylhet Logo"
+                    width={40}
+                    height={40}
+                    className="h-full w-full object-contain"
+                  />
                 </div>
-                <p className="mt-0.5 text-xs font-medium text-muted-foreground">
-                  {INSTITUTION_INFO.subTitle} • {INSTITUTION_INFO.term}
-                </p>
+                <div className="min-w-0">
+                  <h3 className="text-sm font-black tracking-tight text-foreground sm:text-base">
+                    {INSTITUTION_INFO.name}
+                  </h3>
+                  <p className="mt-0.5 text-xs font-medium text-muted-foreground">
+                    {INSTITUTION_INFO.subTitle} • {INSTITUTION_INFO.term}
+                  </p>
+                </div>
               </div>
+              <p className="mt-4 max-w-sm text-xs leading-relaxed text-muted-foreground">
+                A focused academic routine experience for AIBA Sylhet.
+              </p>
             </div>
 
-          </div>
-
-          {/* Bottom Section: Author Attribution & Links */}
-          <div className="flex flex-col gap-3 pt-5 text-xs sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex items-center gap-2 font-medium">
-              <span className="text-slate-500 dark:text-slate-400">
-                Designed and Developed by
-              </span>
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-muted-foreground sm:justify-end">
               <a
                 href="https://www.gmrafi.com.bd/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group font-bold text-sky-600 dark:text-sky-400 hover:text-sky-500 inline-flex items-center gap-1 underline underline-offset-4 decoration-sky-500/40 hover:decoration-sky-400 transition-all"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
               >
-                <span>Md. Golam Mubasshir Rafi</span>
-                <ExternalLink className="w-3 h-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                <Globe className="h-3.5 w-3.5" />
+                gmrafi.com.bd
               </a>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
-              <a
-                href="https://www.gmrafi.com.bd/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
-              >
-                <Globe className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                <span>gmrafi.com.bd</span>
-              </a>
-              <span className="text-slate-300 dark:text-slate-700">•</span>
               <a
                 href="https://github.com/gmrafi/aibasync"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors"
+                className="transition-colors hover:text-primary"
               >
-                GitHub Repo
+                GitHub
               </a>
-              <span className="text-slate-300 dark:text-slate-700">•</span>
-              <span className="px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[10px] font-bold text-slate-600 dark:text-slate-300 tracking-wide">
+              <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-[10px] font-bold text-primary">
                 v0.0.6
               </span>
-              <span className="text-slate-300 dark:text-slate-700">•</span>
-              <span className="px-2 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-[11px] font-semibold text-slate-600 dark:text-slate-300">
-                Zero-Backend PWA
-              </span>
             </div>
+          </div>
+
+          <div className="mt-7 flex flex-col gap-2 border-t border-border/70 pt-4 text-[11px] font-medium text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <span>Designed and developed by</span>
+            <a
+              href="https://www.gmrafi.com.bd/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-1 font-bold text-foreground transition-colors hover:text-primary"
+            >
+              Md. Golam Mubasshir Rafi
+              <ExternalLink className="h-3 w-3 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+            </a>
           </div>
         </footer>
       </main>
