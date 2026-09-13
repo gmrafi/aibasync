@@ -4,9 +4,12 @@ import {
   BellRing,
   BusFront,
   CalendarClock,
+  CalendarDays,
   ClipboardCheck,
   Download,
   FileText,
+  GraduationCap,
+  Layers,
   Megaphone,
   MoreHorizontal,
   StickyNote,
@@ -16,6 +19,9 @@ import {
 interface MoreModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenSelector: () => void;
+  onOpenFacultyDirectory: () => void;
+  onOpenCalendar: () => void;
 }
 
 const upcomingItems = [
@@ -61,7 +67,13 @@ const upcomingItems = [
   },
 ];
 
-export function MoreModal({ isOpen, onClose }: MoreModalProps) {
+export function MoreModal({
+  isOpen,
+  onClose,
+  onOpenSelector,
+  onOpenFacultyDirectory,
+  onOpenCalendar,
+}: MoreModalProps) {
   if (!isOpen) return null;
 
   return (
@@ -93,6 +105,35 @@ export function MoreModal({ isOpen, onClose }: MoreModalProps) {
           >
             <X className="h-4 w-4" />
           </button>
+        </div>
+
+        <div className="mt-5 border-b border-border pb-5">
+          <p className="mb-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+            দ্রুত অ্যাকশন
+          </p>
+          <div className="grid grid-cols-3 gap-2">
+            {[
+              { label: "প্রোফাইল", icon: Layers, action: onOpenSelector },
+              { label: "ফ্যাকাল্টি", icon: GraduationCap, action: onOpenFacultyDirectory },
+              { label: "ক্যালেন্ডার", icon: CalendarDays, action: onOpenCalendar },
+            ].map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.label}
+                  type="button"
+                  onClick={() => {
+                    item.action();
+                    onClose();
+                  }}
+                  className="flex flex-col items-center gap-1.5 rounded-xl border border-border bg-muted/40 px-2 py-2.5 text-[11px] font-semibold text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                >
+                  <Icon className="h-4 w-4 text-primary" />
+                  {item.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <div className="mt-5 space-y-2.5">

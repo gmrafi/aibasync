@@ -28,7 +28,6 @@ import { getFacultyInfo } from "@/data/faculty";
 import {
   Clock,
   Layers,
-  Building2,
   CalendarDays,
   GraduationCap,
   MoreHorizontal,
@@ -223,8 +222,6 @@ export default function HomePage() {
         theme={preferences.theme || "light"}
         onToggleTheme={toggleTheme}
         onOpenSelector={() => setIsSelectorOpen(true)}
-        onOpenFacultyDirectory={() => setIsFacultyDirectoryOpen(true)}
-        onOpenCalendar={() => setIsCalendarOpen(true)}
         onOpenMore={() => setIsMoreOpen(true)}
         onSelectFaculty={(faculty) => setSelectedFaculty(faculty)}
         currentTimeStr={effectiveTime.toLocaleTimeString([], {
@@ -409,33 +406,6 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Quiet shortcuts */}
-            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-muted-foreground">
-              <button
-                type="button"
-                onClick={() => setIsSelectorOpen(true)}
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
-              >
-                <Layers className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-                <span>ব্যাচ / প্রোফাইল</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsFacultyDirectoryOpen(true)}
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
-              >
-                <Building2 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-                <span>ফ্যাকাল্টি</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsCalendarOpen(true)}
-                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
-              >
-                <CalendarDays className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
-                <span>ক্যালেন্ডার</span>
-              </button>
-            </div>
           </div>
 
           {/* Bottom Section: Author Attribution & Links */}
@@ -584,6 +554,9 @@ export default function HomePage() {
       <MoreModal
         isOpen={isMoreOpen}
         onClose={() => setIsMoreOpen(false)}
+        onOpenSelector={() => setIsSelectorOpen(true)}
+        onOpenFacultyDirectory={() => setIsFacultyDirectoryOpen(true)}
+        onOpenCalendar={() => setIsCalendarOpen(true)}
       />
 
       {/* Faculty Info Popover */}

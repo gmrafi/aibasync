@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CalendarDays, Check, ChevronDown, GraduationCap, MoreHorizontal, Moon, Search, Sun, UserRound } from "lucide-react";
+import { Check, ChevronDown, MoreHorizontal, Moon, Search, Sun, UserRound } from "lucide-react";
 import { FACULTY_LIST, getFacultyInfo } from "@/data/faculty";
 import { FacultyMember } from "@/lib/types";
 import { Button } from "@/components/ui/button";
@@ -17,8 +17,6 @@ interface NavbarProps {
   theme: "light" | "dark";
   onToggleTheme: () => void;
   onOpenSelector: () => void;
-  onOpenFacultyDirectory: () => void;
-  onOpenCalendar: () => void;
   onOpenMore: () => void;
   onSelectFaculty: (faculty: FacultyMember) => void;
   currentTimeStr: string;
@@ -35,8 +33,6 @@ export function Navbar({
   theme,
   onToggleTheme,
   onOpenSelector,
-  onOpenFacultyDirectory,
-  onOpenCalendar,
   onOpenMore,
   onSelectFaculty,
   currentTimeStr,
@@ -156,28 +152,6 @@ export function Navbar({
             ) : (
               <Moon className="h-4 w-4" />
             )}
-          </Button>
-
-          <Button
-            type="button"
-            onClick={onOpenFacultyDirectory}
-            variant="ghost"
-            size="sm"
-            title="ফ্যাকাল্টি ডিরেক্টরি"
-          >
-            <GraduationCap className="h-4 w-4" />
-            <span className="hidden md:inline">ফ্যাকাল্টি</span>
-          </Button>
-
-          <Button
-            type="button"
-            onClick={onOpenCalendar}
-            variant="ghost"
-            size="sm"
-            title="একাডেমিক ক্যালেন্ডার ও নোটিশ"
-          >
-            <CalendarDays className="h-4 w-4" />
-            <span className="hidden md:inline">ক্যালেন্ডার</span>
           </Button>
 
           <Button
