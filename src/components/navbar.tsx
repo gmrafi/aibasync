@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, ChevronDown, Download, GraduationCap, Moon, Sun } from "lucide-react";
+import { CalendarDays, ChevronDown, GraduationCap, MoreHorizontal, Moon, Sun } from "lucide-react";
 import { INSTITUTION_INFO } from "@/data/routine";
 import { getFacultyInfo } from "@/data/faculty";
 
@@ -17,6 +17,7 @@ interface NavbarProps {
   onOpenFacultyDirectory: () => void;
   onOpenCalendar: () => void;
   onOpenExport: () => void;
+  onOpenMore: () => void;
   currentTimeStr: string;
   currentDayStr: string;
 }
@@ -34,6 +35,7 @@ export function Navbar({
   onOpenFacultyDirectory,
   onOpenCalendar,
   onOpenExport,
+  onOpenMore,
   currentTimeStr,
   currentDayStr,
 }: NavbarProps) {
@@ -134,16 +136,16 @@ export function Navbar({
             <span className="hidden md:inline">ক্যালেন্ডার</span>
           </button>
 
-          {/* Routine Card Export Button */}
           <button
             type="button"
-            onClick={onOpenExport}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600 text-white border border-emerald-600 hover:bg-emerald-700 shadow-[0_8px_20px_rgba(16,185,129,0.18)] transition-all text-[11px] sm:text-xs font-bold cursor-pointer"
-            title="রুটিন ইমেজ হিসেবে ডাউনলোড করুন"
+            onClick={onOpenMore}
+            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-3 py-1.5 text-[11px] font-semibold text-slate-800 transition-all hover:border-sky-400 hover:bg-sky-50 hover:text-sky-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-sky-500/60 dark:hover:bg-sky-500/10 dark:hover:text-sky-300 sm:text-xs"
+            title="আরও অপশন"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span className="hidden lg:inline">এক্সপোর্ট</span>
+            <MoreHorizontal className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" />
+            <span className="hidden md:inline">আরও</span>
           </button>
+
         </div>
       </div>
     </header>

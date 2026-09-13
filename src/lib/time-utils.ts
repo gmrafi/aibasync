@@ -122,8 +122,9 @@ export function isSlotMatchingStudent(
   }
 
   // 2. Matches student's Minor
-  if (minor && minor !== "None" && MINOR_COURSE_TITLES[minor]) {
-    const targetTitle = MINOR_COURSE_TITLES[minor].toLowerCase();
+  const minorCode = minor?.replace(/-M$/, "");
+  if (minorCode && minorCode !== "None" && MINOR_COURSE_TITLES[minorCode]) {
+    const targetTitle = MINOR_COURSE_TITLES[minorCode].toLowerCase();
     const slotTitle = slot.courseTitle.toLowerCase();
     if (slotTitle.includes(targetTitle) || targetTitle.includes(slotTitle)) {
       return true;
@@ -166,8 +167,9 @@ export function isSlotMatchingView(
 }
 
 export function isSlotMinor(slot: ClassSlot, batch: string, minor?: string): boolean {
-  if (batch !== "BBA-11" || !minor || minor === "None" || !MINOR_COURSE_TITLES[minor]) return false;
-  const targetTitle = MINOR_COURSE_TITLES[minor].toLowerCase();
+  const minorCode = minor?.replace(/-M$/, "");
+  if (batch !== "BBA-11" || !minorCode || minorCode === "None" || !MINOR_COURSE_TITLES[minorCode]) return false;
+  const targetTitle = MINOR_COURSE_TITLES[minorCode].toLowerCase();
   const slotTitle = slot.courseTitle.toLowerCase();
   return slotTitle.includes(targetTitle) || targetTitle.includes(slotTitle);
 }
