@@ -1,8 +1,11 @@
 "use client";
 
-import { CalendarDays, ChevronDown, GraduationCap, MoreHorizontal, Moon, Sun } from "lucide-react";
-import { INSTITUTION_INFO } from "@/data/routine";
-import { getFacultyInfo } from "@/data/faculty";
+import { useMemo, useState } from "react";
+import { CalendarDays, Check, ChevronDown, GraduationCap, MoreHorizontal, Moon, Search, Sun, UserRound } from "lucide-react";
+import { FACULTY_LIST, getFacultyInfo } from "@/data/faculty";
+import { FacultyMember } from "@/lib/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface NavbarProps {
   role?: "student" | "teacher";
@@ -16,8 +19,8 @@ interface NavbarProps {
   onOpenSelector: () => void;
   onOpenFacultyDirectory: () => void;
   onOpenCalendar: () => void;
-  onOpenExport: () => void;
   onOpenMore: () => void;
+  onSelectFaculty: (faculty: FacultyMember) => void;
   currentTimeStr: string;
   currentDayStr: string;
 }
@@ -34,117 +37,159 @@ export function Navbar({
   onOpenSelector,
   onOpenFacultyDirectory,
   onOpenCalendar,
-  onOpenExport,
   onOpenMore,
+  onSelectFaculty,
   currentTimeStr,
   currentDayStr,
 }: NavbarProps) {
+  const [searchQuery, setSearchQuery] = useState("");
   const isBba11 = batch === "BBA-11";
   const minorTag = isBba11 && minor && minor !== "None" ? ` + ${minor.replace("-M", "")}` : "";
   const teacherDisplayName = role === "teacher" && teacherCode ? getFacultyInfo(teacherCode).fullName : "";
+  const searchResults = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return [];
+    return FACULTY_LIST.filter((faculty) =>
+      [faculty.fullName, faculty.designation, faculty.code].join(" ").toLowerCase().includes(query)
+    ).slice(0, 5);
+  }, [searchQuery]);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-emerald-200/80 dark:border-emerald-900/80 bg-gradient-to-r from-white via-emerald-50/60 to-sky-50/70 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900/90 shadow-[0_1px_0_rgba(15,23,42,0.04)] backdrop-blur-xl transition-colors">
-      <div className="max-w-5xl mx-auto px-3 sm:px-4 py-2.5 sm:py-3 flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-          <div className="relative flex items-center justify-center shrink-0 rounded-2xl bg-gradient-to-br from-emerald-50 via-white to-sky-50 dark:from-emerald-500/10 dark:via-slate-900 dark:to-sky-500/10 border border-emerald-200 dark:border-emerald-800 p-1.5 shadow-sm shadow-emerald-500/10">
+    <header className="sticky top-0 z-40 w-full border-b border-border/80 bg-background/85 backdrop-blur-xl">
+      <div className="mx-auto flex min-h-16 max-w-6xl flex-wrap items-center gap-3 px-3 py-2 sm:flex-nowrap sm:px-5">
+        <div className="flex min-w-0 flex-1 items-center gap-3 sm:flex-none">
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border-2 border-primary/20 bg-card p-1.5 shadow-sm sm:h-11 sm:w-11">
             <img
               src="/logo.png"
               alt="AIBA Sylhet Crest"
               className="w-10 h-10 sm:w-11 sm:h-11 object-contain transition-transform hover:scale-105"
             />
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-black text-base sm:text-lg tracking-[-0.03em] text-slate-900 dark:text-white">
-                AIBA Sync
-              </span>
+          <div className="min-w-0">
+            <div className="flex items-center gap-2">
+              <div className="truncate text-sm font-black tracking-tight text-foreground sm:text-base">AIBA Sync</div>
             </div>
-            <p className="text-[11px] sm:text-xs font-semibold text-slate-600 dark:text-slate-300 mt-0.5 tracking-[0.08em] uppercase">
+            <p className="truncate text-[10px] font-medium text-muted-foreground sm:text-[11px]">Routine &amp; Campus Assistant</p>
+            <p className="mt-0.5 text-[10px] font-semibold tabular-nums text-primary sm:text-[11px]">
               {currentDayStr} • {currentTimeStr}
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap justify-end">
-          {/* Quick Batch/Section/Minor Chip */}
-          <button
+        <div className="relative order-3 w-full sm:order-none sm:w-48 md:w-60">
+          <Search className="pointer-events-none absolute left-3 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="শিক্ষক খুঁজুন..."
+            aria-label="শিক্ষক খুঁজুন"
+            className="pl-9 pr-3"
+          />
+          {searchResults.length > 0 && (
+            <div className="absolute left-0 right-0 top-11 z-50 overflow-hidden rounded-2xl border border-border bg-popover p-1.5 shadow-lg">
+              {searchResults.map((faculty) => (
+                <button
+                  key={faculty.code}
+                  type="button"
+                  onClick={() => {
+                    onSelectFaculty(faculty);
+                    setSearchQuery("");
+                  }}
+                  className="flex w-full items-center gap-2 rounded-xl px-2.5 py-2 text-left transition-colors hover:bg-muted"
+                >
+                  <UserRound className="h-4 w-4 shrink-0 text-primary" />
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-xs font-bold text-popover-foreground">{faculty.fullName}</span>
+                    <span className="block truncate text-[10px] text-muted-foreground">{faculty.designation}</span>
+                  </span>
+                  <Check className="h-3.5 w-3.5 shrink-0 text-transparent" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center justify-end gap-1 sm:ml-auto sm:gap-1.5">
+          <Button
             type="button"
             onClick={onOpenSelector}
-            className="group inline-flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-50/80 dark:bg-slate-900/95 border border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 dark:hover:border-emerald-500/50 hover:bg-white dark:hover:bg-slate-800 transition-all text-[10px] sm:text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer shadow-sm active:scale-[0.99]"
+            variant="outline"
+            size="sm"
+            className="group max-w-[170px] gap-1.5 px-2.5 sm:max-w-none sm:px-3"
             title={role === "teacher" ? "ফ্যাকাল্টি প্রোফাইল বা ব্যাচ নির্বাচন করুন" : "ব্যাচ / মেজর / মাইনর নির্বাচন করুন"}
           >
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse ring-2 ring-emerald-500/20" />
+            <span className="h-2 w-2 shrink-0 rounded-full bg-primary ring-2 ring-primary/20" />
             {role === "teacher" ? (
               <>
                 {teacherDisplayName ? (
                   <>
-                    <span className="font-bold text-emerald-700 dark:text-emerald-300">{teacherDisplayName}</span>
-                    <span className="text-slate-400 dark:text-slate-500">•</span>
+                    <span className="truncate font-bold">{teacherDisplayName}</span>
+                    <span className="text-muted-foreground">•</span>
                   </>
                 ) : (
-                  <span className="font-bold text-emerald-700 dark:text-emerald-300">শিক্ষক</span>
+                  <span className="font-bold">শিক্ষক</span>
                 )}
-                <span className="text-slate-600 dark:text-slate-400">
+                <span className="truncate text-muted-foreground">
                   {batch === "MY_CLASSES" ? "আমার ক্লাস" : batch === "ALL_BATCHES" ? "মাস্টার রুটিন" : batch}
                 </span>
               </>
             ) : (
               <>
-                <span className="text-emerald-700 dark:text-emerald-300 font-bold">{batch}</span>
-                <span className="text-slate-400 dark:text-slate-500">•</span>
-                <span className="text-slate-700 dark:text-slate-300 font-medium">{majorOrSection}{minorTag}</span>
+                <span className="font-bold">{batch}</span>
+                <span className="text-muted-foreground">•</span>
+                <span className="truncate text-muted-foreground">{majorOrSection}{minorTag}</span>
               </>
             )}
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-transform group-hover:translate-y-0.5" />
-          </button>
+            <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-transform group-hover:translate-y-0.5" />
+          </Button>
 
-          {/* Theme Toggle (Light / Dark) */}
-          <button
+          <Button
             type="button"
             onClick={onToggleTheme}
-            className="p-2 rounded-xl bg-emerald-50 dark:bg-slate-900 border border-emerald-200 dark:border-emerald-800 text-slate-600 dark:text-slate-300 hover:text-emerald-700 dark:hover:text-emerald-300 hover:bg-emerald-100 dark:hover:bg-emerald-500/10 transition-colors cursor-pointer shadow-sm shrink-0"
+            variant="ghost"
+            size="icon"
             title={theme === "dark" ? "লাইট মোডে স্যুইচ করুন" : "ডার্ক মোডে স্যুইচ করুন"}
             aria-label="Toggle theme"
           >
             {theme === "dark" ? (
-              <Sun className="w-4 h-4 text-amber-400" />
+              <Sun className="h-4 w-4 text-amber-400" />
             ) : (
-              <Moon className="w-4 h-4 text-slate-700" />
+              <Moon className="h-4 w-4" />
             )}
-          </button>
+          </Button>
 
-          {/* Empty Rooms Button */}
-          <button
+          <Button
             type="button"
             onClick={onOpenFacultyDirectory}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-sky-50 dark:bg-slate-900 border border-sky-200 dark:border-sky-800 hover:border-sky-400 dark:hover:border-sky-500/50 hover:bg-sky-100 dark:hover:bg-sky-500/10 text-slate-800 dark:text-slate-200 hover:text-sky-700 dark:hover:text-sky-300 transition-all text-[11px] sm:text-xs font-semibold cursor-pointer shadow-sm"
+            variant="ghost"
+            size="sm"
             title="ফ্যাকাল্টি ডিরেক্টরি"
           >
-            <GraduationCap className="w-3.5 h-3.5 text-sky-600 dark:text-sky-300" />
+            <GraduationCap className="h-4 w-4" />
             <span className="hidden md:inline">ফ্যাকাল্টি</span>
-          </button>
+          </Button>
 
-          {/* Academic Calendar Button */}
-          <button
+          <Button
             type="button"
             onClick={onOpenCalendar}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/60 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 text-slate-800 dark:text-slate-200 hover:text-emerald-700 dark:hover:text-emerald-300 transition-all text-[11px] sm:text-xs font-semibold cursor-pointer shadow-sm"
+            variant="ghost"
+            size="sm"
             title="একাডেমিক ক্যালেন্ডার ও নোটিশ"
           >
-            <CalendarDays className="w-3.5 h-3.5 text-blue-600 dark:text-blue-300" />
+            <CalendarDays className="h-4 w-4" />
             <span className="hidden md:inline">ক্যালেন্ডার</span>
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
             onClick={onOpenMore}
-            className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 px-3 py-1.5 text-[11px] font-semibold text-slate-800 transition-all hover:border-sky-400 hover:bg-sky-50 hover:text-sky-700 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-sky-500/60 dark:hover:bg-sky-500/10 dark:hover:text-sky-300 sm:text-xs"
+            variant="ghost"
+            size="sm"
             title="আরও অপশন"
           >
-            <MoreHorizontal className="h-3.5 w-3.5 text-sky-600 dark:text-sky-300" />
+            <MoreHorizontal className="h-4 w-4" />
             <span className="hidden md:inline">আরও</span>
-          </button>
+          </Button>
 
         </div>
       </div>

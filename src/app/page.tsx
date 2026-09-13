@@ -12,7 +12,7 @@ import {
   timeToMinutes,
 } from "@/lib/time-utils";
 import { trackRoutineView } from "@/lib/tracking";
-import { DayOfWeek, FacultyMember, UserPreferences, UserRole } from "@/lib/types";
+import { FacultyMember, UserPreferences, UserRole } from "@/lib/types";
 import { Navbar } from "@/components/navbar";
 import { LiveStatusCard } from "@/components/live-status-card";
 import { TodayTimeline } from "@/components/today-timeline";
@@ -152,27 +152,6 @@ export default function HomePage() {
     });
   };
 
-  const setSimulationPreset = (day: DayOfWeek, hours: number, minutes: number) => {
-    const d = new Date();
-    const dayMap: Record<DayOfWeek, number> = {
-      Sunday: 0,
-      Monday: 1,
-      Tuesday: 2,
-      Wednesday: 3,
-      Thursday: 4,
-      Friday: 5,
-      Saturday: 6,
-    };
-    const currentDayIdx = d.getDay();
-    const targetDayIdx = dayMap[day];
-    const diff = targetDayIdx - currentDayIdx;
-    d.setDate(d.getDate() + diff);
-    d.setHours(hours, minutes, 0, 0);
-
-    setSimulatedTime(d);
-    setIsSimulationMode(true);
-  };
-
   const isBba11 = preferences.batch === "BBA-11";
   const minorDisplay = isBba11 && preferences.minor && preferences.minor !== "None"
     ? ` + Minor: ${preferences.minor.replace("-M", "")}`
@@ -246,11 +225,12 @@ export default function HomePage() {
         onOpenSelector={() => setIsSelectorOpen(true)}
         onOpenFacultyDirectory={() => setIsFacultyDirectoryOpen(true)}
         onOpenCalendar={() => setIsCalendarOpen(true)}
-        onOpenExport={() => setIsExportOpen(true)}
         onOpenMore={() => setIsMoreOpen(true)}
+        onSelectFaculty={(faculty) => setSelectedFaculty(faculty)}
         currentTimeStr={effectiveTime.toLocaleTimeString([], {
           hour: "2-digit",
           minute: "2-digit",
+          second: "2-digit",
         })}
         currentDayStr={currentDayName}
       />
@@ -400,69 +380,12 @@ export default function HomePage() {
           )}
         </section>
 
-        {/* Simulation Dock */}
-        <div className="p-4 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-950/50 backdrop-blur-sm space-y-2.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
-              <FlaskConical className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
-              <span>টাইম সিমুলেশন কন্ট্রোল (অবসরকালীন ইন্টারফেস নিরীক্ষণ):</span>
-            </span>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setSimulationPreset("Sunday", 10, 15)}
-              className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              ১ম পিরিয়ড (10:15 AM)
-            </button>
-            <button
-              type="button"
-              onClick={() => setSimulationPreset("Sunday", 11, 15)}
-              className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              বিরতি স্লট (11:15 AM)
-            </button>
-            <button
-              type="button"
-              onClick={() => setSimulationPreset("Sunday", 12, 0)}
-              className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              ২য় পিরিয়ড (12:00 PM)
-            </button>
-            <button
-              type="button"
-              onClick={() => setSimulationPreset("Sunday", 14, 0)}
-              className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              ৩য় পিরিয়ড (02:00 PM)
-            </button>
-            <button
-              type="button"
-              onClick={() => setSimulationPreset("Sunday", 16, 0)}
-              className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              ক্লাস সমাপ্তি (04:00 PM)
-            </button>
-            <button
-              type="button"
-              onClick={() => setSimulationPreset("Friday", 11, 0)}
-              className="px-2.5 py-1 rounded-xl bg-slate-100 dark:bg-slate-900 hover:bg-slate-200 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
-            >
-              সাপ্তাহিক ছুটি (শুক্রবার)
-            </button>
-          </div>
-        </div>
-
-        <div className="mt-12 border-t border-slate-200/90 dark:border-slate-800/90" />
-
-        {/* Upgraded Interactive Footer */}
-        <footer className="rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-sm space-y-6">
+        {/* Institutional Footer */}
+        <footer className="border-t border-border/80 py-7 sm:py-9">
           {/* Top Section: Institutional & Quick Shortcuts */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-5 pb-5 border-b border-slate-100 dark:border-slate-800/80">
+          <div className="flex flex-col gap-5 border-b border-border/70 pb-6 md:flex-row md:items-center md:justify-between">
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-2xl bg-slate-50 dark:bg-slate-800/80 p-1.5 border border-slate-200/80 dark:border-slate-700/60 shadow-xs flex items-center justify-center shrink-0">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-border bg-card p-1.5">
                 <Image
                   src="/logo.png"
                   alt="AIBA Sylhet Logo"
@@ -476,22 +399,22 @@ export default function HomePage() {
                   <span className="font-bold text-base text-slate-900 dark:text-white tracking-tight">
                     {INSTITUTION_INFO.name}
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-sky-50 dark:bg-sky-500/10 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-500/30">
+                  <span className="rounded-full border border-primary/20 bg-primary/5 px-2 py-0.5 text-xs font-semibold text-primary">
                     {INSTITUTION_INFO.shortName}
                   </span>
                 </div>
-                <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5 font-medium">
+                <p className="mt-0.5 text-xs font-medium text-muted-foreground">
                   {INSTITUTION_INFO.subTitle} • {INSTITUTION_INFO.term}
                 </p>
               </div>
             </div>
 
-            {/* Quick Action Pills */}
-            <div className="flex flex-wrap items-center gap-2 text-xs font-medium">
+            {/* Quiet shortcuts */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-medium text-muted-foreground">
               <button
                 type="button"
                 onClick={() => setIsSelectorOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-sky-50 hover:text-sky-700 dark:hover:bg-sky-500/15 dark:hover:text-sky-300 transition-colors cursor-pointer border border-transparent hover:border-sky-200 dark:hover:border-sky-500/30"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
               >
                 <Layers className="w-3.5 h-3.5 text-sky-600 dark:text-sky-400" />
                 <span>ব্যাচ / প্রোফাইল</span>
@@ -499,15 +422,15 @@ export default function HomePage() {
               <button
                 type="button"
                 onClick={() => setIsFacultyDirectoryOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-violet-50 hover:text-violet-700 dark:hover:bg-violet-500/15 dark:hover:text-violet-300 transition-colors cursor-pointer border border-transparent hover:border-violet-200 dark:hover:border-violet-500/30"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
               >
                 <Building2 className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-                <span>খালি রুম</span>
+                <span>ফ্যাকাল্টি</span>
               </button>
               <button
                 type="button"
                 onClick={() => setIsCalendarOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-amber-50 hover:text-amber-700 dark:hover:bg-amber-500/15 dark:hover:text-amber-300 transition-colors cursor-pointer border border-transparent hover:border-amber-200 dark:hover:border-amber-500/30"
+                className="inline-flex items-center gap-1.5 transition-colors hover:text-primary"
               >
                 <CalendarDays className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
                 <span>ক্যালেন্ডার</span>
@@ -516,7 +439,7 @@ export default function HomePage() {
           </div>
 
           {/* Bottom Section: Author Attribution & Links */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1 text-xs">
+          <div className="flex flex-col gap-3 pt-5 text-xs sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2 font-medium">
               <span className="text-slate-500 dark:text-slate-400">
                 Designed and Developed by
