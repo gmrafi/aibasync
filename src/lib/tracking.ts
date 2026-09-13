@@ -33,3 +33,8 @@ function send(payload: TrackPayload): void {
 export function trackRoutineView(payload: Omit<TrackPayload, "event">): void {
   send({ ...payload, event: "routine_view" });
 }
+
+/** Called once when the public routine page is loaded. */
+export function trackPageVisit(payload: Omit<TrackPayload, "event"> = {}): void {
+  send({ ...payload, event: "page_view" });
+}

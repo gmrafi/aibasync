@@ -25,6 +25,7 @@ interface RoleRow { role: string | null; count: number; }
 interface DeviceRow { device_type: string | null; count: number; }
 interface BrowserRow { browser: string | null; count: number; }
 interface ReferrerRow { referrer: string | null; count: number; }
+interface EventRow { event_type: string | null; count: number; }
 interface DailyRow { day: string; count: number; }
 interface HourlyRow { hour: string; count: number; }
 interface VisitorsRow {
@@ -66,6 +67,7 @@ interface Stats {
   byDevice: DeviceRow[];
   byBrowser: BrowserRow[];
   byReferrer: ReferrerRow[];
+  byEvent: EventRow[];
   daily: DailyRow[];
   hourly: HourlyRow[];
   visitors: VisitorsRow[];
@@ -81,6 +83,11 @@ const DEVICE_LABELS: Record<string, string> = {
 const ROLE_LABELS: Record<string, string> = {
   student: "শিক্ষার্থী",
   teacher: "শিক্ষক",
+};
+
+const EVENT_LABELS: Record<string, string> = {
+  page_view: "পৃষ্ঠা ভিজিট",
+  routine_view: "রুটিন নির্বাচন",
 };
 
 function bn(value: number): string {
@@ -263,6 +270,7 @@ export default function AdminPage() {
     byDevice: (stats?.byDevice ?? []).map((r) => ({ label: DEVICE_LABELS[r.device_type ?? ""] ?? r.device_type ?? "—", count: r.count })),
     byBrowser: (stats?.byBrowser ?? []).map((r) => ({ label: r.browser ?? "—", count: r.count })),
     byReferrer: (stats?.byReferrer ?? []).map((r) => ({ label: r.referrer ?? "—", count: r.count })),
+    byEvent: (stats?.byEvent ?? []).map((r) => ({ label: EVENT_LABELS[r.event_type ?? ""] ?? r.event_type ?? "—", count: r.count })),
   };
 
   const cards = [
@@ -416,6 +424,13 @@ export default function AdminPage() {
                   </p>
                 </div>
               </div>
+            </section>
+
+            <section className="mb-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-sm font-black text-slate-800">
+                ইভেন্ট অনুযায়ী ব্যবহার
+              </h2>
+              <BarList rows={rows.byEvent} />
             </section>
 
             <section className="mb-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">

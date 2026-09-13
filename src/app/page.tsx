@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ROUTINE_DATA, INSTITUTION_INFO } from "@/data/routine";
 import { DEFAULT_PREFERENCES, getStoredPreferences, savePreferences } from "@/lib/storage";
@@ -11,7 +11,7 @@ import {
   minutesToTime12,
   timeToMinutes,
 } from "@/lib/time-utils";
-import { trackRoutineView } from "@/lib/tracking";
+import { trackPageVisit, trackRoutineView } from "@/lib/tracking";
 import { FacultyMember, UserPreferences, UserRole } from "@/lib/types";
 import { Navbar } from "@/components/navbar";
 import { LiveStatusCard } from "@/components/live-status-card";
@@ -55,6 +55,7 @@ export default function HomePage() {
   const [currentTime, setCurrentTime] = useState<Date>(new Date("2024-01-01T09:00:00"));
   const [isSimulationMode, setIsSimulationMode] = useState(false);
   const [simulatedTime, setSimulatedTime] = useState<Date | undefined>(undefined);
+  const hasTrackedPageVisit = useRef(false);
 
   useEffect(() => {
     setIsHydrated(true);
@@ -63,6 +64,18 @@ export default function HomePage() {
     const stored = getStoredPreferences();
     setPreferences(stored);
     setIsLoaded(true);
+
+    if (!hasTrackedPageVisit.current) {
+      hasTrackedPageVisit.current = true;
+      trackPageVisit({
+        name: stored.studentName || undefined,
+        batch: stored.batch,
+        majorOrSection: stored.majorOrSection,
+        minor: stored.minor,
+        role: stored.role,
+        teacherCode: stored.teacherCode || undefined,
+      });
+    }
 
     // Apply theme to document
     if (stored.theme === "dark") {

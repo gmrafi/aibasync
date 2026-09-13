@@ -65,7 +65,7 @@ export function referrerHost(referrer: string | null): string | null {
 export async function fetchStats() {
   const sql = getSql();
 
-  const [total, today, daysActive, byBatch, byMajor, byRole, byDevice, byBrowser, byReferrer, daily, hourly, keyCounts, visitors, recent] =
+  const [total, today, daysActive, byBatch, byMajor, byRole, byDevice, byBrowser, byReferrer, byEvent, daily, hourly, keyCounts, visitors, recent] =
     await Promise.all([
       sql`SELECT count(*)::int AS count FROM tracking_events`,
       sql`SELECT count(*)::int AS count FROM tracking_events WHERE created_at >= date_trunc('day', now())`,
@@ -76,6 +76,7 @@ export async function fetchStats() {
       sql`SELECT device_type, count(*)::int AS count FROM tracking_events GROUP BY device_type ORDER BY count(*) DESC`,
       sql`SELECT browser, count(*)::int AS count FROM tracking_events WHERE browser IS NOT NULL GROUP BY browser ORDER BY count(*) DESC`,
       sql`SELECT referrer, count(*)::int AS count FROM tracking_events WHERE referrer IS NOT NULL GROUP BY referrer ORDER BY count(*) DESC LIMIT 8`,
+      sql`SELECT event_type, count(*)::int AS count FROM tracking_events GROUP BY event_type ORDER BY count(*) DESC`,
       sql`SELECT to_char(created_at AT TIME ZONE 'Asia/Dhaka', 'YYYY-MM-DD') AS day, count(*)::int AS count
           FROM tracking_events
           WHERE created_at >= now() - interval '14 days'
@@ -121,6 +122,7 @@ export async function fetchStats() {
     byReferrer: (byReferrer as unknown as { referrer: string | null; count: number }[]).map(
       (r) => ({ referrer: referrerHost(r.referrer), count: r.count })
     ),
+    byEvent: byEvent as unknown as { event_type: string | null; count: number }[],
     daily: daily as unknown as { day: string; count: number }[],
     hourly: hourly as unknown as { hour: string; count: number }[],
     visitors: visitors as unknown as {
