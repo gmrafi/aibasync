@@ -378,7 +378,15 @@ export default function HomePage() {
         </section>
 
         {/* Institutional Footer */}
-        <footer className="border-t border-border/80 py-8 sm:py-10">
+        <footer className="relative mt-8 border-t-2 border-primary/25 py-8 sm:mt-10 sm:py-10" aria-label="AIBA Sync institutional footer">
+          <div className="mb-7 flex items-center gap-3">
+            <span className="h-px w-8 bg-primary sm:w-12" />
+            <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-primary">
+              AIBA Sync • Academic Routine
+            </span>
+            <span className="h-px flex-1 bg-border" />
+          </div>
+
           <div className="grid gap-7 sm:grid-cols-[1fr_auto] sm:items-end">
             <div className="relative pl-4 before:absolute before:left-0 before:top-1 before:h-12 before:w-1 before:rounded-full before:bg-primary">
               <div className="flex items-center gap-3">
@@ -401,11 +409,19 @@ export default function HomePage() {
                 </div>
               </div>
               <p className="mt-4 max-w-sm text-xs leading-relaxed text-muted-foreground">
-                A focused academic routine experience for AIBA Sylhet.
+                The academic routine companion for AIBA Sylhet.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs font-semibold text-muted-foreground sm:justify-end">
+              <a
+                href="https://aibasylhet.edu.bd/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition-colors hover:text-primary"
+              >
+                AIBA Website
+              </a>
               <a
                 href="https://www.gmrafi.com.bd/"
                 target="_blank"
@@ -429,8 +445,8 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="mt-7 flex flex-col gap-2 border-t border-border/70 pt-4 text-[11px] font-medium text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-            <span>Designed and developed by</span>
+          <div className="mt-7 flex flex-wrap items-center gap-x-1.5 gap-y-1 border-t border-border/70 pt-4 text-[11px] font-medium text-muted-foreground">
+            <span>Designed &amp; developed for AIBA Sylhet by</span>
             <a
               href="https://www.gmrafi.com.bd/"
               target="_blank"
