@@ -48,6 +48,7 @@ interface VisitorsRow {
 }
 interface RecentRow {
   id: number;
+  event_type: string | null;
   name: string | null;
   batch: string | null;
   major_or_section: string | null;
