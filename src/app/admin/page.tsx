@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState, type FormEvent } from "react";
 import {
   Activity,
   CalendarDays,
+  Download,
   Eye,
   Globe,
   LogOut,
@@ -28,6 +29,12 @@ interface ReferrerRow { referrer: string | null; count: number; }
 interface EventRow { event_type: string | null; count: number; }
 interface DailyRow { day: string; count: number; }
 interface HourlyRow { hour: string; count: number; }
+interface DailyVisitorRow {
+  day: string;
+  unique_count: number;
+  page_viewers: number;
+  routine_viewers: number;
+}
 interface VisitorsRow {
   ip_address: string | null;
   name: string | null;
@@ -69,6 +76,7 @@ interface Stats {
   byReferrer: ReferrerRow[];
   byEvent: EventRow[];
   daily: DailyRow[];
+  dailyVisitors: DailyVisitorRow[];
   hourly: HourlyRow[];
   visitors: VisitorsRow[];
   recent: RecentRow[];
@@ -116,6 +124,18 @@ function locationText(r: {
   return r.country ? (base ? `${base} (${r.country})` : r.country) : base;
 }
 
+function downloadCsv(filename: string, headers: string[], rows: string[][]): void {
+  const escapeCell = (value: string) => `"${value.replace(/"/g, '""')}"`;
+  const csv = [headers, ...rows].map((row) => row.map(escapeCell).join(",")).join("\n");
+  const blob = new Blob(["\ufeff", csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
 function BarList({ rows }: { rows: { label: string; count: number }[] }) {
   const max = Math.max(1, ...rows.map((r) => r.count));
   if (rows.length === 0) {
@@ -151,6 +171,7 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [eventFilter, setEventFilter] = useState("all");
   // Default theme: LIGHT (clear & readable). Dark is optional.
   const [light, setLight] = useState(true);
 
@@ -271,7 +292,12 @@ export default function AdminPage() {
     byBrowser: (stats?.byBrowser ?? []).map((r) => ({ label: r.browser ?? "—", count: r.count })),
     byReferrer: (stats?.byReferrer ?? []).map((r) => ({ label: r.referrer ?? "—", count: r.count })),
     byEvent: (stats?.byEvent ?? []).map((r) => ({ label: EVENT_LABELS[r.event_type ?? ""] ?? r.event_type ?? "—", count: r.count })),
+    dailyVisitors: (stats?.dailyVisitors ?? []).map((r) => ({ label: r.day.slice(5), count: r.unique_count })),
   };
+
+  const filteredRecent = (stats?.recent ?? []).filter(
+    (row) => eventFilter === "all" || row.event_type === eventFilter
+  );
 
   const cards = [
     { label: "মোট ভিজিট", value: stats ? bn(stats.total) : "—", icon: Eye, color: "bg-sky-500" },
@@ -435,6 +461,13 @@ export default function AdminPage() {
 
             <section className="mb-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
               <h2 className="mb-4 text-sm font-black text-slate-800">
+                দৈনিক ইউনিক ভিজিটর (গত ১৪ দিন)
+              </h2>
+              <BarList rows={rows.dailyVisitors} />
+            </section>
+
+            <section className="mb-6 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
+              <h2 className="mb-4 text-sm font-black text-slate-800">
                 ভিজিটর তালিকা (IP ও লোকেশনসহ)
               </h2>
               {stats.visitors.length === 0 ? (
@@ -485,10 +518,46 @@ export default function AdminPage() {
             </section>
 
             <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-sm font-black text-slate-800">
-                সর্বশেষ ভিজিটসমূহ (সম্পূর্ণ বিবরণ)
-              </h2>
-              {stats.recent.length === 0 ? (
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <h2 className="text-sm font-black text-slate-800">
+                  সর্বশেষ ভিজিটসমূহ (সম্পূর্ণ বিবরণ)
+                </h2>
+                <div className="flex flex-wrap items-center gap-2">
+                  <select
+                    value={eventFilter}
+                    onChange={(event) => setEventFilter(event.target.value)}
+                    className="rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-sky-500"
+                    aria-label="ইভেন্ট অনুযায়ী ফিল্টার"
+                  >
+                    <option value="all">সব ইভেন্ট</option>
+                    <option value="page_view">পৃষ্ঠা ভিজিট</option>
+                    <option value="routine_view">রুটিন নির্বাচন</option>
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => downloadCsv(
+                      "aiba-sync-recent-events.csv",
+                      ["Event", "Time", "Name", "Batch", "Role", "Device", "Browser", "IP", "Location"],
+                      filteredRecent.map((row) => [
+                        EVENT_LABELS[row.event_type ?? ""] ?? row.event_type ?? "",
+                        formatDateTime(row.created_at),
+                        row.name || "",
+                        row.batch || "",
+                        ROLE_LABELS[row.role ?? ""] ?? row.role ?? "",
+                        DEVICE_LABELS[row.device_type ?? ""] ?? row.device_type ?? "",
+                        row.browser || "",
+                        row.ip_address || "",
+                        locationText(row),
+                      ])
+                    )}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-700 transition hover:border-sky-400 hover:text-sky-600"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    CSV
+                  </button>
+                </div>
+              </div>
+              {filteredRecent.length === 0 ? (
                 <p className="text-xs text-slate-500">
                   কোনো ভিজিট নেই — প্রথম ভিজিট এখানে দেখা যাবে।
                 </p>
@@ -509,7 +578,7 @@ export default function AdminPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {stats.recent.map((r) => (
+                      {filteredRecent.map((r) => (
                         <tr
                           key={r.id}
                           className="border-b border-slate-100 last:border-0"

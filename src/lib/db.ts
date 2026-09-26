@@ -65,7 +65,7 @@ export function referrerHost(referrer: string | null): string | null {
 export async function fetchStats() {
   const sql = getSql();
 
-  const [total, today, daysActive, byBatch, byMajor, byRole, byDevice, byBrowser, byReferrer, byEvent, daily, hourly, keyCounts, visitors, recent] =
+  const [total, today, daysActive, byBatch, byMajor, byRole, byDevice, byBrowser, byReferrer, byEvent, daily, dailyVisitors, hourly, keyCounts, visitors, recent] =
     await Promise.all([
       sql`SELECT count(*)::int AS count FROM tracking_events`,
       sql`SELECT count(*)::int AS count FROM tracking_events WHERE created_at >= date_trunc('day', now())`,
@@ -78,6 +78,13 @@ export async function fetchStats() {
       sql`SELECT referrer, count(*)::int AS count FROM tracking_events WHERE referrer IS NOT NULL GROUP BY referrer ORDER BY count(*) DESC LIMIT 8`,
       sql`SELECT event_type, count(*)::int AS count FROM tracking_events GROUP BY event_type ORDER BY count(*) DESC`,
       sql`SELECT to_char(created_at AT TIME ZONE 'Asia/Dhaka', 'YYYY-MM-DD') AS day, count(*)::int AS count
+          FROM tracking_events
+          WHERE created_at >= now() - interval '14 days'
+          GROUP BY day ORDER BY day ASC`,
+        sql`SELECT to_char(created_at AT TIME ZONE 'Asia/Dhaka', 'YYYY-MM-DD') AS day,
+             count(DISTINCT COALESCE(ip_address, ip_hash))::int AS unique_count,
+             count(DISTINCT CASE WHEN event_type = 'page_view' THEN COALESCE(ip_address, ip_hash) END)::int AS page_viewers,
+             count(DISTINCT CASE WHEN event_type = 'routine_view' THEN COALESCE(ip_address, ip_hash) END)::int AS routine_viewers
           FROM tracking_events
           WHERE created_at >= now() - interval '14 days'
           GROUP BY day ORDER BY day ASC`,
@@ -97,7 +104,7 @@ export async function fetchStats() {
           WHERE ip_address IS NOT NULL
           GROUP BY ip_address
           ORDER BY last_seen DESC LIMIT 25`,
-      sql`SELECT id, name, batch, major_or_section, role, device_type, browser,
+      sql`SELECT id, event_type, name, batch, major_or_section, role, device_type, browser,
                  ip_address, country, region, city, created_at
           FROM tracking_events ORDER BY id DESC LIMIT 25`,
     ]);
@@ -124,6 +131,12 @@ export async function fetchStats() {
     ),
     byEvent: byEvent as unknown as { event_type: string | null; count: number }[],
     daily: daily as unknown as { day: string; count: number }[],
+    dailyVisitors: dailyVisitors as unknown as {
+      day: string;
+      unique_count: number;
+      page_viewers: number;
+      routine_viewers: number;
+    }[],
     hourly: hourly as unknown as { hour: string; count: number }[],
     visitors: visitors as unknown as {
       ip_address: string | null;
@@ -138,6 +151,7 @@ export async function fetchStats() {
     }[],
     recent: recent as unknown as {
       id: number;
+      event_type: string | null;
       name: string | null;
       batch: string | null;
       major_or_section: string | null;
